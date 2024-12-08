@@ -1,32 +1,31 @@
 ---
 import type { GetStaticPaths, Page } from 'astro'
-import PageLayout from '@/layouts/BaseLayout.astro'
 import type { CollectionEntry } from 'astro:content'
 
-import Pagination from '@/components/blog/Paginator.astro'
-import PostPreview from '@/components/blog/PostPreview.astro'
-import { Button } from '@/components/user'
-import { getAllCollections, getUniqueTags, sortMDByDate } from '@/utils'
-import { siteConfig } from '@/site-config'
+import { Paginator, PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, getUniqueTags, sortMDByDate } from 'astro-pure/server'
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
 
 export const prerender = true
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const allPosts = await getAllCollections()
+  const allPosts = await getBlogCollection()
   const allPostsByDate = sortMDByDate(allPosts)
   const uniqueTags = getUniqueTags(allPostsByDate)
 
   return uniqueTags.flatMap((tag) => {
     const filterPosts = allPostsByDate.filter((post) => post.data.tags.includes(tag))
     return paginate(filterPosts, {
-      pageSize: siteConfig.blog.pageSize,
+      pageSize: config.content.blogPageSize,
       params: { tag }
     })
   })
 }
 
 interface Props {
-  page: Page<CollectionEntry<'post'>>
+  page: Page<CollectionEntry<'blog'>>
 }
 
 const { page } = Astro.props
@@ -63,9 +62,9 @@ const paginationProps = {
 
     <section aria-label='Blog post list'>
       <ul class='animate flex flex-col gap-y-3 text-start'>
-        {page.data.map((p) => <PostPreview as='h2' post={p} detailed />)}
+        {page.data.map((post) => <PostPreview as='h2' {post} detailed />)}
       </ul>
-      <Pagination {...paginationProps} />
+      <Paginator {...paginationProps} />
     </section>
   </div>
 </PageLayout>

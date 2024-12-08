@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets'
+
+import { parseOpenGraph } from '../../plugins/link-preview'
+import { cn } from '../../utils'
+
+export interface Props {
+  /** URL to fetch Open Graph data. */
+  href: string
+  /** Hide any image or video even if set in the OpenGraph data. */
+  hideMedia?: boolean
+  zoomable?: boolean
+}
+
+const { href, hideMedia = false, zoomable = true } = Astro.props
+
+const meta = await parseOpenGraph(href)
+const domain = meta?.url ? new URL(meta.url).hostname.replace('www.', '') : ''
+---
+
+{
+  meta && meta.title ? (
+    <div class='not-prose link-preview-container my-2 flex justify-center sm:my-4'>
+      <article
+        class:list={[
+          'link-preview flex flex-col overflow-hidden rounded-lg border max-sm:max-w-sm sm:flex-row',
+          {
+            'link-preview--has-video max-sm:max-w-none sm:flex-col':
+              !hideMedia && meta.video && meta.videoType,
+            'link-preview--no-media': hideMedia || !((meta.video && meta.videoType) || meta.image)
+          }
+        ]}
+      >
+        {hideMedia ? null : meta.video && meta.videoType ? (
+          <video controls preload='metadata' width='1200' height='630'>
+            <source src={meta.video} type={meta.videoType} />
+          </video>
+        ) : meta.image ? (
+          <Image
+            class={cn('m-0 sm:max-w-60', zoomable && 'zoomable')}
+            src={meta.image}
+            alt={meta.imageAlt || ''}
+            width='1200'
+            height='630'
+          />
+        ) : null}
+        <a
+          class='group font-normal text-muted-foreground no-underline hover:text-muted-foreground'
+          href={href}
+          target='_blank'
+        >
+          <div class='link-preview__content flex h-full flex-col gap-y-1 px-3 py-2 transition-colors group-hover:bg-muted sm:px-5 sm:py-4'>
+            <header class='line-clamp-1 font-medium text-foreground transition-colors group-hover:text-primary'>
+              {meta.title}
+            </header>
+            <p class='link-preview__description line-clamp-2'>
+              {meta.description}{' '}
+              {domain && <small class='link-preview__domain ml-1'>({domain})</small>}
+            </p>
+          </div>
+        </a>
+      </article>
+    </div>
+  ) : (
+    <div class='link-preview link-preview--no-metadata'>
+      <a {href} target='_blank'>
+        {href}
+      </a>
+    </div>
+  )
+}
+
+<style>
+  /* Default styles */
+  .link-preview img,
+  .link-preview video {
+    aspect-ratio: 1200 / 630;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>

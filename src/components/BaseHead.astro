@@ -1,16 +1,15 @@
 ---
 // import { ViewTransitions } from 'astro:transitions'
-import type { SiteMeta } from '@/types'
 
-import { prod } from '@/utils'
-import { siteConfig } from '@/site-config'
+import { prod } from 'astro-pure/server'
+import type { SiteMeta } from 'astro-pure/types'
+import config from '@/site-config'
 
 type Props = SiteMeta
 
 const { articleDate, description, ogImage, title } = Astro.props
 
-const titleSeparator = '•'
-const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`
+const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', Astro.url).href
 ---
@@ -42,7 +41,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 {/* Primary Meta Tags */}
 <meta content={siteTitle} name='title' />
 <meta content={description} name='description' />
-<meta content={siteConfig.author} name='author' />
+<meta content={config.author} name='author' />
 
 {/* Theme Color */}
 <meta content='' name='theme-color' />
@@ -52,15 +51,15 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <meta content={title} property='og:title' />
 <meta content={description} property='og:description' />
 <meta content={canonicalURL} property='og:url' />
-<meta content={siteConfig.title} property='og:site_name' />
-<meta content={siteConfig.ogLocale} property='og:locale' />
+<meta content={config.title} property='og:site_name' />
+<meta content={config.locale.attrs} property='og:locale' />
 <meta content={socialImageURL} property='og:image' />
 <meta content='1200' property='og:image:width' />
 <meta content='630' property='og:image:height' />
 {
   articleDate && (
     <>
-      <meta content={siteConfig.author} property='article:author' />
+      <meta content={config.author} property='article:author' />
       <meta content={articleDate} property='article:published_time' />
     </>
   )
@@ -73,13 +72,6 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <meta content={description} property='twitter:description' />
 <meta content={socialImageURL} property='twitter:image' />
 
-{
-  /* Telegram channel */
-  siteConfig.seo.telegramChannel && (
-    <meta name='telegram:channel' content={siteConfig.seo.telegramChannel} />
-  )
-}
-
 {/* Sitemap */}
 <link href='/sitemap-index.xml' rel='sitemap' />
 
@@ -87,7 +79,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <link
   rel='alternate'
   type='application/rss+xml'
-  title={siteConfig.title}
+  title={config.title}
   href={`${Astro.site}rss.xml`}
 />
 

@@ -1,0 +1,14 @@
+---
+import { cn } from '../../utils'
+
+const { as: Tag = 'span', class: className } = Astro.props
+---
+
+<Tag
+  class={cn(
+    'bg-muted rounded text-transparent hover:text-inherit px-1 transition-colors',
+    className
+  )}
+>
+  <slot />
+</Tag>

@@ -1,40 +1,49 @@
 ---
 import type { MarkdownHeading } from 'astro'
-import PageLayout from '@/layouts/BaseLayout.astro'
 import type { CollectionEntry } from 'astro:content'
-
-import { Comment } from '@/components/advanced'
-import ArticleBottom from '@/components/blog/ArticleBottom.astro'
-import Copyright from '@/components/blog/Copyright.astro'
-import BlogHero from '@/components/blog/Hero.astro'
-import BackToTop from '@/components/pages/BackToTop.astro'
-import TOC from '@/components/pages/TOC.astro'
-import { Button } from '@/components/user'
 
 // Plugin styles
 import '@waline/client/style'
 import 'katex/dist/katex.min.css'
 
-import { MediumZoom } from '@/components/advanced'
-import { cn } from '@/utils'
-import { integrationConfig } from '@/site-config'
+import { Comment, MediumZoom } from 'astro-pure/advanced'
+import { ArticleBottom, BackToTop, Copyright, Hero, TOC } from 'astro-pure/components/pages'
+import { Button } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
 
 interface Props {
-  post: CollectionEntry<'post'>
+  post: CollectionEntry<'blog'>
+  posts: CollectionEntry<'blog'>[]
   headings: MarkdownHeading[]
+  remarkPluginFrontmatter: Record<string, unknown>
 }
 
-const { post, headings } = Astro.props
 const {
-  data: { description, heroImage, publishDate, title, updatedDate }
-} = post
+  post: { id, data },
+  posts,
+  headings,
+  remarkPluginFrontmatter
+} = Astro.props
+
+const {
+  description,
+  heroImage,
+  publishDate,
+  title,
+  updatedDate,
+  draft: isDraft,
+  comment: enableComment
+} = data
+
 const socialImage = heroImage
   ? typeof heroImage.src === 'string'
     ? heroImage.src
     : heroImage.src.src
   : '/images/social-card.png'
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
-const primaryColor = post.data.heroImage?.color ?? 'hsl(var(--primary) / var(--tw-text-opacity))'
+const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--tw-text-opacity))'
 ---
 
 <PageLayout
@@ -52,11 +61,13 @@ const primaryColor = post.data.heroImage?.color ?? 'hsl(var(--primary) / var(--t
           />
         )
       }
-      <article class='min-w-0 grow'>
-        <div id='content-header' class='animate'><BlogHero content={post} /></div>
+      <article class='min-w-0 grow' data-pagefind-body>
+        <div id='content-header' class='animate'>
+          <Hero {data} {remarkPluginFrontmatter} />
+        </div>
         <div
           id='content'
-          class={cn('animate mt-8 max-w-none md:min-w-[45ch]', integrationConfig.typography.class)}
+          class={cn('animate mt-8 max-w-none md:min-w-[45ch]', config.integ.typography.class)}
         >
           <slot />
         </div>
@@ -66,11 +77,11 @@ const primaryColor = post.data.heroImage?.color ?? 'hsl(var(--primary) / var(--t
     <div class='mt-8 w-full items-start gap-x-10 md:flex'>
       <div class='mt-8 flex-1 text-muted-foreground md:min-w-[50ch]'>
         {/* Copyright */}
-        <Copyright content={post} />
+        <Copyright {data} />
         {/* Article recommend */}
-        <ArticleBottom content={post} class='mt-3 sm:mt-6' />
+        <ArticleBottom collections={posts} {id} class='mt-3 sm:mt-6' />
         {/* Comment */}
-        {!post.data.draft && <Comment class='mt-3 sm:mt-6' />}
+        {!isDraft && enableComment && <Comment class='mt-3 sm:mt-6' />}
       </div>
       <div class='min-w-40 basis-60'>
         <slot name='bottom' />
@@ -80,4 +91,4 @@ const primaryColor = post.data.heroImage?.color ?? 'hsl(var(--primary) / var(--t
   </div>
 </PageLayout>
 
-{integrationConfig.mediumZoom.enable && <MediumZoom />}
+{config.integ.mediumZoom.enable && <MediumZoom />}

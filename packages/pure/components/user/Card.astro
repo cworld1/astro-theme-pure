@@ -1,0 +1,23 @@
+---
+import { cn } from '../../utils'
+
+const { as: Tag = 'div', class: className, href, heading, subheading, date } = Astro.props
+---
+
+<Tag
+  class={cn(
+    'not-prose block relative rounded-2xl border border-border bg-muted px-5 py-3',
+    href && 'transition-all hover:border-foreground/25 hover:shadow-sm',
+    className
+  )}
+  href={href}
+>
+  <div class='flex flex-col gap-y-1.5'>
+    <div class='flex flex-col gap-y-0.5'>
+      <h2 class='text-lg font-medium'>{heading}</h2>
+      <p class='text-muted-foreground'>{subheading}</p>
+      <p class='text-muted-foreground'>{date}</p>
+    </div>
+    <slot />
+  </div>
+</Tag>

@@ -1,11 +1,11 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'User Components'
 description: 'Easily extend your content page more interactive'
 ---
 
-import { Aside, Tabs, TabItem } from '@/components/user'
+import { Aside, Tabs, TabItem } from 'astro-pure/user'
 
 Components let you easily reuse a piece of UI or styling consistently. You can use them not just in `.astro` files, but also in `.mdx` files.
 
@@ -22,7 +22,7 @@ For `.astro`, you can directly import and use components and use. An example wil
 <Tabs>
 <TabItem label='MDX'>
 ```jsx
-import { Card } from '@/components/user'
+import { Card } from 'astro-pure/user'
 
 <Card
   as='a'
@@ -38,7 +38,7 @@ import { Card } from '@/components/user'
 <TabItem label='Astro'>
 ```astro
 ---
-import { Card } from '@/components/user'
+import { Card } from 'astro-pure/user'
 ---
 <!-- ... -->
 <Card
@@ -56,7 +56,7 @@ import { Card } from '@/components/user'
 
 Renders:
 
-import { Card } from '@/components/user'
+import { Card } from 'astro-pure/user'
 
 <Card
   as='a'
@@ -71,14 +71,14 @@ import { Card } from '@/components/user'
 ### Collapse
 
 ```jsx
-import { Collapse } from '@/components/user'
+import { Collapse } from 'astro-pure/user'
 
 <Collapse title='Lorem ipsum'> Lorem ipsum dolor sit amet, vidit suscipit at mei. </Collapse>
 ```
 
 Renders:
 
-import { Collapse } from '@/components/user'
+import { Collapse } from 'astro-pure/user'
 
 <Collapse title='Lorem ipsum'>Lorem ipsum dolor sit amet, vidit suscipit at mei.</Collapse>
 <Collapse title='Lorem ipsum'>
@@ -89,7 +89,7 @@ import { Collapse } from '@/components/user'
 ### Aside
 
 ```jsx
-import { Aside } from '@/components/user'
+import { Aside } from 'astro-pure/user'
 
 <Aside>No type selected will default to 'note'. 😉</Aside>
 <Aside type="tip">
@@ -127,7 +127,7 @@ This theme author is a good guy.
 ### Tabs
 
 ```jsx
-import { Tabs, TabItem } from '@/components/user';
+import { Tabs, TabItem } from 'astro-pure/user';
 
 <Tabs>
   <TabItem label="Stars">Sirius, Vega, Betelgeuse</TabItem>
@@ -147,7 +147,7 @@ Renders:
 ### CardList
 
 ```jsx
-import { CardList } from '@/components/user'
+import { CardList } from 'astro-pure/user'
 
 <CardList title='A list' list={
   [{title: 'I am hidden!'}]
@@ -164,7 +164,7 @@ import { CardList } from '@/components/user'
 
 Renders:
 
-import { CardList } from '@/components/user'
+import { CardList } from 'astro-pure/user'
 
 <CardList title='A list' list={
   [{title: 'I am hidden!'}]
@@ -181,7 +181,7 @@ import { CardList } from '@/components/user'
 ### Timeline
 
 ```jsx
-import { Timeline } from '@/components/user'
+import { Timeline } from 'astro-pure/user'
 
 <Timeline events={
   [
@@ -193,7 +193,7 @@ import { Timeline } from '@/components/user'
 
 Renders:
 
-import { Timeline } from '@/components/user'
+import { Timeline } from 'astro-pure/user'
 
 <Timeline events={
   [
@@ -205,7 +205,7 @@ import { Timeline } from '@/components/user'
 ### Steps
 
 ```jsx
-import { Steps } from '@/components/user'
+import { Steps } from 'astro-pure/user'
 
 How to Yi Jian San Lian:
 
@@ -218,7 +218,7 @@ How to Yi Jian San Lian:
 
 Renders:
 
-import { Steps } from '@/components/user'
+import { Steps } from 'astro-pure/user'
 
 How to Yi Jian San Lian:
 
@@ -233,7 +233,7 @@ How to Yi Jian San Lian:
 ### Button
 
 ```jsx
-import { Button } from '@/components/user'
+import { Button } from 'astro-pure/user'
 
 <div class='flex gap-x-2'>
   <Button as='div' title='Simple' />
@@ -246,7 +246,7 @@ import { Button } from '@/components/user'
 
 Renders:
 
-import { Button } from '@/components/user'
+import { Button } from 'astro-pure/user'
 
 <div class='flex gap-x-2'>
   <Button as='div' title='Simple' />
@@ -259,42 +259,42 @@ import { Button } from '@/components/user'
 ### Spoiler
 
 ```jsx
-import { Spoiler } from '@/components/user'
+import { Spoiler } from 'astro-pure/user'
 
 <Spoiler>No one can find me.</Spoiler> But I am exposed here.
 ```
 
 Renders:
 
-import { Spoiler } from '@/components/user'
+import { Spoiler } from 'astro-pure/user'
 
 <Spoiler>No one can find me.</Spoiler> But I am exposed here.
 
 ### Formatted Date
 
 ```jsx
-import { FormattedDate } from '@/components/user'
+import { FormattedDate } from 'astro-pure/user'
 
 <FormattedDate date={new Date('2021-08-01')} dateTimeOptions={{ month: 'short' }} />
 ```
 
 Renders:
 
-import { FormattedDate } from '@/components/user'
+import { FormattedDate } from 'astro-pure/user'
 
 <FormattedDate date={new Date('2021-08-01')} dateTimeOptions={{ month: 'short' }} />
 
 ### Label
 
 ```jsx
-import { Label } from '@/components/user'
+import { Label } from 'astro-pure/user'
 
 <Label title='Hello' />
 ```
 
 Renders:
 
-import { Label } from '@/components/user'
+import { Label } from 'astro-pure/user'
 
 <Label title='Hello' />
 

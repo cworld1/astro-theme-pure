@@ -1,0 +1,95 @@
+---
+import type { CollectionEntry, CollectionKey } from 'astro:content'
+
+import { cn } from '../../utils'
+
+type Props = {
+  id: string
+  collections: CollectionEntry<CollectionKey>[]
+  class?: string
+}
+
+// Get the requested entry
+const { id, collections, class: className } = Astro.props
+const path = Astro.url.pathname.split('/').slice(0, -1).join('/')
+
+// Get the next and prev entries (modulo to wrap index)
+const index = collections.findIndex((x) => x.id === id)
+const prev = collections[index - 1]
+const next = collections[index + 1]
+---
+
+<div class={cn('flex max-sm:flex-col sm:justify-between gap-2', className)}>
+  <span class='min-w-0'>
+    {
+      prev && (
+        <a
+          href={`${path}/${prev.id}`}
+          class='group inline-flex items-center gap-x-2 rounded-xl px-4 py-2 no-underline transition-colors duration-300 hover:bg-muted max-sm:max-w-[80%] sm:flex'
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='20'
+            height='20'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke-width='2.5'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            class='shrink-0 rotate-180 stroke-muted-foreground transition-colors group-hover:stroke-primary'
+          >
+            {' '}
+            <line
+              x1='5'
+              y1='12'
+              x2='19'
+              y2='12'
+              class='translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:scale-x-100'
+            />
+            <polyline
+              points='12 5 19 12 12 19'
+              class='translate-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1'
+            />
+          </svg>
+          <p class='truncate font-medium transition-colors'>{prev.data.title}</p>
+        </a>
+      )
+    }
+  </span>
+
+  <span class='min-w-0'>
+    {
+      next && (
+        <a
+          href={`${path}/${next.id}`}
+          class='group float-end inline-flex items-center gap-x-2 rounded-xl px-4 py-2 text-right no-underline transition-colors duration-300 hover:bg-muted max-sm:max-w-[80%] sm:flex'
+        >
+          <p class='truncate font-medium transition-colors'>{next.data.title}</p>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='20'
+            height='20'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke-width='2.5'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            class='shrink-0 stroke-muted-foreground transition-colors group-hover:stroke-primary'
+          >
+            <line
+              x1='5'
+              y1='12'
+              x2='19'
+              y2='12'
+              class='translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:scale-x-100'
+            />
+            <polyline
+              points='12 5 19 12 12 19'
+              class='translate-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1'
+            />
+          </svg>
+        </a>
+      )
+    }
+  </span>
+</div>

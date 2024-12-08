@@ -1,23 +1,23 @@
 ---
-import PageLayout from '@/layouts/BaseLayout.astro'
 import { Image } from 'astro:assets'
 
-import { Quote } from '@/components/advanced'
-import PostPreview from '@/components/blog/PostPreview.astro'
+import { Quote } from 'astro-pure/advanced'
+import { PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button, Card, Label } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
-import { Button, Card, Label } from '@/components/user'
-import { getAllCollections, sortMDByDate } from '@/utils'
 import avatar from '@/assets/avatar.png'
-import { siteConfig } from '@/site-config'
+import config from '@/site-config'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
 const backend = ['Vercel', 'Waline']
 
 const MAX_POSTS = 10
-const allPosts = await getAllCollections()
+const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
@@ -32,7 +32,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       />
 
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-bold'>{siteConfig.author}</h1>
+        <h1 class='text-3xl font-bold'>{config.author}</h1>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
           <Label title='China'>
             <svg class='size-5' slot='icon'>
@@ -56,7 +56,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       <a
         href='https://github.com/cworld1/astro-theme-pure'
         target='_blank'
-        class='flex flex-row items-center gap-x-3 rounded-full border border-border px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
+        class='flex flex-row items-center gap-x-3 rounded-full border border-border bg-muted px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
       >
         <span class='relative flex items-center justify-center'>
           <span

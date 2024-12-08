@@ -32,12 +32,13 @@ export default {
     '@ianvs/prettier-plugin-sort-imports'
   ],
   importOrder: [
-    '^(astro$)|^(astro/(:*)$)',
-    '^@astrojs/.*$',
+    '^(astro$)|^(astro:(.*)$)',
+    '^@astrojs/(.*)$',
     '<THIRD_PARTY_MODULES>',
     '',
+    '^astro-pure/(.*)$',
     '^@/types/(.*)$',
-    '^@/layout/(.*)$',
+    '^@/layouts/(.*)$',
     '^@/pages/(.*)$',
     '^@/components/(.*)$',
     '^@/utils$',

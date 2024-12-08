@@ -1,0 +1,74 @@
+---
+// https://github.com/withastro/starlight/blob/main/packages/starlight/user-components/Aside.astro
+import { AstroError } from 'astro/errors'
+
+import { cn } from '../../utils'
+
+const asideVariants = ['note', 'tip', 'caution', 'danger'] as const
+const icons = {
+  note: 'ui.svg#mingcute-information-line',
+  tip: 'aside.svg#mingcute-bulb-line',
+  caution: 'aside.svg#mingcute-alert-line',
+  danger: 'aside.svg#mingcute-alert-octagon-line'
+} as const
+
+interface Props {
+  type?: (typeof asideVariants)[number]
+  title?: string
+}
+
+let { type = 'note', title } = Astro.props
+
+if (!asideVariants.includes(type)) {
+  throw new AstroError(
+    'Invalid `type` prop passed to the `<Aside>` component.\n',
+    `Received: ${JSON.stringify(type)}\n` +
+      `Expected one of ${asideVariants.map((i) => JSON.stringify(i)).join(', ')}`
+  )
+}
+
+if (!title) {
+  title = type.toUpperCase()
+}
+---
+
+<aside aria-label={title} class='aside my-3 overflow-hidden rounded-xl border'>
+  <div
+    class={cn('aside-container border-l-8 border-primary px-4 py-3 bg-primary', `aside-${type}`)}
+  >
+    <p class='not-prose flex items-center gap-x-2 font-medium text-primary' aria-hidden='true'>
+      <svg class='size-6 text-primary'>
+        <use href={`/icons/${icons[type]}`}></use>
+      </svg>
+      {title}
+    </p>
+    <div class='aside-content mt-2'>
+      <slot />
+    </div>
+  </div>
+</aside>
+
+<style>
+  .aside > .aside-container {
+    --tw-bg-opacity: 0.07;
+
+    &.aside-tip {
+      --primary: 234 60% 60%;
+    }
+    &.aside-caution {
+      --primary: 41 90% 50%;
+    }
+    &.aside-danger {
+      --primary: 339 90% 60%;
+    }
+
+    .aside-content {
+      & > :first-child {
+        margin-top: 0;
+      }
+      & > :last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+</style>

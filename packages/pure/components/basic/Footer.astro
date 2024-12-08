@@ -1,0 +1,74 @@
+---
+import config from 'virtual:config'
+
+import { Icon } from 'astro-pure/user'
+
+const year = new Date().getFullYear()
+const footerConf = config.footer
+let social = footerConf.social || {}
+
+// If the list does not contain rss, add it
+social.rss = {
+  label: 'RSS',
+  url: '/rss.xml'
+}
+---
+
+<footer class='mx-auto mt-24 w-full'>
+  <div class='border-t border-border pt-5'>
+    <div
+      class='flex flex-col items-center gap-y-3 sm:flex sm:flex-row sm:items-center sm:justify-between sm:gap-y-0'
+    >
+      <div class='flex flex-col items-center gap-2 text-sm sm:flex-row sm:gap-x-4'>
+        {
+          footerConf.registration && (
+            <a
+              class='py-[3px] text-xs text-muted-foreground'
+              href={footerConf.registration.url}
+              target='_blank'
+            >
+              {footerConf.registration.text}
+            </a>
+          )
+        }
+        <div class='text-muted-foreground [&_a:hover]:text-primary [&_a]:text-foreground'>
+          © {year}
+          {config.author} &
+          <a href='/terms/list' class='text-muted-foreground'>Site policy</a>
+        </div>
+        {
+          footerConf.credits && (
+            <div class='text-muted-foreground [&_a:hover]:text-primary [&_a]:text-foreground'>
+              <a href='https://github.com/withastro/astro' target='_blank'>
+                Astro
+              </a>
+              &
+              <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>
+                Pure
+              </a>
+              theme powered
+            </div>
+          )
+        }
+      </div>
+
+      <div class='flex items-center justify-between'>
+        {/* Social Brands */}
+        <div class='flex items-center gap-x-4'>
+          {
+            footerConf.social &&
+              Object.entries(footerConf.social).map(([platform, { label, url }]) => (
+                <a
+                  class='inline-block text-muted-foreground transition-all hover:text-muted-foreground/75'
+                  href={url}
+                  aria-label={label}
+                >
+                  <Icon class='size-6' name={platform as keyof typeof footerConf.social} />
+                </a>
+              ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

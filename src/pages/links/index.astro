@@ -1,11 +1,11 @@
 ---
-import PageLayout from '@/layouts/CommonPage.astro'
 import links from 'public/links.json'
+import config from 'virtual:config'
 
-import { Comment } from '@/components/advanced'
+import { Comment } from 'astro-pure/advanced'
+import { Collapse, Timeline } from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
-import { Collapse, Timeline } from '@/components/user'
-import { integrationConfig } from '@/site-config'
 
 const headings = [
   {
@@ -31,7 +31,7 @@ const headings = [
 ]
 
 const { friends } = links
-const linksConfig = integrationConfig.links
+const linksConfig = config.integ.links
 ---
 
 <PageLayout title='Links' {headings} info='/links'>

@@ -1,13 +1,9 @@
 ---
+import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+// import Search from '@/components/search/FuseSearch.astro'
 
-import Search from '@/components/search/Search.astro'
-import { Button } from '@/components/user'
-import { getAllCollections } from '@/utils'
-
-export const prerender = true
-
-const allPosts = await getAllCollections()
+import PFSearch from '@/components/search/PFSearch.astro'
 
 const meta = {
   description: 'Search relative posts of the whole blog',
@@ -27,6 +23,7 @@ const meta = {
         target='_blank'>Google Powered</a
       > one.
     </p>
-    <Search posts={allPosts} class='animate' />
+    <!-- <Search class='animate' /> -->
+    <PFSearch class='animate' />
   </div>
 </PageLayout>

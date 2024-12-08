@@ -1,5 +1,5 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'Advanced Components'
 description: 'Advanced components with advanced docs'
@@ -12,14 +12,14 @@ description: 'Advanced components with advanced docs'
 The `Quote` component is a simple component that displays a random quote.
 
 ```jsx
-import { Quote } from '@/components/advanced'
+import { Quote } from 'astro-pure/advanced'
 
 <Quote />
 ```
 
 Renders:
 
-import { Quote } from '@/components/advanced'
+import { Quote } from 'astro-pure/advanced'
 
 <Quote />
 
@@ -55,14 +55,14 @@ export const integrationConfig: IntegrationConfig = {
 The `GithubCard` component is a simple component that displays a GitHub user card.
 
 ```jsx
-import { GithubCard } from '@/components/advanced'
+import { GithubCard } from 'astro-pure/advanced'
 
 <GithubCard repo='cworld1/astro-theme-pure' />
 ```
 
 Render:
 
-import { GithubCard } from '@/components/advanced'
+import { GithubCard } from 'astro-pure/advanced'
 
 <GithubCard repo='cworld1/astro-theme-pure' />
 
@@ -71,7 +71,7 @@ import { GithubCard } from '@/components/advanced'
 Preview any link inserted in the content.
 
 ```jsx
-import { LinkPreview } from '@/components/advanced'
+import { LinkPreview } from 'astro-pure/advanced'
 
 <LinkPreview href='https://www.cloudflare.com/' />
 // Disable mediumzoom to preview image
@@ -81,7 +81,7 @@ import { LinkPreview } from '@/components/advanced'
 
 Render:
 
-import { LinkPreview } from '@/components/advanced'
+import { LinkPreview } from 'astro-pure/advanced'
 
 <LinkPreview href='https://www.cloudflare.com/' />
 <LinkPreview href='https://www.cloudflare.com/' hideMedia />
@@ -93,8 +93,8 @@ import { LinkPreview } from '@/components/advanced'
 It needs you bind a component with a id `get-qrcode` to open the QRCode window.
 
 ```jsx
-import { Button } from '@/components/user'
-import { QRCode } from '@/components/advanced'
+import { Button } from 'astro-pure/user'
+import { QRCode } from 'astro-pure/advanced'
 
 <Button id='get-qrcode'>Open QRCode</Button>
 
@@ -104,8 +104,8 @@ import { QRCode } from '@/components/advanced'
 
 Render:
 
-import { Button } from '@/components/user'
-import { QRCode } from '@/components/advanced'
+import { Button } from 'astro-pure/user'
+import { QRCode } from 'astro-pure/advanced'
 
 <Button id='get-qrcode'>Open QRCode</Button>
 <QRCode content='https://github.com/cworld1/astro-theme-pure' />

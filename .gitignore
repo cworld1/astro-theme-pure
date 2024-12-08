@@ -76,4 +76,5 @@ node_modules/
 old_blog
 ignore.*
 bunfig.toml
-/src/content/post/test.*
+/src/content/blog/test.*
+/test/

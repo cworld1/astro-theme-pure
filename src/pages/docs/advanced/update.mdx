@@ -1,11 +1,11 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'Update Theme'
 description: 'Update astro theme pure to the latest version'
 ---
 
-import { Aside } from '@/components/user'
+import { Aside } from 'astro-pure/user'
 
 <Aside type='caution'>
   This theme is updated frequently, and update theme maybe a little bit complex. Please read the
@@ -21,7 +21,7 @@ import { Aside } from '@/components/user'
 
   ```ts
   import LinkPreview from '@/components/LinkPreview.astro' // [!code --]
-  import { LinkPreview } from '@/components/advanced' // [!code ++]
+  import { LinkPreview } from 'astro-pure/advanced' // [!code ++]
 
   <LinkPreview href='https://www.cloudflare.com/' />
   ```
@@ -36,7 +36,7 @@ import { Aside } from '@/components/user'
 
   ```ts
   import Button from '@/components/Button' // [!code --]
-  import { Button } from '@/components/user' // [!code ++]
+  import { Button } from 'astro-pure/user' // [!code ++]
   ```
 
 - Replace `remark-github-blockquote-alert` plugin to component `Aside`. Check [User Components #Aside](/docs/integrations/components#aside) to know how to migrate.

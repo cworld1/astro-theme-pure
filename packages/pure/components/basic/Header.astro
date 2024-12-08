@@ -1,0 +1,202 @@
+---
+import config from 'virtual:config'
+
+import { Icon } from '../user'
+---
+
+<header-component
+  class='group sticky top-4 z-30 mb-16 box-content w-full rounded-xl border border-transparent py-1 transition-all duration-300 sm:rounded-2xl [&.not-top]:border-border [&.not-top]:bg-background dark:[&.not-top]:bg-muted'
+>
+  <header class='flex flex-wrap text-sm sm:flex-nowrap sm:justify-start'>
+    <nav
+      class='relative mx-auto flex w-full items-center justify-between sm:flex sm:items-center'
+      aria-label='global'
+    >
+      <div
+        class='absolute -left-4 -top-8 -z-10 box-content hidden h-20 w-[calc(100%+2rem)] !duration-0 max-sm:group-[.expanded]:block max-sm:group-[.expanded.not-top]:hidden max-sm:group-[.expanded]:bg-white dark:max-sm:group-[.expanded]:bg-muted'
+      >
+      </div>
+      <a
+        class='flex-none text-xl font-semibold transition-all duration-300 group-[.not-top]:ms-3 sm:group-[.not-top]:ms-5'
+        href='/'
+        aria-label='Brand'>{config.title}</a
+      >
+
+      <!-- menu -->
+      <div class='flex gap-x-4 sm:gap-x-6'>
+        <div
+          id='headerExpandConetent'
+          class='end-0 start-0 top-12 z-20 grid transition-all duration-300 group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-md:border-b max-sm:absolute max-sm:pb-4 max-sm:pt-0 max-sm:opacity-0 max-sm:group-[.not-top]:border max-sm:group-[.expanded]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:pb-2 max-sm:group-[.not-top]:pt-2 sm:grid-rows-1 sm:border-0'
+        >
+          <div
+            class='absolute -left-4 top-0 -z-10 box-content hidden h-full w-[calc(100%+2rem)] bg-white max-md:border-b max-sm:group-[.expanded]:block max-sm:group-[.expanded.not-top]:hidden dark:max-sm:group-[.expanded]:bg-muted'
+          >
+          </div>
+          <div
+            class='flex flex-col items-center justify-center gap-x-5 gap-y-2 overflow-hidden transition-colors sm:flex-row sm:gap-x-7'
+          >
+            {
+              config.header.menu.map((item) => (
+                <a
+                  href={item.link}
+                  class='w-full flex-none grow py-2 text-right text-[1.05rem] font-medium hover:text-primary sm:w-fit'
+                  aria-label='Nav Menu Item'
+                >
+                  {item.title}
+                </a>
+              ))
+            }
+            <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
+              {
+                /* <a class='px-1 py-2' href='https://www.travellings.cn/go.html' title='Travelling'>
+                <span class='sr-only'>Travelling</span>
+                <svg class='size-5'>
+                  <use href='/icons/header.svg#mingcute-train-2-line'></use>
+                </svg>
+              </a> */
+              }
+              <a class='px-1 py-2' href='/search' title='Search'>
+                <span class='sr-only'>Search</span>
+                <Icon name='search' class='size-5' />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- buttons -->
+        <div class='flex gap-x-4 transition-all group-[.not-top]:me-1.5 group-[.not-top]:gap-x-2'>
+          <button
+            id='toggleDarkMode'
+            class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+          >
+            <span class='sr-only'>Dark Theme</span>
+            <Icon
+              class='system size-5 transition-colors group-hover/dark:text-primary'
+              name='computer'
+            />
+            <Icon
+              class='light hidden size-5 transition-colors group-hover/dark:text-primary'
+              name='sun'
+            />
+            <Icon
+              class='dark hidden size-5 transition-colors group-hover/dark:text-primary'
+              name='moon'
+            />
+          </button>
+          <button
+            id='toggleMenu'
+            class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+          >
+            <span class='sr-only'>Menu</span>
+            <svg class='size-5'>
+              <use href='/icons/header.svg#mingcute-menu-line'></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+</header-component>
+
+{/* Use inline to load icon quicker firstly */}
+<script is:inline>
+  const toggleDarkModeElement = document.getElementById('toggleDarkMode')
+  if (toggleDarkModeElement) {
+    toggleDarkModeElement.dataset.theme = localStorage.getItem('theme') || 'system'
+  }
+</script>
+<script>
+  import { setTheme, showToast } from 'astro-pure/utils'
+
+  class Header extends HTMLElement {
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      // Header
+      let preScrollY = window.scrollY
+      this.classList.toggle('not-top', preScrollY > 20)
+      window.addEventListener('scroll', () => {
+        this.classList.toggle('not-top', window.scrollY > 20)
+        this.dataset.show = (window.scrollY < 350 || window.scrollY < preScrollY).toString()
+        preScrollY = window.scrollY
+      })
+
+      // Dark Mode
+      const darkModeBtn = this.querySelector('#toggleDarkMode') as HTMLElement
+      darkModeBtn.addEventListener('click', () => {
+        // Old way: dispatch event
+        // const toggleDarkModeEvent = new CustomEvent('theme-change', {
+        //   detail: { theme: localStorage.getItem('theme') === 'light' ? 'dark' : 'light' }
+        // })
+        // document.dispatchEvent(toggleDarkModeEvent)
+        const newTheme = setTheme(undefined, true)
+        darkModeBtn.dataset.theme = newTheme
+        showToast({ message: `Set theme to ${newTheme}` })
+      })
+
+      // Menu
+      this.querySelector('#toggleMenu')?.addEventListener('click', () => {
+        this.classList.toggle('expanded')
+      })
+    }
+  }
+
+  customElements.define('header-component', Header)
+</script>
+
+<style>
+  header-component.not-top {
+    box-shadow:
+      rgb(255, 255, 255) 0px 0px 0px 0px,
+      rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
+      rgba(39, 39, 42, 0.08) 0px 10px 15px -3px,
+      rgba(39, 39, 42, 0.08) 0px 4px 6px -4px;
+  }
+  header-component[data-show='false']:not(.expanded) {
+    transform: translateY(-5rem);
+  }
+  @media (min-width: 800px) {
+    header-component.not-top {
+      width: 80%;
+    }
+  }
+
+  /* header menu */
+  @media (max-width: 640px) {
+    #headerExpandConetent {
+      grid-template-rows: 0fr;
+    }
+    .expanded #headerExpandConetent {
+      grid-template-rows: 1fr;
+    }
+    .expanded.not-top #headerExpandConetent {
+      box-shadow:
+        rgb(255, 255, 255) 0px 0px 0px 0px,
+        rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
+        rgba(39, 39, 42, 0.08) 0px 10px 15px -3px,
+        rgba(39, 39, 42, 0.08) 0px 4px 6px -4px;
+    }
+  }
+
+  /* dark light mode toggle */
+  #toggleDarkMode {
+    &[data-theme='dark'] {
+      & .system {
+        display: none;
+      }
+      & .dark {
+        display: block;
+      }
+    }
+    &[data-theme='light'] {
+      & .system {
+        display: none;
+      }
+      .light {
+        display: block;
+      }
+    }
+  }
+</style>

@@ -12,11 +12,11 @@
 
 ## 简介 / 部署
 
-查看 [预览 →](https://astro-theme-pure.vercel.app/)
+查看 [预览 →](https://astro-pure.js.org/)
 
 ## 使用
 
-[文档](https://astro-theme-pure.vercel.app/docs/list) | [展示台](https://github.com/cworld1/astro-theme-pure/issues/10)
+[文档](https://astro-pure.js.org/docs/list) | [展示台](https://github.com/cworld1/astro-theme-pure/issues/10)
 
 ## 本地开发
 

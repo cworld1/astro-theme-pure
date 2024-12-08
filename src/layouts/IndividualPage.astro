@@ -1,12 +1,11 @@
 ---
 import type { MarkdownHeading, MarkdownLayoutProps } from 'astro'
-import PageLayout from '@/layouts/BaseLayout.astro'
 
-import BackToTop from '@/components/pages/BackToTop.astro'
-import TOC from '@/components/pages/TOC.astro'
-import { Button } from '@/components/user'
-import { cn } from '@/utils'
-import { integrationConfig } from '@/site-config'
+import { BackToTop, TOC } from 'astro-pure/components/pages'
+import { Button } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
 
 type Props = MarkdownLayoutProps<{
   title: string
@@ -69,7 +68,7 @@ const socialImage = heroImage?.src ?? '/images/social-card.png'
         </div>
         <div
           id='content'
-          class={cn('animate mt-8 max-w-none md:min-w-[45ch]', integrationConfig.typography.class)}
+          class={cn('animate mt-8 max-w-none md:min-w-[45ch]', config.integ.typography.class)}
         >
           <slot />
         </div>

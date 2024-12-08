@@ -1,11 +1,11 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'Other Integrations'
 description: 'Other integrations that help improve your site'
 ---
 
-import { Aside, Tabs, TabItem } from '@/components/user'
+import { Aside, Tabs, TabItem } from 'astro-pure/user'
 
 <Aside>Docs are still in progress.</Aside>
 
@@ -27,13 +27,13 @@ export const integrationConfig: IntegrationConfig = {
 }
 ```
 
-This theme has integrated it in `BlogPost.astro` by default, which means any content in `src/content/post` doesn't need to import. If you want to use it in any other layout or page, you can use the following code:
+This theme has integrated it in `BlogPost.astro` by default, which means any content in `src/content/blog` doesn't need to import. If you want to use it in any other layout or page, you can use the following code:
 
 <Tabs>
 <TabItem label='Astro'>
 ```astro
 ---
-import { MediumZoom } from '@/components/advanced'
+import { MediumZoom } from 'astro-pure/advanced'
 ---
 
 <div class="prose">
@@ -50,7 +50,7 @@ import { MediumZoom } from '@/components/advanced'
 </TabItem>
 <TabItem label='MDX'>
 ```tsx
-import { MediumZoom } from '@/components/advanced'
+import { MediumZoom } from 'astro-pure/advanced'
 
 // .zoomable class will automatically added using remark plugin
 ![](path/to/image.jpg)

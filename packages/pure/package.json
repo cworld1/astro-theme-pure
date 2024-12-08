@@ -1,0 +1,42 @@
+{
+  "name": "astro-pure",
+  "version": "1.1.0",
+  "description": "A simple, clean but powerful blog theme build by astro.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Astro",
+    "Theme",
+    "Blog"
+  ],
+  "author": "CWorld",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cworld1/astro-theme-pure",
+    "directory": "packages/pure"
+  },
+  "bugs": "https://github.com/cworld1/astro-theme-pure",
+  "homepage": "https://astro-pure.js.org/",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./user": "./components/user/index.ts",
+    "./advanced": "./components/advanced/index.ts",
+    "./components/pages": "./components/pages/index.ts",
+    "./components/basic": "./components/basic/index.ts",
+    "./utils": "./utils/index.ts",
+    "./server": "./utils/server.ts",
+    "./types": "./types/index.ts"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.0.1",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/tailwind": "^5.1.3",
+    "astro": "^5.0.3",
+    "pagefind": "^1.2.0",
+    "rehype-external-links": "^3.0.0",
+    "tailwind-merge": "^2.5.5"
+  }
+}

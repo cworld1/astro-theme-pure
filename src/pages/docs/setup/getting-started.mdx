@@ -1,11 +1,11 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'Getting Started'
 description: 'Get started with the astro theme pure'
 ---
 
-import { Steps, Aside, Tabs, TabItem } from '@/components/user'
+import { Steps, Aside, Tabs, TabItem } from 'astro-pure/user'
 
 ## Installation
 
@@ -146,14 +146,15 @@ The theme file structure is as follows:
    
    ```ts title="src/site.config.ts"
    // ...
-   export const menuLinks: MenuLinks = [
+   {/* export const menuLinks: MenuLinks = [
       // ...
       // Docs menu
       { // [!code --]
          link: '/docs/list', // [!code --]
          label: 'Docs' // [!code --]
       }, // [!code --]
-   ]
+   ] */}
+   (pendding update...)
    ```
 
 2. Change the site favicon.
@@ -176,7 +177,7 @@ The theme file structure is as follows:
    export const siteConfig: SiteConfig = {
       author: 'CWorld / Arthals',
       title: 'Astro Theme Pure',
-      site: 'https://astro-theme-pure.vercel.app',
+      site: 'https://astro-pure.js.org',
       description: 'Stay hungry, stay foolish',
       // ...
    }

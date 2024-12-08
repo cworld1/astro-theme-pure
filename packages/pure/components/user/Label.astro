@@ -1,0 +1,18 @@
+---
+import { cn } from '../../utils'
+
+const { class: className, as: Tag = 'div', title, href, ...props } = Astro.props
+---
+
+<Tag
+  class={cn(
+    className,
+    'flex flex-row items-center justify-center gap-x-2',
+    href && 'hover:opacity-75 transition-all'
+  )}
+  href={href}
+  {...props}
+>
+  <slot name='icon' />
+  <p>{title}</p>
+</Tag>

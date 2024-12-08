@@ -1,13 +1,11 @@
 ---
 import type { MarkdownHeading } from 'astro'
-import PageLayout from '@/layouts/BaseLayout.astro'
 
-import BackToTop from '@/components/pages/BackToTop.astro'
-import PageInfo from '@/components/pages/PageInfo.astro'
-import TOC from '@/components/pages/TOC.astro'
-import { Button } from '@/components/user'
-import { cn } from '@/utils'
-import { integrationConfig } from '@/site-config'
+import { BackToTop, PageInfo, TOC } from 'astro-pure/components/pages'
+import { Button } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
 
 interface Props {
   title: string
@@ -54,7 +52,7 @@ const { title, headings, info, ...props } = Astro.props
         </div>
         <div
           id='content'
-          class={cn('mt-8 max-w-none md:min-w-[45ch]', integrationConfig.typography.class)}
+          class={cn('mt-8 max-w-none md:min-w-[45ch]', config.integ.typography.class)}
         >
           <slot />
         </div>

@@ -1,13 +1,10 @@
 ---
+import { Button, CardList } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
 
-import { Button, CardList } from '@/components/user'
-import { cn } from '@/utils'
-import { integrationConfig } from '@/site-config'
-
-import { docs } from './contents'
-
-export const prerender = true
+import { docs } from '../../utils/docsContents'
 
 const meta = {
   title: 'Docs content',
@@ -24,7 +21,7 @@ const meta = {
 
     <div
       id='content'
-      class={cn('animate mt-8 max-w-none md:min-w-[45ch]', integrationConfig.typography.class)}
+      class={cn('animate mt-8 max-w-none md:min-w-[45ch]', config.integ.typography.class)}
     >
       <h2 class='text-xl font-medium'>Theme documentation</h2>
       <CardList {...docs} />

@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 
-import { cn } from '@/utils'
+import { cn } from 'astro-pure/utils'
 
 interface Props {
   class?: string
@@ -25,7 +25,7 @@ const { class: className, title, tools, ...props } = Astro.props
   {...props}
 >
   <div class='m-0 px-2 text-lg font-medium'>{title}</div>
-  <div class='grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2 sm:gap-y-4'>
+  <div class='grid grid-cols-1 gap-x-2 gap-y-2 sm:grid-cols-2'>
     {
       tools.map((tool) => (
         <a
@@ -34,7 +34,7 @@ const { class: className, title, tools, ...props } = Astro.props
           id={tool.name}
           target='_blank'
         >
-          <div class='flex flex-row items-center gap-x-4 rounded-lg border border-transparent px-2 py-1.5 transition-colors hover:border-border hover:bg-muted'>
+          <div class='flex items-center gap-x-3 rounded-lg border border-transparent px-1.5 py-1 transition-colors hover:border-border hover:bg-muted'>
             <Icon name={tool.iconPath} class='size-10 rounded-lg bg-primary-foreground p-2' />
             <div class='z-20 flex flex-col'>
               <div class='font-medium text-foreground'>{tool.name}</div>

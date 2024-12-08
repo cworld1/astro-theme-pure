@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets'
+import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
+import type { HTMLTag, Polymorphic } from 'astro/types'
+
+import { Button, FormattedDate } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
+
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+  post: CollectionEntry<CollectionKey>
+  detailed?: boolean
+  class?: string
+}
+
+const { as: Tag = 'div', post, detailed = false, class: className } = Astro.props
+
+const { id, data } = post
+
+const { remarkPluginFrontmatter } = await render(post)
+
+const postDate = data.updatedDate ?? data.publishDate
+---
+
+<li
+  class={cn(
+    'group/card flex flex-col relative rounded-2xl border border-border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted',
+    detailed && 'max-sm:px-4 sm:py-5',
+    className
+  )}
+>
+  <a
+    class={cn(
+      'group/link w-full flex flex-col transition-all hover:text-primary',
+      !detailed && 'sm:flex-row',
+      detailed && data.heroImage && 'max-md:pt-24'
+    )}
+    href={`/blog/${id}`}
+    data-astro-prefetch
+  >
+    {
+      detailed && data.heroImage && (
+        <Image
+          src={data.heroImage.src}
+          alt={data.heroImage.alt || data.title}
+          class='cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover/card:opacity-70 md:h-full md:w-3/5'
+          loading='eager'
+        />
+      )
+    }
+
+    <FormattedDate class='min-w-[95px] py-1 text-xs' date={postDate} />
+
+    <Tag class='z-10 flex-grow'>
+      <!-- title -->
+      <div class='flex justify-between'>
+        <div>
+          {data.draft && <span class='text-red-500'>(Draft) </span>}
+          {data.title}
+        </div>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='16'
+          height='16'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke-width='2.5'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          class='my-1 stroke-muted-foreground group-hover/link:stroke-primary'
+          ><line
+            x1='5'
+            y1='12'
+            x2='19'
+            y2='12'
+            class='translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover/link:translate-x-1 group-hover/link:scale-x-100'
+          ></line><polyline
+            points='12 5 19 12 12 19'
+            class='translate-x-0 transition-all duration-300 ease-in-out group-hover/link:translate-x-1'
+          ></polyline></svg
+        >
+      </div>
+      {
+        detailed && (
+          <>
+            {/* desc */}
+            <p
+              class={cn(
+                'line-clamp-2 pt-1 text-sm text-muted-foreground sm:line-clamp-3',
+                data.heroImage && 'sm:me-24'
+              )}
+            >
+              {data.description}
+            </p>
+            <div class='flex items-center gap-2 py-1.5 text-sm italic leading-4 text-muted-foreground sm:py-3'>
+              {/* reading time */}
+              <span class='flex items-center gap-1'>
+                <svg class='size-4'>
+                  <use href='/icons/ui.svg#mingcute-time-line' />
+                </svg>
+                {remarkPluginFrontmatter.minutesRead}
+              </span>
+              {/* language */}
+              {data.language && (
+                <span class='flex items-center gap-1'>
+                  <svg class='size-4'>
+                    <use href='/icons/project.svg#mingcute-earth-2-line' />
+                  </svg>
+                  {data.language}
+                </span>
+              )}
+            </div>
+          </>
+        )
+      }
+    </Tag>
+  </a>
+  <!-- tags -->
+  {
+    detailed && data.tags && (
+      <ul class='text-bgColor mt-1 flex flex-wrap gap-2'>
+        {data.tags.map((tag: string) => (
+          <li>
+            <Button title={tag} href={`/tags/${tag}`} style='pill' />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</li>
+
+<style>
+  .cover-image {
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+    -ms-mask-image: -ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+    -webkit-mask-image: -webkit-linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 100%
+    );
+  }
+
+  @media (max-width: 768px) {
+    .cover-image {
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+      -ms-mask-image: -ms-linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+      -webkit-mask-image: -webkit-linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 100%
+      );
+    }
+  }
+</style>

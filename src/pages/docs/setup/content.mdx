@@ -1,11 +1,11 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'Authoring Content'
 description: 'Astro is a perfect choice for your content-focused site: blogs, marketing sites, portfolios, and more!'
 ---
 
-import { Aside } from '@/components/user'
+import { Aside } from 'astro-pure/user'
 
 Astro helps you [author and present your content](https://docs.astro.build/en/guides/content/). You can write a blog post directly in Astro using Markdown/MDX, or fetch your content from a headless CMS. Astro lets you build a site around your content: you can add a layout to your pages, create an index of posts, and set up an RSS feed to allow readers to subscribe.
 
@@ -27,7 +27,7 @@ Create and write a new `.md` file in your code editor or bring in an existing fi
 
 Let's give you example of [writing Markdown content in Astro](https://docs.astro.build/en/guides/markdown-content/):
 
-```markdown title="src/content/post/first-article.md"
+```markdown title="src/content/blog/first-article.md"
 ---
 title: First Article (Required, max 60)
 description: I like writing articles. (Required, 10 to 160)
@@ -38,6 +38,7 @@ heroImage: { src: './thumbnail.jpg', alt: 'an image targetting my article', colo
 # thumbnail.jpg should be in the same folder as the article
 draft: false (set true will only show in development)
 language: 'English' (String as you like)
+comment: true (set false will disable comment, even if you've enabled it in site-config)
 ---
 
 ## This is a title
@@ -45,11 +46,11 @@ language: 'English' (String as you like)
 This is a paragraph.
 ```
 
-If you have a lot of assets, you can create a folder for title like `src/content/post/first-article/` and put all your assets in there. Of course, your content should be renamed to `index.md` or `index.mdx` and also be contained in this folder.
+If you have a lot of assets, you can create a folder for title like `src/content/blog/first-article/` and put all your assets in there. Of course, your content should be renamed to `index.md` or `index.mdx` and also be contained in this folder.
 
 Too complex? Simple example just need these:
 
-```markdown title="src/content/post/simple-article.md"
+```markdown title="src/content/blog/simple-article.md"
 ---
 title: Simple Article
 description: Just another simple article.

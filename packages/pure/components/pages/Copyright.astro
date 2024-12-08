@@ -1,0 +1,137 @@
+---
+import type { CollectionKey, InferEntrySchema } from 'astro:content'
+import config from 'virtual:config'
+
+import { QRCode } from 'astro-pure/advanced'
+import { cn, getFormattedDate } from 'astro-pure/utils'
+
+import { Icon } from '../user'
+
+interface Props {
+  data: InferEntrySchema<CollectionKey>
+  class?: string
+}
+
+const {
+  data: { heroImage, title, publishDate },
+  class: className
+} = Astro.props
+
+const image = typeof heroImage?.src === 'string' ? heroImage?.src : (heroImage?.src?.src ?? '')
+
+const shares = {
+  weibo: {
+    icon: 'mingcute-weibo-line',
+    link: `http://service.weibo.com/share/share.php?url=${Astro.url}&title=${title}&pic=${image}`
+  },
+  x: {
+    icon: 'mingcute-social-x-line',
+    link: `https://x.com/intent/tweet?text='${title}'&url='${Astro.url}'&via='${config.author}'`
+  },
+  bluesky: {
+    icon: 'mingcute-bluesky-social-line',
+    link: `https://bsky.app/intent/compose?text=${title}%0A${Astro.url}`
+  }
+} as const
+---
+
+<div
+  class={cn(
+    'relative flex flex-col gap-y-2 rounded-xl border px-3 sm:px-4 py-2 sm:py-3',
+    className
+  )}
+>
+  <svg class='absolute end-4 top-4 size-20 opacity-10'>
+    <use href='/icons/copyright-sponsor.svg#mingcute-copyright-line'></use>
+  </svg>
+
+  {/* title & link */}
+  <div class='flex flex-col'>
+    <div class='font-medium text-foreground'>{title}</div>
+    <div class='text-sm'>{Astro.url}</div>
+  </div>
+
+  {/* common info */}
+  <div class='flex flex-row flex-wrap justify-start gap-x-5 gap-y-1 sm:gap-x-8'>
+    <div class='flex gap-x-2 sm:flex-col'>
+      <span>Author</span>
+      <span class='text-sm text-foreground max-sm:place-self-center'>{config.author}</span>
+    </div>
+    <div class='flex gap-x-2 sm:min-w-16 sm:flex-col'>
+      <span>Published at</span>
+      <span class='text-sm text-foreground max-sm:place-self-center'
+        >{
+          getFormattedDate(publishDate, {
+            month: 'long'
+          })
+        }</span
+      >
+    </div>
+    <div class='flex gap-x-2 sm:flex-col'>
+      <span>Copyright</span>
+      <a
+        class='text-sm text-foreground max-sm:place-self-center'
+        href='https://creativecommons.org/licenses/by/4.0/'
+        target='_blank'
+      >
+        CC BY-NC-SA 4.0
+      </a>
+    </div>
+  </div>
+
+  {/* functions */}
+  <div class='relative'>
+    <div class='flex flex-row gap-3'>
+      <button
+        id='copy-link'
+        class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
+      >
+        <Icon class='size-5' name='link' />
+      </button>
+      <button
+        id='get-qrcode'
+        class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
+      >
+        <Icon class='size-5' name='qrcode' />
+      </button>
+      {
+        config.content.share.map((share) => (
+          <a href={shares[share].link} target='_blank'>
+            <button
+              id={`share-${share}`}
+              class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
+            >
+              <Icon class='size-5' name={share} />
+            </button>
+          </a>
+        ))
+      }
+    </div>
+    <QRCode />
+  </div>
+</div>
+
+<div class='mx-6 rounded-b-xl border border-t-0 px-3 pb-1.5 pt-1 sm:mx-8 sm:px-4'>
+  <a
+    href='/projects#sponsorship'
+    class='flex justify-between text-muted-foreground no-underline'
+    target='_blank'
+  >
+    <div>Buy me a cup of coffee ☕.</div>
+    <svg class='m-1 size-5'>
+      <use href='/icons/copyright-sponsor.svg#mingcute-receive-money-line'></use>
+    </svg>
+  </a>
+</div>
+
+<script>
+  import { showToast } from 'astro-pure/utils'
+
+  // Copy link
+  const copyLink = document.getElementById('copy-link')
+  copyLink?.addEventListener('click', () => {
+    navigator.clipboard.writeText(window.location.href)
+    // Show toast
+    showToast({ message: 'Link copied!' })
+  })
+</script>

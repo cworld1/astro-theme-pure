@@ -1,10 +1,10 @@
 ---
-import PageLayout from '@/layouts/CommonPage.astro'
 import { Image } from 'astro:assets'
 
+import { Button, Collapse } from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import Sponsors from '@/components/projects/Sponsors.astro'
-import { Button, Collapse } from '@/components/user'
 import alipay from '@/assets/alipay-qrcode.jpg'
 import wechat from '@/assets/wechat-qrcode.jpg'
 
@@ -73,7 +73,7 @@ const headings = [
           { type: 'site', href: 'https://github.com/cworld1/astro-theme-pure' },
           {
             type: 'doc',
-            href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/post/customize/index.md'
+            href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
           }
         ]
       }
@@ -213,10 +213,10 @@ const headings = [
 </PageLayout>
 
 <script is:inline type='module' data-astro-rerun>
-  import { siteConfig } from '/src/site.config.ts'
+  import config from '/src/site.config.ts'
 
   const loadPageviewCount = async () => {
-    const pageviewCount = await import(`${siteConfig.npmCDN}/@waline/client@v3/dist/pageview.js`)
+    const pageviewCount = await import(`${config.npmCDN}/@waline/client@v3/dist/pageview.js`)
     pageviewCount({
       serverURL: siteConfig.commonPage.walineServerUrl,
       path: window.location.pathname

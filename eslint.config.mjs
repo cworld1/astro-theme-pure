@@ -1,10 +1,9 @@
 // @ts-check
 
-import globals from 'globals'
 import pluginJs from '@eslint/js'
-import tseslint from 'typescript-eslint'
-
 import eslintPluginAstro from 'eslint-plugin-astro'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default [
   // For JavaScript and TypeScript files in general

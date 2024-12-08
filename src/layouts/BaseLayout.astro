@@ -1,11 +1,8 @@
 ---
-import type { SiteMeta } from '@/types'
-
+import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
+import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
-import Footer from '@/components/layout/Footer.astro'
-import Header from '@/components/layout/Header.astro'
-import ThemeProvider from '@/components/layout/ThemeProvider.astro'
-import { siteConfig } from '@/site-config'
+import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -17,12 +14,12 @@ interface Props {
 }
 
 const {
-  meta: { articleDate, description = siteConfig.description, ogImage, title },
+  meta: { articleDate, description = config.description, ogImage, title },
   highlightColor
 } = Astro.props
 ---
 
-<html lang={siteConfig.lang}>
+<html lang={config.locale.lang}>
   <head>
     <BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
     <ThemeProvider />
@@ -30,21 +27,11 @@ const {
 
   <body class='flex justify-center bg-background transition-colors'>
     {
-      highlightColor && highlightColor != 'hsl(var(--primary) / var(--tw-text-opacity))' && (
-        <>
-          <div
-            class='pointer-events-none absolute start-0 top-0 z-0 h-1/2 w-full opacity-25'
-            style={{ backgroundImage: `linear-gradient(${highlightColor}, transparent)` }}
-          />
-          <style define:vars={{ highlightColor }}>
-            :global(.highlight) {
-              color: var(--highlightColor) !important;
-            }
-            :global(.highlight-bg) {
-              background-color: var(--highlightColor) !important;
-            }
-          </style>
-        </>
+      highlightColor && (
+        <div
+          class='pointer-events-none absolute start-0 top-0 z-0 h-screen w-full opacity-25'
+          style={`background-image:linear-gradient(${highlightColor},transparent)`}
+        />
       )
     }
     <main
@@ -54,5 +41,18 @@ const {
       <slot />
       <Footer />
     </main>
+
+    {/* Set highlight color */}
+    <style define:vars={{ highlightColor }}>
+      :global(.highlight) {
+        color: var(--highlightColor, hsl(var(--primary) / var(--tw-text-opacity))) !important;
+      }
+      :global(.highlight-bg) {
+        background-color: var(
+          --highlightColor,
+          hsl(var(--primary) / var(--tw-text-opacity))
+        ) !important;
+      }
+    </style>
   </body>
 </html>

@@ -1,11 +1,11 @@
 ---
-layout: '@/pages/docs/DocsLayout.astro'
+layout: '@/layouts/DocsLayout.astro'
 
 title: 'Comment System'
 description: 'Comment system for pages at the bottom'
 ---
 
-import { Aside } from '@/components/user'
+import { Aside } from 'astro-pure/user'
 
 ## Waline Comment System
 
@@ -47,13 +47,13 @@ export const integrationConfig: IntegrationConfig = {
 You can call it manually in `.astro` or `.mdx` files.
 
 ```jsx
-import { Comment } from '@/components/advanced'
+import { Comment } from 'astro-pure/advanced'
 
 ;<Comment />
 ```
 
 Render:
 
-import { Comment } from '@/components/advanced'
+import { Comment } from 'astro-pure/advanced'
 
 <Comment />

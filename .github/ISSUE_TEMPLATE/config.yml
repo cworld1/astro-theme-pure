@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💁 Discussion
+    url: https://github.com/cworld1/astro-theme-pure/discussions
+    about: 'This issue tracker is not for support questions. Leave a comment on the discussion board if you need help.'
+  - name: 📘 Documentation
+    url: https://astro-pure.js.org/docs/list
+    about: Checkout the documentation for more information
+  - name: 💡 Ideas for New Features, Improvements and RFCs
+    url: https://github.com/withastro/roadmap/discussions
+    about: Propose and discuss future improvements to Astro
+  - name: 👾 Chat
+    url: https://t.me/astro_pure
+    about: Chat with the community on Telegram

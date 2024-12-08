@@ -1,0 +1,18 @@
+---
+// https://github.com/withastro/starlight/blob/main/packages/starlight/user-components/TabItem.astro
+import { TabItemTagname } from '../../plugins/rehype-tabs'
+
+interface Props {
+  label: string
+}
+
+const { label } = Astro.props
+
+if (!label) {
+  throw new Error('Missing prop `label` on `<TabItem>` component.')
+}
+---
+
+<TabItemTagname data-label={label}>
+  <slot />
+</TabItemTagname>
