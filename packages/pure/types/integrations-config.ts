@@ -24,7 +24,7 @@ export const IntegrationConfigSchema = () =>
       target: z.string()
     }),
 
-    /** Tailwindcss typography */
+    /** UnoCSS typography */
     typography: z.object({
       /** The class to apply to the typography. */
       class: z

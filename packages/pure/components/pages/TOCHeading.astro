@@ -7,8 +7,10 @@ interface Props {
 }
 
 const {
-  heading: { depth, slug, subheadings, text }
+  heading: { depth, slug, subheadings, text: rawText }
 } = Astro.props
+// TODO: Temporary fix for the issue with the headings that end with link reference text
+const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText
 ---
 
 <li>

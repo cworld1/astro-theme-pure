@@ -34,7 +34,7 @@ const blog = defineCollection({
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
       language: z.string().optional(),
       draft: z.boolean().default(false),
-      // Integrations
+      // Special fields
       comment: z.boolean().default(true)
     })
 })
@@ -49,7 +49,9 @@ const docs = defineCollection({
       publishDate: z.coerce.date().optional(),
       updatedDate: z.coerce.date().optional(),
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
-      draft: z.boolean().default(false)
+      draft: z.boolean().default(false),
+      // Special fields
+      order: z.number().default(999)
     })
 })
 

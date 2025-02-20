@@ -1,6 +1,6 @@
 {
   "name": "astro-pure",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "A simple, clean but powerful blog theme build by astro.",
   "type": "module",
   "author": "CWorld",
@@ -42,6 +42,7 @@
     "hast-util-select": "^6.0.3",
     "node-html-parser": "^7.0.1",
     "pagefind": "^1.2.0",
-    "rehype-external-links": "^3.0.0"
+    "rehype-external-links": "^3.0.0",
+    "unocss": "^65.4.3"
   }
 }

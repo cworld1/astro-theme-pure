@@ -1,5 +1,5 @@
 // Copy integrations output
-// It's a known problem on Astro v5, causing output-dependened integrations
+// It's a known problem on Astro v5, causing output-depended integrations
 // files missing on the final build.
 // This plugin helps to copy the output files to the final build.
 // See:

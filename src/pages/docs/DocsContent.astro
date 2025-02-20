@@ -37,9 +37,11 @@ const { title = true, class: className, ...props } = Astro.props
       Object.entries(docCategories).map(([id, title]: [string, string]) => (
         <li>
           <h3 class='text-muted-foreground text-xs tracking-widest uppercase'>{title}</h3>
-          <ul class='mt-2 flex flex-col gap-y-1 border-l-3 ml-1 pl-3'>
-            {docsByCate[id].map((doc) => (
-              <li class='text-foreground'>
+          <ul class='mt-2 flex flex-col'>
+            {docsByCate[id]
+              .sort((a, b) => a.data.order - b.data.order)
+              .map((doc) => (
+<li class='docs-item relative ms-2 px-3 py-1 text-foreground/75 transition-all rounded-2xl'>
                 <a href={`/docs/${doc.id}`}>{doc.data.title}</a>
               </li>
             ))}

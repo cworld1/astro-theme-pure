@@ -12,34 +12,57 @@ social.rss = {
   label: 'RSS',
   url: '/rss.xml'
 }
+
+const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
 ---
 
 <footer class='mx-auto mb-5 mt-16'>
   <div class='border-t pt-5'>
     <div class='flex items-center gap-y-3 max-sm:flex-col sm:justify-between sm:gap-y-0'>
       <div
-        class='flex items-center gap-x-4 gap-y-2 text-muted-foreground max-sm:flex-col [&_a:hover]:text-primary [&_a]:text-foreground'
+        class='flex items-center gap-x-4 gap-y-2 text-muted-foreground max-sm:flex-col [&_a]:text-foreground'
       >
+        {/* Position 1 */}
         {
-          footerConf.registration && (
-            <a
-              class='text-xs'
-              style='color:hsl(var(--muted-foreground)/var(--un-text-opacity,1))'
-              href={footerConf.registration.url}
-              target='_blank'
-            >
-              {footerConf.registration.text}
-            </a>
+          footerLink1.length > 0 && (
+            <div>
+              {footerLink1.map(({ title, link, style }, index) => (
+                <span>
+                  <a href={link} target='_blank' class={style}>
+                    {title}
+                  </a>
+                  {index < footerLink1.length - 1 && ' • '}
+                </span>
+              ))}
+            </div>
           )
         }
-        <span>
+        {/* Position 2 */}
+        <div>
           © {year}
-          {config.author} &
-          <a href='/terms/list'>Site policy</a>
-        </span>
+          {config.author}
+          {
+            footerConf.links && footerConf.links.length > 0 && (
+              <>
+                &
+                <span>
+                  {footerConf.links
+                    .filter(({ pos }) => pos === 2)
+                    .map(({ title, link, style }) => (
+                      <span>
+                        <a href={link} target='_blank' class={style}>
+                          {title}
+                        </a>
+                      </span>
+                    ))}
+                </span>
+              </>
+            )
+          }
+        </div>
         {
           footerConf.credits && (
-            <span class='text-muted-foreground [&_a:hover]:text-primary [&_a]:text-foreground'>
+            <span>
               <a href='https://github.com/withastro/astro' target='_blank'>
                 Astro
               </a>
