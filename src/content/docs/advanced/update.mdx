@@ -1,6 +1,7 @@
 ---
 title: 'Update Theme'
 description: 'Update astro theme pure to the latest version'
+order: 1
 ---
 
 import { Aside } from 'astro-pure/user'
@@ -11,6 +12,29 @@ import { Aside } from 'astro-pure/user'
 </Aside>
 
 ## Breaking Changes
+
+### v4.0.3
+
+- Change footer registration config to `links`. This will give you more flexibility to add more links or other information:
+
+  ```ts title="src/site.config.ts"
+  export const theme: ThemeUserConfig = {
+    footer: {
+      links: [ // [!code highlight:12]
+        {
+          title: 'Moe ICP APTX4869',
+          link: 'https://icp.gov.moe/?keyword=APTX4869',
+          style: 'text-sm' // Uno/TW CSS class
+        },
+        {
+          title: 'Site Policy',
+          link: '/terms/list',
+          pos: 2 // position set to 2 will be appended to copyright line
+        }
+      ]
+    }
+  }
+  ``` 
 
 ### v4.0.2-beta
 
@@ -75,7 +99,7 @@ import { Aside } from 'astro-pure/user'
     import config from 'vertual:config' // [!code ++]
     ```
 
-- Built-in astro config supported. package `astro-pure` will automatically config some integrations like `@astrojs/tailwind`, `@astrojs/mdx`, `@astrojs/sitemap`, also with some rehypePlugins and remarkPlugins.
+- Built-in astro config supported. package `astro-pure` will automatically config some integrations like `unocss/astro`, `@astrojs/mdx`, `@astrojs/sitemap`, also with some rehypePlugins and remarkPlugins.
 - Change search engine to [pagefind](https://pagefind.app/), mainly because Astro v5 will not allow getting collection data directly from client (that is core working mode of Fuse.js search engine).
 - Change some `BaseHead` tags config to `src/site.config.ts`.
 

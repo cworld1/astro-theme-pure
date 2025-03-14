@@ -57,11 +57,25 @@ export const theme: ThemeUserConfig = {
 
   /** Configure the footer of your site. */
   footer: {
-    // Registration information for ICP (optional)
-    registration: {
-      url: 'https://icp.gov.moe/?keyword=APTX4869',
-      text: 'Moe ICP APTX4869'
-    },
+    links: [
+      // Registration link
+      {
+        title: 'Moe ICP APTX4869',
+        link: 'https://icp.gov.moe/?keyword=APTX4869',
+        style: 'text-sm' // Uno/TW CSS class
+      },
+      {
+        title: 'Travelling',
+        link: 'https://www.travellings.cn/go.html',
+        style: 'text-sm'
+      },
+      // Privacy Policy link
+      {
+        title: 'Site Policy',
+        link: '/terms/list',
+        pos: 2 // position set to 2 will be appended to copyright line
+      }
+    ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
@@ -79,7 +93,7 @@ export const theme: ThemeUserConfig = {
 }
 
 export const integ: IntegrationUserConfig = {
-  // Links menagement
+  // Links management
   // See: https://astro-pure.js.org/docs/integrations/links
   links: {
     // Friend logbook
@@ -108,10 +122,9 @@ export const integ: IntegrationUserConfig = {
     server: 'https://api.quotable.io/quotes/random?maxLength=60',
     target: `(data) => data[0].content || 'Error'`
   },
-  // Tailwindcss typography
-  // See: https://astro-pure.js.org/docs/integrations/others#tailwindcsstypography
+  // UnoCSS typography
+  // See: https://unocss.dev/presets/typography
   typography: {
-    // https://github.com/tailwindlabs/tailwindcss-typography
     class: 'prose text-base text-muted-foreground'
   },
   // A lightbox library that can add zoom effect

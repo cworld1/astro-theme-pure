@@ -51,7 +51,7 @@ const typographyConfig = {
     },
     // Table
     table: {
-      display: 'inline-table',
+      display: 'block',
       width: '100%',
       'overflow-x': 'scroll',
       'font-size': '.875em'
@@ -110,6 +110,23 @@ const typographyConfig = {
     a: {
       'font-weight': '500',
       color: fg
+    },
+    'code:not(pre code)': {
+      'white-space': 'pre-wrap!important',
+      'word-break': 'break-all!important'
+    },
+    '.katex-html': {
+      overflow: 'auto hidden',
+      padding: '3px'
+    },
+    '.katex-html .base': {
+      'margin-block': '0',
+      'margin-inline': 'auto'
+    },
+    '.katex-html .tag': {
+      position: 'relative !important',
+      display: 'inline-block',
+      'padding-inline-start': '0.5rem'
     }
   }
 }

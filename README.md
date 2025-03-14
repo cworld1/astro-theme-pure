@@ -39,7 +39,7 @@ Checkout [Demo Site →](https://astro-pure.js.org/)
 
 Theme includes a lot of components, which can not only be used in the theme, but also in other astro projects.
 
-> For other astro projects, Tailwind CSS is required.
+> For other astro projects, UnoCSS is required.
 
 - Basic components: `Aside`, `Tabs`, `Timeline`, `Steps`, `Spoiler`...
 - Advanced components: `GithubCard`, `LinkPreview`, `Quote`, `QRCode`...

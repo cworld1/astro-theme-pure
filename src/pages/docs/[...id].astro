@@ -4,9 +4,8 @@ import { render, type CollectionEntry } from 'astro:content'
 import { MediumZoom } from 'astro-pure/advanced'
 import { TOC } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { CardList } from 'astro-pure/user'
+import { Collapse } from 'astro-pure/user'
 import PageLayout from '@/layouts/ContentLayout.astro'
-import { docs } from '@/pages/docs/docsContents'
 
 import DocsContent from './DocsContent.astro'
 
@@ -49,12 +48,19 @@ const { description, title } = post.data
         )
       }
     </div>
-    <CardList {...docs} collapse class='md:hidden' />
+    <Collapse class='md:hidden' title='See more docs'>
+      <DocsContent title={false} />
+    </Collapse>
   </Fragment>
 
   <Content />
 
-  <CardList {...docs} title='See more docs' class='mt-5' slot='bottom' />
+  <div
+    class='mt-5 not-prose my-3 flex flex-col gap-y-2 rounded-xl border px-4 py-3 sm:py-4'
+    slot='bottom'
+  >
+    <DocsContent />
+  </div>
 </PageLayout>
 <MediumZoom />
 
