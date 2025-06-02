@@ -150,10 +150,33 @@ Rendering LaTeX in Astro.js enriches your markdown files with mathematical expre
    <link rel="stylesheet" href={`${config.npmCDN}/katex@0.16.15/dist/katex.min.css`}>
    ```
 
+4. Some CSS code is recommended:
+
+   To ensure that the LaTeX formulas are displayed better, you may need to add the following code to `public/styles/global.css`:
+
+   ```css
+   span.katex-display {
+     overflow-y: scroll;
+     padding: 0.5rem;
+   }
+   .katex-html {
+     overflow: auto hidden;
+     padding: 3px;
+   }
+   .katex-html .base {
+     margin-block: 0;
+     margin-inline: auto;
+   }
+   .katex-html .tag {
+     position: relative !important;
+     display: inline-block;
+     padding-inline-start: 0.5rem;
+   }
+   ```
+
 </Steps>
 
 Common Pitfalls and Solutions:
-
 
 - CSS Styling Issues
   
