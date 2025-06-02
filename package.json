@@ -1,7 +1,7 @@
 {
   "name": "astro-theme-pure",
   "type": "module",
-  "version": "4.0.2-beta",
+  "version": "4.0.3",
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
@@ -26,7 +26,7 @@
     "@unocss/reset": "^66.1.3",
     "@waline/client": "^3.5.7",
     "astro": "^5.8.1",
-    "astro-pure": "1.2.6",
+    "astro-pure": "1.2.7",
     "katex": "^0.16.22",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
