@@ -15,9 +15,7 @@
 > [!WARNING]
 > 主题模板 v4.0.2^ 尝试将 CSS 引擎换到 UnoCSS。更稳定的版本是 [v4.0.1-beta](https://github.com/cworld1/astro-theme-pure/tree/v4.0.1-beta)。已知问题：
 >
-> 1. UnoCSS 适配（急需解决）
-> 2. 无法在 Vercel 上打包站点地图和 pagefind 资源（[需要上游修复](https://github.com/withastro/astro/issues/12663) & 临时修复）
-> 3. Head 标签和自定义选项仍在开发中（已经暴露模板直接改）
+> 1. Head 标签和自定义选项仍在开发中（已经暴露模板直接改）
 
 ## 简介
 

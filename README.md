@@ -15,9 +15,7 @@ A simple, fast and powerful blog theme built by Astro.
 > [!WARNING]
 > Theme template v4.0.2^ is changing CSS engine to UnoCSS. Stabler experience is currently on [v4.0.1-beta](https://github.com/cworld1/astro-theme-pure/tree/v4.0.1-beta). Known issues:
 >
-> 1. UnoCSS adaption (serious)
-> 2. Cannot pack sitemap and pagefind resources on Vercel ([need upstream fix](https://github.com/withastro/astro/issues/12663) & temp fixed)
-> 3. Header & customize options is still under development (template exposed still)
+> 1. Header & customize options is still under development (template exposed still)
 
 ## Introduction
 
