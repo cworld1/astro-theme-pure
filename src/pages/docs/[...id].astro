@@ -7,7 +7,7 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Collapse } from 'astro-pure/user'
 import PageLayout from '@/layouts/ContentLayout.astro'
 
-import DocsContent from './DocsContent.astro'
+import DocsContents from './DocsContents.astro'
 
 export const prerender = true
 
@@ -31,7 +31,7 @@ const { description, title } = post.data
 <PageLayout meta={{ description, title }} back='/docs'>
   <Fragment slot='sidebar'>
     {!!headings.length && <TOC {headings} />}
-    <DocsContent class='docs-toc block mt-3' />
+    <DocsContents class='docs-toc block mt-3' />
   </Fragment>
 
   <Fragment slot='header'>
@@ -49,7 +49,7 @@ const { description, title } = post.data
       }
     </div>
     <Collapse class='md:hidden' title='See more docs'>
-      <DocsContent title={false} />
+      <DocsContents title={false} />
     </Collapse>
   </Fragment>
 
@@ -59,7 +59,7 @@ const { description, title } = post.data
     class='mt-5 not-prose my-3 flex flex-col gap-y-2 rounded-xl border px-4 py-3 sm:py-4'
     slot='bottom'
   >
-    <DocsContent />
+    <DocsContents />
   </div>
 </PageLayout>
 <MediumZoom />
