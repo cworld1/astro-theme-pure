@@ -80,7 +80,7 @@ const { title, list: friend_list, ...props } = Astro.props
               </div>
             </div>
             <Image
-              class='absolute -start-2 top-0 z-0 my-0 h-full w-2/3 bg-white object-cover opacity-15'
+              class='absolute transition-opacity duration-300 -start-2 top-0 z-0 my-0 h-full w-2/3 bg-white object-cover opacity-15 group-hover:opacity-30'
               src={frd.avatar}
               height={80}
               width={80}
