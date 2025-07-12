@@ -167,6 +167,12 @@ const rules: Rule<object>[] = [
       'white-space': 'nowrap',
       'border-width': '0'
     }
+  ],
+  [
+    'object-cover',
+    {
+      'object-fit': 'cover'
+    }
   ]
 ]
 
