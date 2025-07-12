@@ -6,8 +6,6 @@ export const theme: ThemeUserConfig = {
   title: 'Astro Theme Pure',
   /** Will be used in index page & copyright declaration */
   author: 'Pure Lab',
-  /** The year the site was established. If specified, the copyright year will be displayed as a range. */
-  since: 2024,
   /** Description metadata for your website. Can be used in page metadata. */
   description: 'Stay hungry, stay foolish',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
@@ -59,6 +57,9 @@ export const theme: ThemeUserConfig = {
 
   /** Configure the footer of your site. */
   footer: {
+    // Year format
+    year: `© ${new Date().getFullYear()}`,
+    // year: `© 2019 - ${new Date().getFullYear()}`,
     links: [
       // Registration link
       {

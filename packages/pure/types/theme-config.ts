@@ -18,12 +18,6 @@ export const ThemeConfigSchema = () =>
     /** Will be used in index page & copyright declaration */
     author: z.string().describe('Will be used in index page & copyright declaration'),
 
-    /** The year the site was established. If specified, the copyright year will be displayed as a range. */
-    since: z
-      .number()
-      .optional()
-      .describe('The year the site was established. If specified, the copyright year will be displayed as a range.'),
-
     /** Description metadata for your website. Can be used in page metadata. */
     description: z
       .string()
@@ -125,6 +119,8 @@ export const ThemeConfigSchema = () =>
 
     /** Configure the footer of your site. */
     footer: z.object({
+      /** The footer content for your site. */
+      year: z.string().describe('The footer content for your site.'),
       /** The footer links for your site. */
       links: z
         .array(
