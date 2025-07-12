@@ -63,8 +63,7 @@ export const addTitle = (): ShikiTransformer => {
       const div = h(
         'div',
         {
-          class:
-            'title absolute top-0 left-0 m-2 text-sm text-foreground px-3 py-1 bg-primary-foreground rounded-lg border'
+          class: 'title text-sm text-foreground px-3 py-1 bg-primary-foreground rounded-lg border'
         },
         meta.title.toString()
       )

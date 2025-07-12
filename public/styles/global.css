@@ -116,6 +116,12 @@ span.katex-display {
       top: calc(2rem + 0.8571429em);
     }
   }
+  & .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0.5rem;
+  }
   & .language {
     transition: opacity 0.3s;
     position: absolute;
