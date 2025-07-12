@@ -7,19 +7,23 @@ order: 1
 import { Aside } from 'astro-pure/user'
 
 <Aside type='caution'>
-  This theme is updated frequently, and update theme maybe a little bit complex. Please read the
+  This theme is updated frequently, and updating the theme may be a little bit complex. Please read the
   following breaking changes carefully.
 </Aside>
 
 ## Breaking Changes
 
+### v4.0.6
+
+- Changed the project card var name to `projects` instead of `project`.
+
 ### v4.0.5
 
-- Change the UnoCSS preset from `Wind3` to `Mini`. Some features are removed, like `gradient`, `animation`, `container`, etc.
+- Changed the UnoCSS preset from `Wind3` to `Mini`. Some features are removed, like `gradient`, `animation`, `container`, etc.
 
 ### v4.0.3
 
-- Change footer registration config to `links`. This will give you more flexibility to add more links or other information:
+- Changed footer registration config to `links`. This will give you more flexibility to add more links or other information:
 
   ```ts title="src/site.config.ts"
   export const theme: ThemeUserConfig = {
@@ -42,8 +46,8 @@ import { Aside } from 'astro-pure/user'
 
 ### v4.0.2-beta
 
-- Considering move tools icons to new path like `src/assets/tools/`, this may help user know which ones are relevant to tools.
-- Change links `applyTip` to custom array style:
+- Consider moving tool icons to a new path such as `src/assets/tools/`; this may help users know which ones are relevant to tools.
+- Changed links `applyTip` to a custom array style:
 
   ```ts title="src/site.config.ts"
   export const integ: IntegrationUserConfig = {
@@ -59,12 +63,12 @@ import { Aside } from 'astro-pure/user'
   }
   ```
 
-- Add env `BUN_LINK_PKG`, set this to `true` where automatically refer the package `astro-pure` in path `packages/pure` instead of `node_modules/astro-pure`. This may help user to develop the theme or change code for them (may not be recommended for production).
-- Change CSS framework to UnoCSS. Will affect `unocss.config.ts` & typography classname setting.
+- Add the env variable `BUN_LINK_PKG`. Set this to `true` to automatically refer to the package `astro-pure` in the path `packages/pure` instead of `node_modules/astro-pure`. This may help users develop the theme or change code for themselves (not recommended for production).
+- Changed the CSS framework to UnoCSS. This will affect `unocss.config.ts` and typography class name settings.
 
 ### v4.0.1-beta
 
-- Change svg deliver import to custom import svg element. This will affect using component for `ToolSelection`. You should change:
+- Changed svg deliver import to custom import svg element. This will affect using component for `ToolSelection`. You should change:
 
   (Optional) Move icons to new path like `src/assets/icons/`
 
@@ -83,7 +87,7 @@ import { Aside } from 'astro-pure/user'
     ]},
   />
 
-- This change import a new component `Svg`. See [User Components #Svg Loader](/docs/integrations/components#svg-loader) for usage.
+- This changes import a new component `Svg`. See [User Components #Svg Loader](/docs/integrations/components#svg-loader) for usage.
 
 ### v4.0.0-alpha
 
@@ -104,8 +108,8 @@ import { Aside } from 'astro-pure/user'
     ```
 
 - Built-in astro config supported. package `astro-pure` will automatically config some integrations like `unocss/astro`, `@astrojs/mdx`, `@astrojs/sitemap`, also with some rehypePlugins and remarkPlugins.
-- Change search engine to [pagefind](https://pagefind.app/), mainly because Astro v5 will not allow getting collection data directly from client (that is core working mode of Fuse.js search engine).
-- Change some `BaseHead` tags config to `src/site.config.ts`.
+- Changed search engine to [pagefind](https://pagefind.app/), mainly because Astro v5 will not allow getting collection data directly from client (that is core working mode of Fuse.js search engine).
+- Changed some `BaseHead` tags config to `src/site.config.ts`.
 
 ### v3.1.4
 
@@ -120,7 +124,7 @@ import { Aside } from 'astro-pure/user'
   ```
 
 - Move `Substats` config to related page `src/pages/about/index.astro`.
-- Change Github Card component to `GithubCard` in `src/components/advanced`. See [Advanced Components #Github Card](http://localhost:4321/docs/integrations/advanced#github-card) for usage.
+- Changed Github Card component to `GithubCard` in `src/components/advanced`. See [Advanced Components #Github Card](http://localhost:4321/docs/integrations/advanced#github-card) for usage.
 - Move Links Logbook to `src/site.config.ts`. See [Friend Links #Basic Configurations](/docs/integrations/links#basic-configurations).
 
 ### v3.1.3
@@ -147,7 +151,7 @@ import { Aside } from 'astro-pure/user'
 
 ### v3.1.0 (pre-release)
 
-- Change common content markdown formatter `coverImage` to `heroImage`. You need to modify all your markdown files to replace `coverImage` with `heroImage`.
+- Changed common content markdown formatter `coverImage` to `heroImage`. You need to modify all your markdown files to replace `coverImage` with `heroImage`.
 
 ### v3.0.9
 
@@ -163,11 +167,11 @@ If you create a new project using fork, you can just rebase the theme repository
 
 ### Merge Manually
 
-As there's not the same git history, you might need to merge the theme repository to your project manually.
+As the git histories are not the same, you might need to merge the theme repository into your project manually.
 
-A soluble way for Windows user is using tool [WinMerge](https://winmerge.org/).
+A practical way for Windows users is to use the tool [WinMerge](https://winmerge.org/).
 
-A filter list here may be helpful:
+A filter list may be helpful:
 
 ```diff
 ## This is a directory/file filter template for WinMerge
