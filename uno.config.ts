@@ -1,5 +1,9 @@
 import { defineConfig, presetMini, presetTypography, type Rule } from 'unocss'
 
+import { integ } from './src/site.config.ts'
+
+const typographyCustom = integ.typography || {}
+
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
 const fgMuted = 'hsl(var(--muted-foreground) / var(--un-text-opacity, 1))'
 const bgMuted = 'hsl(var(--muted) / var(--un-bg-opacity, 1))'
@@ -35,7 +39,8 @@ const typographyConfig = {
       'border-left': 'inherit',
       'border-radius': 'var(--radius)',
       'padding-inline': '1.6rem',
-      'box-shadow': '0 5px 0 ' + bgMuted
+      'box-shadow': '0 5px 0 ' + bgMuted,
+      ...(typographyCustom.blockquoteStyle === 'normal' ? { 'font-style': 'normal' } : {})
     },
     'blockquote::after': {
       color: fgMuted,
@@ -87,6 +92,19 @@ const typographyConfig = {
       'margin-top': '.5em',
       'margin-bottom': '.5em'
     },
+    // Inline code
+    ...(typographyCustom.inlineCodeBlockStyle === 'modern' && {
+      ':not(pre)>code::before,:not(pre)>code::after': {
+        content: 'none'
+      },
+      ':not(pre) > code': {
+        padding: '0.3em 0.5em',
+        color: 'hsl(var(--primary) / var(--un-text-opacity, 1))',
+        border: '1px solid hsl(var(--border) / 1)',
+        'border-radius': 'var(--radius)',
+        'background-color': 'hsl(var(--muted) / var(--un-bg-opacity, 1))'
+      }
+    }),
     // Others
     img: {
       'border-radius': 'var(--radius)',
