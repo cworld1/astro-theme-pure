@@ -1,0 +1,197 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+import SignatureSVG from './signature.svg?raw'
+
+interface Props extends HTMLAttributes<'div'> {
+  mode?: 'loop' | 'once-on-view'
+  drawDelay?: number
+  rollbackDelay?: number
+  loopPause?: number
+  threshold?: number
+  defaultDuration?: number
+}
+
+const {
+  mode = 'loop',
+  drawDelay = 200,
+  rollbackDelay = 80,
+  loopPause = 2000,
+  threshold = 1.0,
+  defaultDuration = 600,
+  class: className,
+  ...rest
+} = Astro.props
+---
+
+<div
+  class:list={[
+    'signature-wrapper w-40 float-right mt-4 [&_path]:stroke-black dark:[&_path]:stroke-gray-2 [&_path]:opacity-0',
+    className
+  ]}
+  data-mode={mode}
+  {...rest}
+>
+  <Fragment set:html={SignatureSVG} />
+</div>
+
+<script
+  is:inline
+  define:vars={{ mode, drawDelay, rollbackDelay, loopPause, threshold, defaultDuration }}
+>
+  function setupSignature(wrapper) {
+    let initialPaths = Array.from(wrapper.querySelectorAll('path[stroke]'))
+    if (initialPaths.length === 0) return
+
+    initialPaths.sort((a, b) => {
+      const seqA = a.getAttribute('seq')
+      const seqB = b.getAttribute('seq')
+      const numA = parseInt(seqA, 10)
+      const numB = parseInt(seqB, 10)
+      const hasSeqA = !isNaN(numA)
+      const hasSeqB = !isNaN(numB)
+
+      if (hasSeqA && hasSeqB) return numA - numB
+      if (hasSeqA) return -1
+      if (hasSeqB) return 1
+      return 0
+    })
+    const paths = initialPaths
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (motionQuery.matches) {
+      paths.forEach((path) => {
+        path.style.opacity = '1'
+      })
+      return
+    }
+
+    // 计算路径长度和动画时长
+    const pathLengths = new Map()
+    const pathDurations = new Map()
+
+    paths.forEach((path) => {
+      const length = path.getTotalLength()
+      pathLengths.set(path, length)
+
+      const customDuration = path.getAttribute('data-duration')
+      const duration = customDuration ? parseInt(customDuration, 10) : defaultDuration
+      pathDurations.set(path, duration)
+
+      path.style.strokeDasharray = `${length} ${length}`
+      path.style.strokeDashoffset = length
+      path.style.transition = 'none'
+      path.style.opacity = '1'
+    })
+
+    // 使用递归方式实现顺序动画
+    const drawSequentially = (index, callback) => {
+      if (index >= paths.length) {
+        if (callback) callback()
+        return
+      }
+
+      const path = paths[index]
+      const duration = pathDurations.get(path)
+
+      // 强制重排以确保初始状态被应用
+      path.getBoundingClientRect()
+
+      // 设置动画
+      path.style.transition = `stroke-dashoffset ${duration}ms ease-in-out`
+      path.style.strokeDashoffset = '0'
+
+      // 等待动画完成
+      setTimeout(() => {
+        // 如果不是最后一笔，添加延迟
+        // @ts-ignore
+        const nextDelay = index < paths.length - 1 ? drawDelay : 0
+        setTimeout(() => {
+          drawSequentially(index + 1, callback)
+        }, nextDelay)
+      }, duration)
+    }
+
+    const rollbackSequentially = (index, callback) => {
+      if (index < 0) {
+        if (callback) callback()
+        return
+      }
+
+      const path = paths[index]
+      const duration = pathDurations.get(path)
+      const currentRollbackDuration = duration * 0.8
+
+      // 强制重排
+      path.getBoundingClientRect()
+
+      // 设置回滚动画
+      path.style.transition = `stroke-dashoffset ${currentRollbackDuration}ms ease-in-out`
+      path.style.strokeDashoffset = pathLengths.get(path)
+
+      // 等待动画完成
+      setTimeout(() => {
+        // 如果不是最后一笔，添加延迟
+        // @ts-ignore
+        const nextDelay = index > 0 ? rollbackDelay : 0
+        setTimeout(() => {
+          rollbackSequentially(index - 1, callback)
+        }, nextDelay)
+      }, currentRollbackDuration)
+    }
+
+    // 执行动画
+    // @ts-ignore
+    if (mode === 'loop') {
+      const runLoop = () => {
+        // 绘制所有笔画
+        drawSequentially(0, () => {
+          // 绘制完成后暂停
+          setTimeout(() => {
+            // 回滚所有笔画
+            rollbackSequentially(paths.length - 1, () => {
+              // 回滚完成后暂停
+              setTimeout(() => {
+                // 重新开始循环
+                runLoop()
+                // @ts-ignore
+              }, loopPause / 2)
+            })
+            // @ts-ignore
+          }, loopPause)
+        })
+      }
+
+      // 初始延迟后开始
+      setTimeout(runLoop, 500)
+      // @ts-ignore
+    } else if (mode === 'once-on-view') {
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // 再等500ms后移除观察器
+              setTimeout(() => {
+                drawSequentially(0)
+                obs.unobserve(entry.target)
+              }, 500)
+            }
+          })
+        },
+        // @ts-ignore
+        { threshold: threshold }
+      )
+      observer.observe(wrapper)
+    }
+  }
+
+  document.querySelectorAll('.signature-wrapper').forEach(setupSignature)
+</script>
+
+<style is:global>
+  .signature-wrapper svg {
+    width: 100%;
+    height: auto;
+    stroke: currentColor;
+  }
+</style>

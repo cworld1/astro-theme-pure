@@ -1,0 +1,42 @@
+import { MdxRepl } from 'astro-pure/user'
+
+# Signature
+
+> Thanks for [zhuozhiyongde (Arthals)](https://github.com/zhuozhiyongde)
+
+<MdxRepl>
+import Signature from '<place_file_path>'
+
+<Signature />
+
+<Fragment slot='desc'>
+  ```jsx
+  import Signature from '<place_file_path>'
+
+  <Signature />
+  ```
+</Fragment>
+</MdxRepl>
+
+To customize this component, you first need to create an SVG using Figma or another vector graphics editor. This SVG should contain one or more `<path>` elements with a `stroke` attribute, as the animation effect is applied exclusively to these stroked paths. You can refer to [this SVG](https://github.com/zhuozhiyongde/Arthals-Ink/blob/main/src/assets/signature.svg) as an example.
+
+There also has some additional attributes you can use to customize the component:
+
+1. `data-duration`(optional): The duration of the animation in milliseconds. If not specified, the `defaultDuration` prop value will be used. For example: `<path data-duration="800" ... />`
+2. `seq`(optional): The sequence of the path. If not specified, the path will be animated in the order of appearance in the SVG file. For example: `<path seq="1" ... />`, `<path seq="2" ... />`.
+
+By default, the component loads the SVG file from `src/assets/signature.svg`. Place your prepared SVG file at this path and name it `signature.svg`.
+
+## Component Props
+
+You can pass the following props when using the component to customize its animation behavior:
+
+| Prop              | Type                         | Description                                                  | Default Value |
+| ----------------- | ---------------------------- | ------------------------------------------------------------ | ------------- |
+| `mode`            | `'loop'` \| `'once-on-view'` | Animation mode. `loop`: continuously draws and rolls back; `once-on-view`: plays the animation once it enters the viewport. | `'loop'`      |
+| `drawDelay`       | `number`                     | (Loop mode) The delay in milliseconds before drawing the next path. | `200`         |
+| `rollbackDelay`   | `number`                     | (Loop mode) The delay in milliseconds before rolling back the previous path. | `80`          |
+| `loopPause`       | `number`                     | (Loop mode) The pause duration in milliseconds at the end of each full cycle. | `2000`        |
+| `threshold`       | `number`                     | (On-view mode) The visibility threshold (from 0.0 to 1.0) to trigger the animation. | `1.0`         |
+| `defaultDuration` | `number`                     | The default animation duration in milliseconds for each stroke. | `600`         |
+| `class`           | `string`                     | Additional CSS classes to be added to the component's root element. | `undefined`   |
