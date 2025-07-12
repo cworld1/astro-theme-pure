@@ -3,12 +3,6 @@ import config from 'virtual:config'
 
 import { Icon } from '../user'
 
-const currentYear = new Date().getFullYear();
-const startYear = config.since
-const displayYear = startYear && startYear < currentYear
-  ? `${startYear} - ${currentYear}`
-  : currentYear;
-
 const footerConf = config.footer
 let social = footerConf.social || {}
 
@@ -44,7 +38,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         }
         {/* Position 2 */}
         <div>
-          © {displayYear}
+          {config.footer.year}
           {config.author}
           {
             footerConf.links && footerConf.links.length > 0 && (
