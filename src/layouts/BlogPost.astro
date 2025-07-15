@@ -6,9 +6,11 @@ import type { CollectionEntry } from 'astro:content'
 import 'katex/dist/katex.min.css'
 
 import { Comment, MediumZoom } from 'astro-pure/advanced'
-import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
+import { ArticleBottom, Copyright, Hero } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
-import { integ } from '@/site-config'
+import SafeTOC from '@/components/SafeTOC.astro'
+import { getISOString } from '@/utils/date'
+import config, { integ } from '@/site-config'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -39,7 +41,10 @@ const socialImage = heroImage
     ? heroImage.src
     : heroImage.src.src
   : '/images/social-card.png'
-const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
+
+// Using safe date handling functions
+const articleDate =
+  getISOString(updatedDate) ?? getISOString(publishDate) ?? new Date().toISOString()
 const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
 ---
 
@@ -48,7 +53,7 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   highlightColor={primaryColor}
   back='/blog'
 >
-  {!!headings.length && <TOC {headings} slot='sidebar' />}
+  {!!headings.length && <SafeTOC {headings} slot='sidebar' />}
 
   <Hero {data} {remarkPluginFrontmatter} slot='header' />
 
@@ -67,3 +72,29 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
 </PageLayout>
 
 {integ.mediumZoom.enable && <MediumZoom />}
+
+<script
+  is:inline
+  type='module'
+  data-astro-rerun
+  define:vars={{
+    npmCDN: config.npmCDN,
+    walineServer: config.integ.waline.server,
+    walineEnabled: config.integ.waline.enable
+  }}
+>
+  if (walineEnabled) {
+    const loadPageviewCount = async () => {
+      try {
+        const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
+        pageview.pageviewCount({
+          serverURL: walineServer,
+          path: window.location.pathname
+        })
+      } catch (error) {
+        console.error('Failed to load pageview:', error)
+      }
+    }
+    await loadPageviewCount()
+  }
+</script>

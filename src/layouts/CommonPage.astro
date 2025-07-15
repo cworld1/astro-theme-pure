@@ -1,8 +1,10 @@
 ---
 import type { MarkdownHeading } from 'astro'
 
-import { PageInfo, TOC } from 'astro-pure/components/pages'
+import { PageInfo } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
+import SafeTOC from '@/components/SafeTOC.astro'
+import config from '@/site-config'
 
 interface Props {
   title: string
@@ -19,7 +21,7 @@ const { title, headings, info, ...props } = Astro.props
 ---
 
 <PageLayout meta={{ title }} {...props}>
-  {headings?.length && <TOC headings={headings} slot='sidebar' />}
+  {headings?.length && <SafeTOC headings={headings} slot='sidebar' />}
 
   <Fragment slot='header'>
     <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>
@@ -42,3 +44,29 @@ const { title, headings, info, ...props } = Astro.props
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />
 </PageLayout>
+
+<script
+  is:inline
+  type='module'
+  data-astro-rerun
+  define:vars={{
+    npmCDN: config.npmCDN,
+    walineServer: config.integ.waline.server,
+    walineEnabled: config.integ.waline.enable
+  }}
+>
+  if (walineEnabled) {
+    const loadPageviewCount = async () => {
+      try {
+        const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
+        pageview.pageviewCount({
+          serverURL: walineServer,
+          path: window.location.pathname
+        })
+      } catch (error) {
+        console.error('Failed to load pageview:', error)
+      }
+    }
+    await loadPageviewCount()
+  }
+</script>
