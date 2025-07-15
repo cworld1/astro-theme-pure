@@ -1,0 +1,42 @@
+---
+import type { MarkdownHeading } from 'astro'
+
+import { TOC } from 'astro-pure/components/pages'
+
+interface Props {
+  headings: MarkdownHeading[]
+  class?: string
+  id?: string
+}
+
+const { headings: rawHeadings, ...props } = Astro.props
+
+// 安全过滤和验证 headings 数据
+const safeHeadings = (rawHeadings || []).filter((h) => {
+  return (
+    h &&
+    typeof h === 'object' &&
+    typeof h.depth === 'number' &&
+    typeof h.text === 'string' &&
+    h.depth > 0 &&
+    h.depth <= 6
+  )
+})
+
+// 确保有合适的标题层级结构
+const validHeadings = []
+let hasH2 = false
+
+for (const heading of safeHeadings) {
+  if (heading.depth === 2) {
+    hasH2 = true
+    validHeadings.push(heading)
+  } else if (heading.depth > 2 && hasH2) {
+    // 只有在有 h2 的情况下才添加更深层级的标题
+    validHeadings.push(heading)
+  }
+  // 静默跳过没有父级 h2 的深层级标题，避免控制台警告
+}
+---
+
+{validHeadings.length > 0 && <TOC headings={validHeadings} {...props} />}

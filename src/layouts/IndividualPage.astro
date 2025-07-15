@@ -1,10 +1,11 @@
 ---
 import type { MarkdownHeading, MarkdownLayoutProps } from 'astro'
 
-import { BackToTop, TOC } from 'astro-pure/components/pages'
+import { BackToTop } from 'astro-pure/components/pages'
 import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import SafeTOC from '@/components/SafeTOC.astro'
 import { integ } from '@/site-config'
 
 type Props = MarkdownLayoutProps<{
@@ -27,7 +28,7 @@ const socialImage = heroImage?.src ?? '/images/social-card.png'
   <main class='mt-6 items-start gap-x-10 md:flex lg:mt-10'>
     {
       !!headings.length && (
-        <TOC
+        <SafeTOC
           class='animate top-24 min-w-48 basis-60 max-md:hidden md:sticky md:order-2 lg:shrink-0'
           {headings}
         />
