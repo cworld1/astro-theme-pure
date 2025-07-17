@@ -6,9 +6,10 @@ import type { CollectionEntry } from 'astro:content'
 import 'katex/dist/katex.min.css'
 
 import { Comment, MediumZoom } from 'astro-pure/advanced'
-import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
+import { ArticleBottom, Copyright, Hero} from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import { integ } from '@/site-config'
+import { TOC } from '@/custom/components/pages' 
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -47,6 +48,7 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   meta={{ articleDate, description, ogImage: socialImage, title }}
   highlightColor={primaryColor}
   back='/blog'
+  hasToc={!!headings.length}
 >
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 

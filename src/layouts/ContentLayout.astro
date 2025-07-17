@@ -10,9 +10,10 @@ interface Props {
   meta: SiteMeta
   highlightColor?: string
   back?: string
+  hasToc?: boolean
 }
 
-const { meta, highlightColor, back = '/', ...props } = Astro.props
+const { meta, highlightColor, back = '/', hasToc = false, ...props } = Astro.props
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
@@ -63,14 +64,18 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
   </div>
 
   <BackToTop header='content-header' content='content'>
-    <button
-      slot='other-icons'
-      aria-label='Toggle sidebar'
-      class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
-      id='sidebar-btn'
-    >
-      <Icon name='list' />
-    </button>
+    {
+      hasToc && (
+        <button
+          slot='other-icons'
+          aria-label='Toggle sidebar'
+          class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
+          id='sidebar-btn'
+        >
+          <Icon name='list' />
+        </button>
+      )
+    }
   </BackToTop>
 </PageLayout>
 
