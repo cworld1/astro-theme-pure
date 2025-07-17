@@ -12,7 +12,7 @@
         "@unocss/reset": "^66.1.3",
         "@waline/client": "^3.5.7",
         "astro": "^5.8.1",
-        "astro-pure": "1.2.7",
+        "astro-pure": "1.3.1",
         "katex": "^0.16.22",
         "rehype-katex": "^7.0.1",
         "remark-math": "^6.0.0",
@@ -526,7 +526,7 @@
 
     "astro-eslint-parser": ["astro-eslint-parser@1.2.1", "https://registry.npmmirror.com/astro-eslint-parser/-/astro-eslint-parser-1.2.1.tgz", { "dependencies": { "@astrojs/compiler": "^2.0.0", "@typescript-eslint/scope-manager": "^7.0.0 || ^8.0.0", "@typescript-eslint/types": "^7.0.0 || ^8.0.0", "astrojs-compiler-sync": "^1.0.0", "debug": "^4.3.4", "entities": "^6.0.0", "eslint-scope": "^8.0.1", "eslint-visitor-keys": "^4.0.0", "espree": "^10.0.0", "fast-glob": "^3.3.3", "is-glob": "^4.0.3", "semver": "^7.3.8" } }, "sha512-3oqANMjrvJ+IE5pwlUWsH/4UztmYf/GTL0HPUkWnYBNAHiGVGrOh2EbegxS5niAwlO0w9dRYk0CkCPlJcu8c3Q=="],
 
-    "astro-pure": ["astro-pure@1.2.7", "https://registry.npmmirror.com/astro-pure/-/astro-pure-1.2.7.tgz", { "dependencies": { "@astrojs/mdx": "^4.3.0", "@astrojs/sitemap": "^3.4.0", "@pagefind/default-ui": "^1.3.0", "astro": "^5.8.1", "hast-util-select": "^6.0.4", "node-html-parser": "^7.0.1", "pagefind": "^1.3.0", "rehype-external-links": "^3.0.0", "unocss": "^66.1.3" }, "bin": { "astro-pure": "scripts/index.js" } }, "sha512-kwWGCChwvplBfsJbRRej2fNklLC3nZDBXyURjgx8gK3Qrgx2eoSoz78KS32qZ0C7GdQBZqLkONLttI1ddyPKbw=="],
+    "astro-pure": ["astro-pure@1.3.1", "", { "dependencies": { "@astrojs/mdx": "^4.3.0", "@astrojs/sitemap": "^3.4.0", "@pagefind/default-ui": "^1.3.0", "astro": "^5.8.1", "hast-util-select": "^6.0.4", "node-html-parser": "^7.0.1", "pagefind": "^1.3.0", "rehype-external-links": "^3.0.0", "unocss": "^66.1.3" }, "bin": { "astro-pure": "scripts/index.js" } }, "sha512-0edjNNQyWZwLp5qCC1gACBKdelTGWh02tNsFLewWT0qgxhb7pth8JsZj0yNYp6BwSGRqsmJ978MBh42BJxZelw=="],
 
     "astrojs-compiler-sync": ["astrojs-compiler-sync@1.0.1", "https://registry.npmmirror.com/astrojs-compiler-sync/-/astrojs-compiler-sync-1.0.1.tgz", { "dependencies": { "synckit": "^0.9.0" }, "peerDependencies": { "@astrojs/compiler": ">=0.27.0" } }, "sha512-EdJILVkc/Iiw9sLMyb2uppp/vG7YL9TgkwaEumNDflI8s0AhR5XuCFkdbA/AcCGvcBfsRH9ngy/iIP8Uybl82g=="],
 

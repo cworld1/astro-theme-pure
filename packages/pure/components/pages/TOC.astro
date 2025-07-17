@@ -14,13 +14,14 @@ const { headings, class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
 ---
-
-<toc-heading class={className} {...props}>
-  <h2 class='font-semibold'>TABLE OF CONTENTS</h2>
-  <ul class='mt-4 text-card-foreground'>
-    {toc.map((heading) => <TOCHeading heading={heading} />)}
-  </ul>
-</toc-heading>
+{toc.length > 0 && (
+  <toc-heading class={className} {...props}>
+    <h2 class='font-semibold'>TABLE OF CONTENTS</h2>
+    <ul class='mt-4 text-card-foreground'>
+      {toc.map((heading) => <TOCHeading heading={heading} />)}
+    </ul>
+  </toc-heading>
+)}
 
 <script>
   // This script tag is useful only if you want to display the TOC alongside the blog post...
@@ -48,7 +49,7 @@ const toc = generateToc(headings)
 
       // Initialize the headings and tocLinks
       this.headings = Array.from(
-        document.querySelectorAll('article h2, article h3, article h4, article h5, article h6')
+        document.querySelectorAll('article h1, article h2, article h3, article h4, article h5, article h6')
       )
       this.tocLinks = Array.from(this.querySelectorAll('a[href^="#"]')).map((link) => ({
         element: link as HTMLAnchorElement,
