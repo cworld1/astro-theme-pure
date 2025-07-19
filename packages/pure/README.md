@@ -1,6 +1,6 @@
 # Astro Theme Pure (Integration Package)
 
-A simple, fast and powerful blog theme built by Astro.
+A simple, fast and powerful blog & document theme built by Astro.
 
 [![GitHub deployments](https://img.shields.io/github/deployments/cworld1/astro-theme-pure/production?style=flat&logo=vercel&label=vercel)](https://astro-pure.js.org/)
 [![NPM Version](https://img.shields.io/npm/v/astro-pure?style=flat)](https://www.npmjs.com/package/astro-pure)
@@ -16,7 +16,17 @@ See [Getting Started](https://astro-pure.js.org/docs/setup/getting-started).
 
 ### Use with common Astro project
 
-Set up tailwindcss in your project.
+See [User Components](https://astro-pure.js.org/docs/integrations/components) & [Advanced Components](https://astro-pure.js.org/docs/integrations/advanced) to learn how to use.
+
+> Some part of Advanced Components may require Astro Integration config.
+
+#### UnoCSS
+
+UnoCSS is more recommended, and TailwindCSS method will be removed soon.
+
+#### TailwindCSS V3
+
+Set up tailwindcss v3 in your project.
 
 ```js
 // tailwind.config.mjs
@@ -31,12 +41,6 @@ const config = {
 
 export default config
 ```
-
-UnoCSS is more recommended, and TailwindCSS method will be removed soon.
-
-See [User Components](https://astro-pure.js.org/docs/integrations/components) & [Advanced Components](https://astro-pure.js.org/docs/integrations/advanced) to learn how to use.
-
-> Some part of Advanced Components may require Astro Integration config.
 
 ## Cli
 

@@ -2,7 +2,6 @@
 import links from 'public/links.json'
 import config from 'virtual:config'
 
-import { Comment } from 'astro-pure/advanced'
 import { Collapse, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
@@ -15,9 +14,10 @@ const headings = [
 
 const { friends } = links
 const linksConf = config.integ.links
+const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/public/links.json'
 ---
 
-<PageLayout title='Links' {headings} info='/links'>
+<PageLayout title='Links' {headings} comment>
   <p>怎么可能有顺序呢，当然是随机的~ It's random</p>
   <h2 id='common-links'>Common Links</h2>
   <FriendList list={friends[0]} />
@@ -32,7 +32,7 @@ const linksConf = config.integ.links
 
   <!-- apply-links -->
   <h2 id='apply-links'>Apply Links</h2>
-  <p>本站信息如下 The site information（点击快速复制）：</p>
+  <p>本站信息（点击复制）The site information (click to copy)：</p>
   <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
     {
       linksConf.applyTip.map(({ name, val }) => {
@@ -50,15 +50,14 @@ const linksConf = config.integ.links
   </blockquote>
 
   <p>
-    申请时还请按照这个模板留言（<a
-      href='https://github.com/cworld1/astro-theme-pure/blob/main/public/links.json'
-      target='_blank'>提交 PR</a
-    > 或许也是个更快的办法）。此外有关申请说明：
+    可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。此外申请说明：<br
+    />
+    Apply your link by leaving comment or <a href={linkEditPage} target='_blank'>Submitting a PR</a
+    >. Additional info:
   </p>
   <ul>
-    <li>在你的友链上添加了本站；</li>
-    <li>请确保你的站点活着；</li>
-    <li>博客内容不违反国家法律。</li>
+    <li>在你的友链上添加了本站. You've recommended this site on your website.</li>
+    <li>请确保你的站点活着. Make sure your site is alive.</li>
+    <li>博客内容不违反国家法律. Content does not violate common laws.</li>
   </ul>
-  <Comment slot='bottom' />
 </PageLayout>

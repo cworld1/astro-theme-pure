@@ -4,23 +4,28 @@ description: 'Advanced components with advanced docs'
 order: 2
 ---
 
+import { MdxRepl } from 'astro-pure/user'
+
 ## Web Content Render
 
 ### Quote
 
 The `Quote` component is a simple component that displays a random quote.
 
+
+<MdxRepl>
+import { Quote } from 'astro-pure/advanced'
+
+<Quote />
+
+<Fragment slot='desc'>
 ```jsx
 import { Quote } from 'astro-pure/advanced'
 
 <Quote />
 ```
-
-Renders:
-
-import { Quote } from 'astro-pure/advanced'
-
-<Quote />
+</Fragment>
+</MdxRepl>
 
 Config:
 
@@ -53,22 +58,31 @@ export const integ: IntegrationUserConfig = {
 
 The `GithubCard` component is a simple component that displays a GitHub user card.
 
+<MdxRepl width='80%'>
+import { GithubCard } from 'astro-pure/advanced'
+
+<GithubCard repo='cworld1/astro-theme-pure' />
+
+<Fragment slot='desc'>
 ```jsx
 import { GithubCard } from 'astro-pure/advanced'
 
 <GithubCard repo='cworld1/astro-theme-pure' />
 ```
-
-Render:
-
-import { GithubCard } from 'astro-pure/advanced'
-
-<GithubCard repo='cworld1/astro-theme-pure' />
+</Fragment>
+</MdxRepl>
 
 ### Link Preview
 
 Preview any link inserted in the content.
 
+<MdxRepl width='80%'>
+import { LinkPreview } from 'astro-pure/advanced'
+
+<LinkPreview href='https://www.mozilla.org/en-US/' />
+<LinkPreview href='https://www.cloudflare.com/' hideMedia />
+
+<Fragment slot='desc'>
 ```jsx
 import { LinkPreview } from 'astro-pure/advanced'
 
@@ -77,18 +91,21 @@ import { LinkPreview } from 'astro-pure/advanced'
 // <LinkPreview href='https://www.cloudflare.com/' zoomable={false} />
 <LinkPreview href='https://www.cloudflare.com/' hideMedia />
 ```
-
-Render:
-
-import { LinkPreview } from 'astro-pure/advanced'
-
-<LinkPreview href='https://www.cloudflare.com/' />
-<LinkPreview href='https://www.cloudflare.com/' hideMedia />
+</Fragment>
+</MdxRepl>
 
 ## Data Transformer
 
 ### QRCode
 
+<MdxRepl>
+import { QRCode } from 'astro-pure/advanced'
+
+<QRCode
+  content='https://github.com/cworld1/astro-theme-pure'
+  class='inline-flex max-w-44 p-3 bg-muted rounded-lg border' />
+
+<Fragment slot='desc'>
 ```jsx
 import { QRCode } from 'astro-pure/advanced'
 
@@ -97,14 +114,8 @@ import { QRCode } from 'astro-pure/advanced'
   content='https://github.com/cworld1/astro-theme-pure'
   class='inline-flex max-w-44 p-3 bg-muted rounded-lg border' />
 ```
-
-Render:
-
-import { QRCode } from 'astro-pure/advanced'
-
-<QRCode
-  content='https://github.com/cworld1/astro-theme-pure'
-  class='inline-flex max-w-44 p-3 bg-muted rounded-lg border' />
+</Fragment>
+</MdxRepl>
 
 ### Medium Zoom
 
@@ -113,9 +124,3 @@ Try click the following image.
 ![img](https://github.com/user-attachments/assets/6c42b061-df7e-4696-a29b-bff07fe17d88)
 
 See [Other Integrations#medium-zoom](/docs/integrations/others#medium-zoom).
-
-## Individual Server Integration
-
-### Comment System
-
-See [Comment#Usage](/docs/integrations/comment#usage).

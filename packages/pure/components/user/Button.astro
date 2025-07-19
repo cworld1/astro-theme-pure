@@ -1,14 +1,22 @@
 ---
 import { cn } from '../../utils'
 
-const { as: Tag = 'a', class: className, title, href, style = 'button', ...props } = Astro.props
+interface Props {
+  as?: string
+  title?: string
+  href?: string
+  variant?: 'button' | 'pill' | 'back' | 'ahead'
+  class?: string
+}
+
+const { as: Tag = 'a', class: className, title, href, variant = 'button', ...props } = Astro.props
 ---
 
 <Tag
   class={cn(
     'group inline-flex items-center gap-x-1 rounded-lg bg-muted border px-2 py-1 text-sm text-muted-foreground transition-all hover:bg-primary-foreground no-underline',
     !href && 'cursor-default',
-    style === 'pill' && 'rounded-xl',
+    variant === 'pill' && 'rounded-xl',
     className
   )}
   href={href}
@@ -17,7 +25,7 @@ const { as: Tag = 'a', class: className, title, href, style = 'button', ...props
 >
   <slot name='before'>
     {
-      style === 'back' && (
+      variant === 'back' && (
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='16'
@@ -49,7 +57,7 @@ const { as: Tag = 'a', class: className, title, href, style = 'button', ...props
   </slot>
   <slot name='after'>
     {
-      style === 'ahead' && (
+      variant === 'ahead' && (
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='16'

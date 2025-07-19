@@ -14,7 +14,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' style='back' />
+  <Button title='Back' href='/blog' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>Tags</h1>
@@ -28,7 +28,7 @@ const meta = {
               <li>
                 <Button
                   href={`/tags/${tag}`}
-                  style='pill'
+                  variant='pill'
                   class={cn(
                     'items-start gap-x-1',
                     val > 2 ? 'rounded-xl px-3 py-1 text-xl' : val > 1 && 'text-lg'

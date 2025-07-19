@@ -40,7 +40,7 @@ const typographyConfig = {
       'border-radius': 'var(--radius)',
       'padding-inline': '1.6rem',
       'box-shadow': '0 5px 0 ' + bgMuted,
-      ...(typographyCustom.blockquoteStyle === 'normal' ? { 'font-style': 'normal' } : {})
+      ...(typographyCustom.blockquoteStyle === 'normal' && { 'font-style': 'normal' })
     },
     'blockquote::after': {
       color: fgMuted,
@@ -94,15 +94,14 @@ const typographyConfig = {
     },
     // Inline code
     ...(typographyCustom.inlineCodeBlockStyle === 'modern' && {
-      ':not(pre)>code::before,:not(pre)>code::after': {
-        content: 'none'
-      },
       ':not(pre) > code': {
         padding: '0.3em 0.5em',
-        color: 'hsl(var(--primary) / var(--un-text-opacity, 1))',
         border: '1px solid hsl(var(--border) / 1)',
         'border-radius': 'var(--radius)',
         'background-color': 'hsl(var(--muted) / var(--un-bg-opacity, 1))'
+      },
+      ':not(pre)>code::before,:not(pre)>code::after': {
+        content: 'none'
       }
     }),
     // Others
@@ -197,7 +196,6 @@ const rules: Rule<object>[] = [
 export default defineConfig({
   presets: [
     presetMini(), // required
-    // presetWind3(), // original full version
     presetTypography(typographyConfig)
   ],
   rules,

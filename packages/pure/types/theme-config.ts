@@ -162,13 +162,22 @@ export const ThemeConfigSchema = () =>
     }),
 
     content: z.object({
-      externalLinksContent: z.string().optional().default(' ↗'),
+      externalLinks: z.object({
+        /** Content to show for external links */
+        content: z
+          .string()
+          .optional()
+          .default(' ↗')
+          .describe('Content to show for external links'),
+        /** Properties for the external links element */
+        properties: z
+          .record(z.string())
+          .optional()
+          .describe('Properties for the external links element')
+      }),
 
       /** Blog page size for pagination */
       blogPageSize: z.number().optional().default(8),
-
-      /** Show external link arrow */
-      externalLinkArrow: z.boolean().optional().default(true),
 
       /** Share buttons to show */
       share: ShareSchema()

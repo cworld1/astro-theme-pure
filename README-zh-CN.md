@@ -1,8 +1,8 @@
 # Astro Theme Pure
 
-[English](./README.md) | [简体中文](./README-zh-CN.md)
+[English](./README.md) | 简体中文
 
-一个由 Astro 构建的轻便简洁、快速强大的博客主题。
+一个由 Astro 构建的，轻便简洁、快速强大的博客 & 文档主题。
 
 [![GitHub deployments](https://img.shields.io/github/deployments/cworld1/astro-theme-pure/production?style=flat&logo=vercel&label=vercel)](https://astro-pure.js.org/)
 [![NPM Version](https://img.shields.io/npm/v/astro-pure?logo=npm&style=flat)](https://www.npmjs.com/package/astro-pure)
@@ -12,16 +12,14 @@
 ![image](./.github/assets/header.webp)
 ![image](./.github/assets/body.webp)
 
-> [!WARNING]
-> 主题模板 v4.0.2^ CSS 引擎被换到 UnoCSS。更稳定版本为 [v4.0.1-beta](https://github.com/cworld1/astro-theme-pure/tree/v4.0.1-beta)。已知问题：
->
-> 1. Head 标签和自定义选项仍在开发中（已经暴露模板直接改）
+> [!NOTE]
+> 已知问题：1. Head 标签和自定义选项仍在开发中（已经暴露模板直接改）；2. 主题模板 v4.0.5^ CSS 预设被换到 PresetMini。如有任何问题，请及时反馈。
 
 ## 简介
 
 查看 [预览 →](https://astro-pure.js.org/)
 
-## :fire: 特性
+### :fire: 特性
 
 - [x] :rocket: 快速高性能
 - [x] :star: 简单干净的设计
@@ -33,11 +31,11 @@
 - [x] :framed_picture: 动态为文章生成可供三方媒体预览的分享图像
 - [x] :framed_picture: Mediumzoom 图像灯箱
 
-## :package: 组件
+### :package: 组件
 
 主题包含了许多组件，不仅可以在主题中使用，还可以在其他 Astro 项目中使用。
 
-> 对于其他 Astro 项目，需要 UnoCSS。
+> 其他 Astro 项目使用需要 UnoCSS。更多详情请查阅 [Package README](https://github.com/cworld1/astro-theme-pure/blob/main/packages/pure/README.md#use-with-common-astro-project)。
 
 - 基础组件：`Aside`、`Tabs`、`Timeline`、`Steps`、`Spoiler`...
 - 高级组件：`GithubCard`、`LinkPreview`、`Quote`、`QRCode`...
@@ -95,6 +93,8 @@ bun new-post
 - [Astro Cactus](https://github.com/chrismwilliams/astro-theme-cactus)
 - [Astro Resume](https://github.com/srleom/astro-theme-resume)
 - [Starlight](https://github.com/withastro/starlight)
+
+其他第三方参考资料在 [Docs#Contributions](https://astro-pure.js.org/docs/advanced/thanks) 上。感谢所有开源库。
 
 ## 许可证
 

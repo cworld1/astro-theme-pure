@@ -104,8 +104,7 @@ const shares = {
       }
     </div>
     <QRCode
-      aria-expanded='false'
-      class='absolute z-10 -mt-2 box-content max-h-0 max-w-44 overflow-hidden rounded-xl border bg-muted p-4 opacity-0 transition-all duration-300 ease-in-out aria-expanded:max-h-44 aria-expanded:translate-y-4 aria-expanded:opacity-100'
+      class='absolute z-10 -mt-2 box-content max-h-0 max-w-44 overflow-hidden rounded-xl border bg-muted p-4 opacity-0 transition-all duration-300 ease-in-out'
     />
   </div>
 </div>
@@ -121,6 +120,14 @@ const shares = {
   </a>
 </div>
 
+<style>
+  #qrcode-container.expanded {
+    max-height: 11rem;
+    transform: translateY(4px);
+    opacity: 100;
+  }
+</style>
+
 <script>
   import { showToast } from '../../utils'
 
@@ -135,12 +142,5 @@ const shares = {
   // QRCode
   const getQRCode = document.getElementById('get-qrcode')
   const qrcodeContainer = document.getElementById('qrcode-container')
-  if (!qrcodeContainer) throw new Error('qrcode container not found')
-  getQRCode?.addEventListener('click', () => {
-    if (qrcodeContainer.ariaExpanded === 'true') {
-      qrcodeContainer.ariaExpanded = 'false'
-    } else {
-      qrcodeContainer.ariaExpanded = 'true'
-    }
-  })
+  getQRCode?.addEventListener('click', () => qrcodeContainer?.classList.toggle('expanded'))
 </script>

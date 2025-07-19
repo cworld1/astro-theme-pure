@@ -3,6 +3,19 @@ type Options = {
   includeHtml?: boolean
 }
 
+/**
+ * Get the text content of a node or list of nodes.
+ *
+ * Prefers the node’s plain-text fields, otherwise serializes its children,
+ * and if the given value is an array, serialize the nodes in it.
+ *
+ * @param {unknown} [value]
+ *   Thing to serialize, typically `Node`.
+ * @param {Options | null | undefined} [options]
+ *   Configuration (optional).
+ * @returns {string}
+ *   Serialized `value`.
+ */
 export default function toString(value: unknown, options?: Options): string {
   const { includeImageAlt = true, includeHtml = true } = options || {}
   return serialize(value, includeImageAlt, includeHtml)

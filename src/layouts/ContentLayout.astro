@@ -16,7 +16,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
-  <Button title='Back' href={back} style='back' />
+  <Button title='Back' href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     <aside
@@ -54,7 +54,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
 
   <div class='bottom mt-6 items-start gap-x-10 md:flex'>
     {/* Bottom */}
-    <div class='mt-8 flex-1 text-muted-foreground md:min-w-[50ch]'>
+    <div class='flex-1 text-muted-foreground md:min-w-[50ch]'>
       <slot name='bottom' />
     </div>
     <div class='min-w-48 basis-60'>

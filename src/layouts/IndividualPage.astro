@@ -23,7 +23,7 @@ const socialImage = heroImage?.src ?? '/images/social-card.png'
 ---
 
 <PageLayout meta={{ title, description, ogImage: socialImage }}>
-  <Button title='Back' href={back ?? '/'} style='back' />
+  <Button title='Back' href={back ?? '/'} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex lg:mt-10'>
     {
       !!headings.length && (

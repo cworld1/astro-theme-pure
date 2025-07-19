@@ -72,7 +72,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
           at eum oratio possit voluptatum.
         </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
+        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
@@ -84,7 +84,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
                 </li>
               ))}
             </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
+            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
           </Section>
         )
       }

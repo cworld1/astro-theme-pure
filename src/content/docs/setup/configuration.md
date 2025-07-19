@@ -38,23 +38,9 @@ Options are available [here](https://prettier.io/docs/en/options).
 
 File: `uno.config.ts`
 
-It is a utility-first CSS framework building custom designs. Theme also uses its preset `typography` to make typesettings (checkout [Other Integrations#`@unocss/preset-typography`](/docs/integrations/others#unocsspreset-typography) for more info).
+It is a utility-first CSS framework building custom designs. Theme also uses its preset `typography` to make type settings.
 
-Get to know more:
-
-- [UnoCSS: Typography preset](https://unocss.dev/presets/typography)
-- [UnoCSS: Astro Integration](https://unocss.dev/integrations/astro)
-- [UnoCSS: Configuring UnoCSS](https://unocss.dev/config)
-
-And you can also customize the theme default UnoCSS palette by modifying the CSS file at `src/assets/styles/app.css`. For example, if you want to change the default theme color, you can modify the following code:
-
-```css title="src/assets/styles/app.css"
-:root {
-  /* ... */
-  --primary: 200 29% 45%; /* [!code --] */
-  --primary: <Your favorite color using raw hsl>; /* [!code ++] */
-}
-```
+Checkout [UnoCSS & Styles ](/docs/integrations/unocss) for more info.
 
 ## Typescript Configuration
 

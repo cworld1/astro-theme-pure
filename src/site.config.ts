@@ -86,10 +86,16 @@ export const theme: ThemeUserConfig = {
   },
 
   content: {
-    externalLinksContent: ' ↗',
+    /** External links configuration */
+    externalLinks: {
+      content: ' ↗',
+      /** Properties for the external links element */
+      properties: {
+        style: 'user-select:none'
+      }
+    },
     /** Blog page size for pagination (optional) */
     blogPageSize: 8,
-    externalLinkArrow: true, // show external link arrow
     // Currently support weibo, x, bluesky
     share: ['weibo', 'x', 'bluesky']
   }
@@ -101,9 +107,11 @@ export const integ: IntegrationUserConfig = {
   links: {
     // Friend logbook
     logbook: [
-      { date: '2024-07-01', content: 'Lorem ipsum dolor sit amet.' },
-      { date: '2024-07-01', content: 'vidit suscipit at mei.' },
-      { date: '2024-07-01', content: 'Quem denique mea id.' }
+      { date: '2025-03-16', content: 'Is there a leakage?' },
+      { date: '2025-03-16', content: 'A leakage of what?' },
+      { date: '2025-03-16', content: 'I have a full seat of water, like, full of water!' },
+      { date: '2025-03-16', content: 'Must be the water.' },
+      { date: '2025-03-16', content: "Let's add that to the words of wisdom." }
     ],
     // Yourself link info
     applyTip: [

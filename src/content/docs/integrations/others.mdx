@@ -68,31 +68,6 @@ import { MediumZoom } from 'astro-pure/advanced'
 
 Checkout [playform/compress](https://github.com/PlayForm/Compress) for more.
 
-## `@unocss/preset-typography`
-
-Configure typography; configs are in `uno.config.ts`.
-
-```js title="uno.config.ts"
-const typographyConfig = {
-  cssExtend: { // [!code highlight:3]
-    // ...
-  }
-}
-```
-
-And it will be applied to class list configuration:
-
-```ts title="src/site.config.ts"
-export const integ: IntegrationUserConfig = {
-  // ...
-  typography: {
-    class: 'prose text-base text-muted-foreground' // [!code highlight]
-  }
-}
-```
-
-Checkout [Typography preset](https://unocss.dev/presets/typography) for more.
-
 ## Friend-Circle-Lite
 
 See [Friend Links #Integrated with `Friend-Circle-Lite`](/docs/integrations/links#integrated-with-friend-circle-lite).

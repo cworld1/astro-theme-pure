@@ -7,6 +7,6 @@ const { title, skills } = Astro.props
 <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
   <h3 class='w-1/5 font-medium'>{title}</h3>
   <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
-    {skills.map((skill: string[]) => <Button as='button' title={skill} style='pill' />)}
+    {skills.map((skill: string[]) => <Button as='button' title={skill} variant='pill' />)}
   </div>
 </div>
