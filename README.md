@@ -83,7 +83,7 @@ bun run build
 bun preview
 
 # create a new post
-bun new-post
+bun new
 ```
 
 ## Contributions
