@@ -44,10 +44,10 @@ if (!images[imagePath])
   <Image
     src={images[imagePath]()}
     alt={altText ?? heading}
-    class='absolute top-0 h-36 w-full object-cover opacity-60 transition-opacity group-hover:opacity-100 dark:opacity-35'
+    class='absolute top-0 w-full object-contain opacity-60 transition-opacity group-hover:opacity-100 dark:opacity-35'
     loading='lazy'
   />
-  <div class='project-card-fg z-10 flex flex-col gap-y-0.5 px-5 pb-4 pt-24 transition-all'>
+  <div class='project-card-fg z-10 flex flex-col gap-y-0.5 px-5 pb-4 pt-36 transition-all'>
     <h2 class='text-lg font-medium'>{heading}</h2>
     <p class='text-muted-foreground'>{subheading}</p>
   </div>
