@@ -10,7 +10,8 @@ Astro helps you [author and present your content](https://docs.astro.build/en/gu
 
 ## Writing Content
 
-In Astro, you can author your content in a variety of ways: 
+In Astro, you can author your content in a variety of ways:
+
 - In Markdown files (`.md` or [alternative extensions](https://docs.astro.build/en/guides/markdown-content/)), designed to make it easy to write rich text content.
 - In MDX (`.mdx`) or Markdoc (`.mdoc`) files with [an official integration](https://docs.astro.build/en/guides/integrations-guide/), which can include components and dynamic expressions in your document.
 - Using a [third-party content management system (CMS)](https://docs.astro.build/en/guides/content/#headless-cms-authoring), then pulling that content into a `.astro` page.
@@ -48,6 +49,7 @@ This is a paragraph.
 If you have a lot of assets, you can create a folder for title like `src/content/blog/first-article/` and put all your assets in there. Of course, your content should be renamed to `index.md` or `index.mdx` and also be contained in this folder.
 
 <Aside type='tip'>
+
 If you want to use remote image for `heroImage`, please add `inferSize: true` or specificed `width` and `height` to the object `heroImage`. Example:
 
 ```yaml
@@ -57,6 +59,7 @@ heroImage:
 heroImage:
   { src: 'https://img.tukuppt.com/ad_preview/00/15/09/5e715a320b68e.jpg!/fw/980', width: 980, height: 551 }
 ```
+
 </Aside>
 
 Too complex? Simple example just need these:
@@ -72,7 +75,7 @@ I like writing simple articles.
 ```
 
 <Aside type='tip'>
-This theme has a quick script to create a new article for you. Just run `bun new-post <post-slug>` in your terminal.
+This theme has a quick script to create a new article for you. Just run `bun new <post-slug>` in your terminal.
 </Aside>
 
 ### MDX Authoring
@@ -105,7 +108,9 @@ src/pages/posts/1.md         -> mysite.com/posts/1
 ```
 
 <Aside type='tip'>
+
 There is no separate "routing config" to maintain in an Astro project! When you add a file to the `src/pages/` directory, a new route is automatically created for you. In static builds, you can customize the file output format using the [`build.format`](https://docs.astro.build/en/reference/configuration-reference/#buildformat) configuration option.
+
 </Aside>
 
 ### Astro Pages
@@ -114,8 +119,10 @@ Astro pages use the `.astro` file extension and support the same features as [As
 
 ```astro title="src/pages/index.astro"
 ---
+
 ---
-<html lang="en">
+
+<html lang='en'>
   <head>
     <title>My Homepage</title>
   </head>
@@ -137,16 +144,21 @@ import PageLayout from '@/layouts/BaseLayout.astro' // [!code highlight]
 
 const meta = {
   title: 'My Page',
-  description: 'My fav page',
+  description: 'My fav page'
 }
 const highlightColor = '#44AEF6' // Optional
 ---
-<PageLayout {meta} {highlightColor}> <!-- [!code highlight] -->
+
+<PageLayout {meta} {highlightColor}>
+  <!-- [!code highlight] -->
   <p>My page content, wrapped in a layout!</p>
-</MySiteLayout> <!-- [!code highlight] -->
+</PageLayout>
+<!-- [!code highlight] -->
 ```
 
-<Aside type='tip'>Read more about [layout components](https://docs.astro.build/en/basics/layouts/) in Astro.</Aside>
+<Aside type='tip'>
+  Read more about [layout components](https://docs.astro.build/en/basics/layouts/) in Astro.
+</Aside>
 
 ### Markdown/MDX Pages
 
@@ -155,7 +167,9 @@ While `.astro` pages have some flexsible features and be friendly to inline / mo
 Astro also treats any Markdown (`.md`) files inside of `src/pages/` as pages in your final website. If you have the [MDX Integration installed](https://docs.astro.build/en/guides/integrations-guide/mdx/#installation), it also treats MDX (`.mdx`) files the same way.
 
 <Aside type='caution'>
+
 Consider creating [content collections](/en/guides/content-collections/) instead of pages for directories of related Markdown files that share a similar structure, such as blog posts or product items.
+
 </Aside>
 
 Markdown files can use the special `layout` frontmatter property to specify a [layout component](https://docs.astro.build/en/basics/layouts/) that will wrap their Markdown content in a full `<html>...</html>` page document.
