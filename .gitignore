@@ -1,5 +1,5 @@
 ### Astro ###
-dist/
+# dist/
 .astro/
 
 ### Vercel ###
