@@ -1,0 +1,1 @@
+import{s as e}from"./toast.DeilrAYO.js";const t=document.getElementById("copy-link");t?.addEventListener("click",()=>{navigator.clipboard.writeText(window.location.href),e({message:"Link copied!"})});const o=document.getElementById("get-qrcode"),n=document.getElementById("qrcode-container");o?.addEventListener("click",()=>n?.classList.toggle("expanded"));
