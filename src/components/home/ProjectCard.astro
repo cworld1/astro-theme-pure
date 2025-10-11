@@ -24,11 +24,11 @@ const {
   altText
 } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/projects/*.{jpeg,jpg,png,gif,avif.webp}'
+  '/src/assets/projects/*.{jpeg,jpg,png,gif,avif,webp}'
 )
 if (!images[imagePath])
   throw new Error(
-    `"${imagePath}" does not exist in glob: "src/assets/projects/*.{jpeg,jpg,png,gif,avif.webp}"`
+    `"${imagePath}" does not exist in glob: "src/assets/projects/*.{jpeg,jpg,png,gif,avif,webp}"`
   )
 ---
 
