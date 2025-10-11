@@ -14,7 +14,7 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 
 // Get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif.webp}' // add more image formats if needed
+  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif,webp}' // add more image formats if needed
 )
 
 const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
