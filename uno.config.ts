@@ -12,7 +12,7 @@ const typographyConfig = {
   cssExtend: {
     // Title
     'h2,h3,h4,h5,h6': {
-      'scroll-margin-top': '3rem',
+      'scroll-margin-top': '3.5rem',
       'font-weight': '500',
       color: fg
     },
@@ -132,6 +132,9 @@ const typographyConfig = {
     'code:not(pre code)': {
       'white-space': 'pre-wrap!important',
       'word-break': 'break-all!important'
+    },
+    'sup>a': {
+      'scroll-margin-top': '3.5rem'
     }
   }
 }
