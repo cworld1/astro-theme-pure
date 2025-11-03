@@ -94,7 +94,7 @@ Using this, it will transform your images to a WebP format. `.md` and `.mdx` fil
 
 ### Change Image Size
 
-Althought this theme has integrated with some known image optimization plugins, you way still need to optimize your images for some key pages like homepage.
+Although this theme has integrated with some known image optimization plugins, you way still need to optimize your images for some key pages like homepage.
 
 A easy way is using online tools like [TinyPNG](https://tinypng.com/) to manually compress your images.
 
@@ -113,3 +113,23 @@ export default defineConfig({
 ```
 
 <Aside type='caution'>This may have a bad work for svg files.</Aside>
+
+## File Size Analysis
+
+Install npm package `rollup-plugin-visualizer`. Then append the following code to your `astro.config.ts`:
+
+```ts title="astro.config.ts"
+export default defineConfig({
+  // ...
+  vite: {
+    plugins: [
+        visualizer({
+          emitFile: true,
+          filename: 'stats.html'
+        })
+    ]
+  }
+})
+```
+
+Build your project and open the generated `stats.html` file to analyze your bundle size. After that finish, you can remove the above code and package to keep your project clean.
