@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
-    "prebuild": "tsx scripts/cacheAvatars.ts",
     "build": "astro-pure check && astro check && astro build",
     "preview": "astro preview",
     "sync": "astro sync",
