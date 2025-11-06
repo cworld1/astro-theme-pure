@@ -44,6 +44,7 @@ if (!images[imagePath])
   <Image
     src={images[imagePath]()}
     alt={altText ?? heading}
+    class='absolute w-full object-contain opacity-60 transition-opacity group-hover:opacity-100 dark:opacity-35'
     class='absolute w-full h-full object-cover opacity-60 transition-opacity group-hover:opacity-100 dark:opacity-35'
     loading='lazy'
   />
