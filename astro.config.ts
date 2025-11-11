@@ -1,10 +1,13 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import vercel from '@astrojs/vercel'
-import AstroPureIntegration from 'astro-pure'
+import AstroPureIntegration from './packages/pure'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
+// Others
+// import { visualizer } from 'rollup-plugin-visualizer'
+const DEFAULT_LOCALE = 'en'
 // Local integrations
 // Local rehype & remark plugins
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
@@ -30,8 +33,8 @@ export default defineConfig({
   // Adapter
   // https://docs.astro.build/en/guides/deploy/
   // 1. Vercel (serverless)
-  adapter: vercel(),
-  output: 'server',
+  // adapter: vercel(),
+  output: 'static',
   // 2. Vercel (static)
   // adapter: vercelStatic(),
   // 3. Local (standalone)
@@ -98,5 +101,32 @@ export default defineConfig({
   },
   experimental: {
     contentIntellisense: true
+  },
+  i18n: {
+    locales: [DEFAULT_LOCALE, 'zh', 'es'],
+    defaultLocale: DEFAULT_LOCALE,
+    fallback: {
+      // es: DEFAULT_LOCALE,
+      // zh: DEFAULT_LOCALE
+    },
+    routing: {
+      fallbackType: "rewrite",
+    }
+  },
+  redirects: {
+    [`/${DEFAULT_LOCALE}`]: '/',                                // /en  -> /
+    [`/${DEFAULT_LOCALE}/[...slug]`]: '/[...slug]',             // /en/foo/bar -> /foo/bar
+  },
+  vite: {
+    plugins: [
+      //   visualizer({
+      //     emitFile: true,
+      //     filename: 'stats.html'
+      //   })
+    ],
+    optimizeDeps: {
+      // Prebundle CommonJS-only browser build to fix default export error
+      include: ['picocolors']
+    }
   }
 })
