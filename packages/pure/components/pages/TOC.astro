@@ -3,6 +3,7 @@ import type { MarkdownHeading } from 'astro'
 
 import { generateToc } from '../../plugins/toc'
 import TOCHeading from './TOCHeading.astro'
+import { useTranslations } from 'astro-pure/utils'
 
 interface Props {
   headings: MarkdownHeading[]
@@ -13,10 +14,11 @@ interface Props {
 const { headings, class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
+const { t } = useTranslations('common', Astro.currentLocale)
 ---
 
 <toc-heading class={className} {...props}>
-  <h2 class='font-medium'>TABLE OF CONTENTS</h2>
+  <h2 class='font-medium'>{t('toc.title')}</h2>
   <ul class='mt-4'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ul>
@@ -77,8 +79,9 @@ const toc = generateToc(headings)
       })
 
       this.tocLinks.forEach(({ element: el, progressBar: bar, slug }, i) => {
-        const { inView, progress } = this.headingProgress[slug]
-        if (this.headingProgress[slug]) {
+        const info = this.headingProgress[slug]
+        if (info) {
+          const { inView, progress } = info
           el.classList.toggle('highlight', inView)
           el.classList.toggle('highlight-bg-translucent', inView)
           el.classList.toggle(
@@ -94,6 +97,11 @@ const toc = generateToc(headings)
           bar.classList.toggle('is-read', !inView && progress === 1)
           bar.classList.toggle('highlight-bg', inView)
           bar.style.setProperty('height', `${progress * 90}%`)
+        } else {
+          // Ensure default styles when heading progress hasn't been computed yet
+          el.classList.remove('highlight', 'highlight-bg-translucent')
+          bar.classList.remove('is-read', 'highlight-bg')
+          bar.style.setProperty('height', '0%')
         }
       })
     }

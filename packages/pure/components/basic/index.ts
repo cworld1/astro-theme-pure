@@ -1,3 +1,5 @@
 export { default as Footer } from './Footer.astro'
 export { default as Header } from './Header.astro'
 export { default as ThemeProvider } from './ThemeProvider.astro'
+export { default as LanguageSwitch } from './LanguageSwitch.astro'
+export { default as LocaleRedirect } from './LocaleRedirect.astro'

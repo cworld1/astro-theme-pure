@@ -23,7 +23,16 @@
       "@/plugins/*": ["src/plugins/*"],
       "@/pages/*": ["src/pages/*"],
       "@/types": ["src/types/index.ts"],
-      "@/site-config": ["src/site.config.ts"]
+      "@/site-config": ["src/site.config.ts"],
+      "astro-pure": ["packages/pure/index.ts"],
+      "astro-pure/utils": ["packages/pure/utils/index.ts"],
+      "astro-pure/server": ["packages/pure/utils/server.ts"],
+      "astro-pure/types": ["packages/pure/types/index.ts"],
+      "astro-pure/libs": ["packages/pure/libs/index.ts"],
+      "astro-pure/advanced": ["packages/pure/components/advanced/index.ts"],
+      "astro-pure/user": ["packages/pure/components/user/index.ts"],
+      "astro-pure/components/basic": ["packages/pure/components/basic/index.ts"],
+      "astro-pure/components/pages": ["packages/pure/components/pages/index.ts"]
     }
   },
   "exclude": ["node_modules", "**/node_modules/*", ".vscode", "dist", "public/scripts/*", "test/*"]
