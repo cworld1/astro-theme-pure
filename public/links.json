@@ -28,16 +28,10 @@
       "desc": "Other special links",
       "link_list": [
         {
-          "name": "虫洞",
-          "intro": "随机前往十年之约的成员博客",
-          "link": "https://www.foreverblog.cn/go.html",
-          "avatar": "/images/wormhole.png"
-        },
-        {
-          "name": "开往",
-          "intro": "随机前往开往的成员博客",
-          "link": "https://www.travellings.cn/go.html",
-          "avatar": "https://www.travellings.cn/assets/travelling.png"
+          "name": "Astro",
+          "intro": "The web framework for content-driven websites",
+          "link": "https://astro.build/",
+          "avatar": "https://avatars.githubusercontent.com/u/44914786?s=200&v=4"
         }
       ]
     }
