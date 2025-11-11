@@ -1,4 +1,6 @@
 ---
+import { Font } from 'astro:assets'
+
 import { prod } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
 import config from '@/site-config'
@@ -24,14 +26,12 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <link rel='manifest' href='/favicon/site.webmanifest' />
 
 {/* Font preloads */}
-<link rel='preload' href='/fonts/Satoshi-Variable.ttf' as='font' type='font/ttf' crossorigin />
-<link
-  rel='preload'
-  href='/fonts/Satoshi-VariableItalic.ttf'
-  as='font'
-  type='font/ttf'
-  crossorigin
-/>
+<Font cssVariable='--font-satoshi' preload />
+<style>
+  body {
+    font-family: var(--font-satoshi);
+  }
+</style>
 
 {/* Canonical URL */}
 <link rel='canonical' href={canonicalURL} />
