@@ -3,50 +3,45 @@ import { Image } from 'astro:assets'
 
 import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale } from 'astro-pure/server'
 import { Button, Card, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
+import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
-import { initializeRuntimeLocale } from 'astro-pure/utils'
+import { localizeLink, initializeRuntimeLocale } from 'astro-pure/utils'
 
 initializeRuntimeLocale(Astro.currentLocale)
+export const prerender = true
+
+export { getStaticPaths } from 'astro-pure/utils'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
 const backend = ['Vercel', 'Waline']
 
 const MAX_POSTS = 10
-const allPosts = await getBlogCollection()
+const allPosts = await getBlogCollectionByLocale(Astro.currentLocale)
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
-
-const imagePath = config.logo.src
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
-)
-if (!images[imagePath])
-  throw new Error(
-    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
-  )
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
       <Image
-        src={images[imagePath]()}
-        alt={config.logo.alt || 'Profile'}
+        src={avatar}
+        alt='profile'
         class='h-28 w-auto rounded-full border p-1'
         loading='eager'
-        fetchpriority='high'
       />
 
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-medium'>{config.author}</h1>
+        <h1 class='text-3xl font-bold'>{config.author}</h1>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Label title='Somewhere'>
+          <Label title='China'>
             <Icon name='location' class='size-5' slot='icon' />
           </Label>
           <Label
@@ -84,7 +79,7 @@ if (!images[imagePath])
           indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
           at eum oratio possit voluptatum.
         </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
+        <Button title='More about me' class='w-fit self-end' href={localizeLink('/about')} variant='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
@@ -96,7 +91,7 @@ if (!images[imagePath])
                 </li>
               ))}
             </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+            <Button title='More posts' class='w-fit self-end' href={localizeLink('/blog')} variant='ahead' />
           </Section>
         )
       }
@@ -155,26 +150,26 @@ if (!images[imagePath])
           <ProjectCard
             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             heading='Lorem ipsum'
-            subheading='Do not go gentle into that good night'
-            imagePath='/src/assets/projects/1.avif'
+            subheading='dolor sit amet, oratio ornatus explicari pro ex'
+            imagePath='/src/assets/projects/alex-tyson-2BAXJ7ha74s-unsplash.jpg'
           />
           <ProjectCard
             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             heading='Lorem ipsum'
-            subheading='Old age burn and rave at close of day'
-            imagePath='/src/assets/projects/2.avif'
+            subheading='dolor sit amet, oratio ornatus explicari pro ex'
+            imagePath='/src/assets/projects/angelica-teran-Bk9hpaXHK4o-unsplash.jpg'
           />
           <ProjectCard
             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             heading='Lorem ipsum'
-            subheading='Rage, rage against the dying of the light'
-            imagePath='/src/assets/projects/3.avif'
+            subheading='dolor sit amet, oratio ornatus explicari pro ex'
+            imagePath='/src/assets/projects/kseniia-zapiatkina-yATU3rg8tNI-unsplash.jpg'
           />
           <ProjectCard
-            href='/projects'
+            href={localizeLink('/projects')}
             heading='More projects'
             subheading='Check out more projects'
-            imagePath='/src/assets/projects/4.avif'
+            imagePath='/src/assets/projects/wen-qiao-g_w8I64FiO0-unsplash.jpg'
           />
         </div>
       </Section>

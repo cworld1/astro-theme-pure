@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
+import { localizeLink, normalizeLocaleBlogId } from '../../utils/locale'
 
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
@@ -30,7 +31,7 @@ const postDate = data.updatedDate ?? data.publishDate
       detailed && 'max-sm:px-4 sm:py-5',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
-    href={`/blog/${id}`}
+    href={localizeLink(`/blog/${normalizeLocaleBlogId(id)}/`)}
     data-astro-prefetch
   >
     {

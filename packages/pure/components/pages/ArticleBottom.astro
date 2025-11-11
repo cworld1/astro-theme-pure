@@ -2,6 +2,7 @@
 import type { CollectionEntry, CollectionKey } from 'astro:content'
 
 import { cn } from '../../utils'
+import { normalizeLocaleBlogId } from '../../utils/locale'
 
 type Props = {
   id: string
@@ -24,7 +25,7 @@ const next = collections[index + 1]
     {
       prev && (
         <a
-          href={`${path}/${prev.id}`}
+          href={`${path}/${normalizeLocaleBlogId(prev.id)}`}
           class='group inline-flex items-center gap-x-2 rounded-xl px-4 py-2 no-underline transition-colors duration-300 hover:bg-muted max-sm:max-w-[80%] sm:flex'
         >
           <svg
@@ -60,7 +61,7 @@ const next = collections[index + 1]
     {
       next && (
         <a
-          href={`${path}/${next.id}`}
+          href={`${path}/${normalizeLocaleBlogId(next.id)}`}
           class='group inline-flex items-center gap-x-2 rounded-xl px-4 py-2 text-right no-underline transition-colors duration-300 hover:bg-muted max-sm:float-end max-sm:max-w-[80%] sm:flex'
         >
           <p class='truncate font-medium transition-colors'>{next.data.title}</p>

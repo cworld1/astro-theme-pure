@@ -23,8 +23,9 @@ export function vitePluginUserConfig(
     legacy,
     root,
     srcDir,
-    trailingSlash
-  }: Pick<AstroConfig, 'root' | 'srcDir' | 'trailingSlash'> & {
+    trailingSlash,
+    i18n
+  }: Pick<AstroConfig, 'root' | 'srcDir' | 'trailingSlash' | 'i18n'> & {
     build: Pick<AstroConfig['build'], 'format'>
     legacy: Pick<AstroConfig['legacy'], 'collections'>
   }
@@ -65,7 +66,11 @@ export function vitePluginUserConfig(
       legacyCollections: legacy.collections,
       root,
       srcDir,
-      trailingSlash
+      trailingSlash,
+      i18n: {
+        defaultLocale: i18n?.defaultLocale,
+        locales: i18n?.locales
+      }
     })}`,
     /**
      * Module containing imports of user-specified custom CSS files.
