@@ -15,3 +15,6 @@ export { getTheme, listenThemeChange, setTheme } from './theme'
 
 // Toast
 export { showToast } from './toast'
+
+// Locale helpers
+export { localizeLink as localeHref, initializeRuntimeLocale, getLocale, resolveMenu, useTranslations } from './locale'
