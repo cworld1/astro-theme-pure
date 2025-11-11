@@ -26,7 +26,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/images/social-card.png', As
 <link rel='manifest' href='/favicon/site.webmanifest' />
 
 {/* Font preloads */}
-<Font cssVariable='--font-satoshi' preload />
+<Font cssVariable='--font-satoshi' preload={[{ subset: 'latin', style: 'normal' }]} />
 <style>
   body {
     font-family: var(--font-satoshi);

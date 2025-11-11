@@ -108,7 +108,8 @@ export default defineConfig({
         // styles: ["normal", "italics"],
         // subsets: ["cyrillic-ext", "cyrillic", "greek-ext", "greek", "vietnamese", "latin-ext", "latin"],
         // fallbacks: ["sans-serif"],
-        weights: [400, 500]
+        weights: [400, 500],
+        subsets: ['latin']
       }
     ]
   }
