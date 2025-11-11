@@ -29,6 +29,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         alt='profile'
         class='h-28 w-auto rounded-full border p-1'
         loading='eager'
+        fetchpriority='high'
       />
 
       <div class='flex flex-col items-center gap-y-4'>
