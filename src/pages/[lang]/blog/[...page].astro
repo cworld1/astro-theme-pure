@@ -1,0 +1,125 @@
+---
+import type { GetStaticPaths, Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+
+import { Paginator } from 'astro-pure/components/pages'
+import { PostPreview } from '../../../../packages/pure/components/pages'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate } from '../../../../packages/pure/utils/server'
+import { Button, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
+import { getRelativeLocaleUrlList } from 'astro:i18n'
+import { getLocale } from '../../../../packages/pure/utils/locale'
+
+export const prerender = true
+
+export const getStaticPaths = (async ({ paginate }) => {
+  // Derive locale path slugs from Astro i18n configuration
+  const locales = getRelativeLocaleUrlList()
+    .map((url) => url.replace(/^\//, '').replace(/\/$/, ''))
+    .filter(Boolean)
+
+  // Generate paginated paths per locale by filtering the collection with the locale
+  const paths: ReturnType<typeof paginate>[number][] = []
+  for (const lang of locales) {
+    const localizedCollections = sortMDByDate(await getBlogCollectionByLocale(lang))
+    const uniqueTags = getUniqueTags(localizedCollections)
+    const collectionsCount = localizedCollections.length
+
+    paths.push(
+      ...paginate(localizedCollections, {
+        pageSize: config.content.blogPageSize,
+        params: { lang },
+        props: { uniqueTags, collectionsCount }
+      })
+    )
+  }
+
+  return paths
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
+  uniqueTags: string[]
+  collectionsCount: number
+}
+
+const { page, uniqueTags, collectionsCount } = Astro.props
+
+const meta = {
+  description: 'Some posts or archives of my blog',
+  title: 'Blog'
+}
+
+const paginationProps = {
+  ...(page.url.prev && {
+    prevUrl: {
+      text: `← Previous Posts`,
+      url: page.url.prev
+    }
+  }),
+  ...(page.url.next && {
+    nextUrl: {
+      text: `Next Posts →`,
+      url: page.url.next
+    }
+  })
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back' href='/' variant='back' />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
+    </div>
+    {
+      page.data.length === 0 ? (
+        <p>No posts yet.</p>
+      ) : (
+        <div class='grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
+          <section aria-label='Blog posts list' class='animate' id='content'>
+            {/* header */}
+            <div class='mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row'>
+              <span class='text-muted-foreground'>
+                Page {page.currentPage} - Showing {page.data.length} of {collectionsCount} posts
+              </span>
+              <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
+                View all posts by years →
+              </a>
+            </div>
+            {/* posts */}
+            <ul class='flex flex-col gap-y-4 text-start'>
+              {page.data.map((post) => (
+                <PostPreview {post} detailed />
+              ))}
+            </ul>
+            <Paginator {...paginationProps} />
+          </section>
+
+          {/* sidebar */}
+          {!!uniqueTags.length && (
+            <aside class='animate' id='sidebar'>
+              <h2 class='mb-4 flex items-center text-lg font-semibold'>
+                <Icon name='tag-2' class='me-2' />
+                Tags
+              </h2>
+              <ul class='text-bgColor flex flex-wrap gap-2'>
+                {uniqueTags.map((tag) => (
+                  <li>
+                    <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+                  </li>
+                ))}
+              </ul>
+              <span class='mt-4 block sm:text-end'>
+                <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
+                  View all →
+                </a>
+              </span>
+            </aside>
+          )}
+        </div>
+      )
+    }
+  </main>
+</PageLayout>

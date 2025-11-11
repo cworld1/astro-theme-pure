@@ -1,0 +1,37 @@
+---
+import { type CollectionEntry, getCollection, getEntry, render } from 'astro:content'
+import PostLayout from '@/layouts/BlogPost.astro'
+import { getRelativeLocaleUrlList } from 'astro:i18n'
+import { normalizeLocaleBlogId } from '../../../../packages/pure/utils/locale'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  // Derive locale path slugs from Astro i18n configuration
+  const locales = getRelativeLocaleUrlList()
+    .map((url) => url.replace(/^\//, '').replace(/\/$/, ''))
+    .filter(Boolean)
+
+  return posts.flatMap((post) => {
+    return locales.map((lang) => ({
+      params: { lang, id: normalizeLocaleBlogId(post.id) },
+      props: { post, posts },
+    }))
+  })
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>
+  posts: CollectionEntry<'blog'>[]
+}
+
+const { post, posts } = Astro.props as Props
+const { headings, remarkPluginFrontmatter } = await render(post as CollectionEntry<'blog'>)
+---
+<PostLayout
+  headings={headings}
+  remarkPluginFrontmatter={remarkPluginFrontmatter}
+  post={post}
+  posts={posts}
+  />
