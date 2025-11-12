@@ -83,7 +83,7 @@ Let's make an example to customize the `Footer` component:
 
 Then you've done a "localization" of the component.
 
-## Package mode
+## Package Mode
 
 <Aside type='danger' title={'Use at Your Own Risk'.toUpperCase()}>
 Keep cautious for change the underlying code <Spoiler>~~底层代码不可突破，祖宗之法不可变~~</Spoiler>, unless you know what you are doing. You should know and accept any risks & difficulties for making project complex.
@@ -92,11 +92,9 @@ Keep cautious for change the underlying code <Spoiler>~~底层代码不可突破
 If you want to make some breaking changes or just make a test, this method may follow "what you see is what you get".
 
 1. Making sure you have the original theme code (`./packages/pure`). If yo've deleted it, download it from the [Releases](https://github.com/cworld1/astro-theme-pure/releases).
-2. Link it to your project using your package manager.
+2. Link it to your project using your package manager (Example: [Bun](https://bun.com/docs/pm/cli/link), [NPM](https://docs.npmjs.com/cli/v11/commands/npm-link), [PNPM](https://pnpm.io/cli/link)).
 3. Then change the theme code as it is a part of your code!
 
 <Aside type='tip'>
-For bun user, please refer to [Deployment#Package Mode](/docs/setup/deployment#package-mode)
-
-This can also help you correctly build your project on cloud CI/CD.
+For bun user, please refer to [Deployment#Package Mode](/docs/setup/deployment#package-mode). This can also help you correctly build your project on cloud CI/CD.
 </Aside>

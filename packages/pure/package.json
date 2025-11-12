@@ -35,14 +35,14 @@
     "./libs": "./libs/index.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.9",
+    "@astrojs/mdx": "^4.3.10",
     "@astrojs/sitemap": "^3.6.0",
     "@pagefind/default-ui": "^1.4.0",
-    "@unocss/reset": "^66.5.4",
-    "astro": "^5.15.3",
+    "@unocss/reset": "^66.5.6",
+    "astro": "^5.15.5",
     "hast-util-select": "^6.0.4",
     "node-html-parser": "^7.0.1",
     "pagefind": "^1.4.0",
-    "unocss": "^66.5.4"
+    "unocss": "^66.5.6"
   }
 }

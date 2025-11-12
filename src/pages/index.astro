@@ -9,7 +9,6 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
-import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
@@ -19,16 +18,26 @@ const backend = ['Vercel', 'Waline']
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+
+const imagePath = config.logo.src
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
+)
+if (!images[imagePath])
+  throw new Error(
+    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
+  )
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
       <Image
-        src={avatar}
-        alt='profile'
+        src={images[imagePath]()}
+        alt={config.logo.alt || 'Logo'}
         class='h-28 w-auto rounded-full border p-1'
         loading='eager'
+        fetchpriority='high'
       />
 
       <div class='flex flex-col items-center gap-y-4'>
@@ -143,26 +152,26 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           <ProjectCard
             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
-            imagePath='/src/assets/projects/alex-tyson-2BAXJ7ha74s-unsplash.jpg'
+            subheading='Do not go gentle into that good night'
+            imagePath='/src/assets/projects/1.jpg'
           />
           <ProjectCard
             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
-            imagePath='/src/assets/projects/angelica-teran-Bk9hpaXHK4o-unsplash.jpg'
+            subheading='Old age burn and rave at close of day'
+            imagePath='/src/assets/projects/2.jpg'
           />
           <ProjectCard
             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
-            imagePath='/src/assets/projects/kseniia-zapiatkina-yATU3rg8tNI-unsplash.jpg'
+            subheading='Rage, rage against the dying of the light'
+            imagePath='/src/assets/projects/3.jpg'
           />
           <ProjectCard
             href='/projects'
             heading='More projects'
             subheading='Check out more projects'
-            imagePath='/src/assets/projects/wen-qiao-g_w8I64FiO0-unsplash.jpg'
+            imagePath='/src/assets/projects/4.jpg'
           />
         </div>
       </Section>

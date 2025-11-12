@@ -80,12 +80,14 @@ const shares = {
     <div class='flex flex-row gap-3'>
       <button
         id='copy-link'
+        aria-label='Copy link'
         class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
       >
         <Icon class='size-5' name='link' />
       </button>
       <button
         id='get-qrcode'
+        aria-label='Get QR code'
         class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
       >
         <Icon class='size-5' name='qrcode' />
@@ -96,6 +98,7 @@ const shares = {
             href={shares[share].link}
             target='_blank'
             id={`share-${share}`}
+            aria-label={`Share to ${share}`}
             class='group rounded-full bg-muted p-1 text-muted-foreground transition-colors hover:text-primary sm:p-1.5'
           >
             <Icon class='size-5' name={share} />

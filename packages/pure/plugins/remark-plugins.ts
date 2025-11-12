@@ -21,7 +21,7 @@ export const remarkReadingTime: Plugin<[], Root> = function () {
     const textOnPage = mdastToString(tree)
     const readingTime = getReadingTime(textOnPage)
     // readingTime.text will give us minutes read as a friendly string,
-    // i.e. "3 min read"
+    // i.e. "3 min"
     if (data.astro && data.astro.frontmatter) {
       data.astro.frontmatter.minutesRead = readingTime.text
       data.astro.frontmatter.words = readingTime.words

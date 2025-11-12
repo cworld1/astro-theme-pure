@@ -67,7 +67,7 @@ export function getReadingTime(text: string, wordsPerMinute: number = 200): Read
   const displayed = Math.ceil(minutes)
 
   return {
-    text: displayed + ' min read',
+    text: displayed + ' min',
     minutes,
     time,
     words
