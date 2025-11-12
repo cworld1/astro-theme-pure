@@ -3,7 +3,7 @@ import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import siteConfig from '../src/site.config'
+import siteConfig from '../../src/site.config'
 
 type Friend = {
   name: string
@@ -27,7 +27,7 @@ type LinksJson = {
 }
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const projectRoot = path.resolve(__dirname, '..')
+const projectRoot = path.resolve(__dirname, '../..')
 const linksJsonPath = path.join(projectRoot, 'public', 'links.json')
 const avatarOutputDir = path.join(projectRoot, 'public', 'avatars')
 
