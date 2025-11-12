@@ -71,15 +71,6 @@ export function vitePluginUserConfig(
      * Module containing imports of user-specified custom CSS files.
      */
     'virtual:user-css': opts.customCss.map((id) => `import ${resolveId(id)};`).join(''),
-    'virtual:user-images': opts.logo
-      ? 'src' in opts.logo
-        ? `import src from ${resolveId(
-            opts.logo.src
-          )}; export const logos = { dark: src, light: src };`
-        : `import dark from ${resolveId(opts.logo.dark)}; import light from ${resolveId(
-            opts.logo.light
-          )}; export const logos = { dark, light };`
-      : 'export const logos = {};',
     'virtual:collection-config': `let userCollections;
 			try {
 				userCollections = (await import(${resolveId('./content/config.ts', srcDir)})).collections;
