@@ -12,7 +12,7 @@ export default {
     dev_disabled: 'You are in development mode, search is disabled.'
   },
   toc: {
-    title: 'Table of contents',
+    title: 'Table of Contents',
     scroll_to_section: 'Scroll to section: {section}'
   },
   tocHeading: {
