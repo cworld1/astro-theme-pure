@@ -1,0 +1,20 @@
+export default {
+  meta: {
+    description: 'Algunas entradas o archivos de mi blog',
+    title: 'Blog'
+  },
+  page: {
+    title: 'Blog',
+    no_posts: 'Todavía no hay entradas.',
+    summary: 'Página {page} - Mostrando {count} de {total} entradas',
+    view_archives: 'Ver todas las entradas por años →'
+  },
+  sidebar: {
+    tags: 'Etiquetas',
+    view_all: 'Ver todo →'
+  },
+  paginator: {
+    prev_posts: '← Entradas anteriores',
+    next_posts: 'Entradas siguientes →'
+  }
+}
