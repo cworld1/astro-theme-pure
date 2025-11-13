@@ -14,7 +14,7 @@ interface Props {
 const { headings, class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
-const { t } = useTranslations('common')
+const { t } = useTranslations('common', Astro.currentLocale)
 ---
 
 <toc-heading class={className} {...props}>
