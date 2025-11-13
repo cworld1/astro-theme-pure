@@ -9,7 +9,7 @@ import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
-import { getLocale } from '../../../../packages/pure/utils/locale'
+import { useTranslations } from '../../../../packages/pure/utils/locale'
 
 export const prerender = true
 
@@ -46,21 +46,22 @@ interface Props {
 
 const { page, uniqueTags, collectionsCount } = Astro.props
 
+const { t } = useTranslations('blog')
 const meta = {
-  description: 'Some posts or archives of my blog',
-  title: 'Blog'
+  description: t('meta.description'),
+  title: t('meta.title')
 }
 
 const paginationProps = {
   ...(page.url.prev && {
     prevUrl: {
-      text: `← Previous Posts`,
+      text: t('paginator.prev_posts'),
       url: page.url.prev
     }
   }),
   ...(page.url.next && {
     nextUrl: {
-      text: `Next Posts →`,
+      text: t('paginator.next_posts'),
       url: page.url.next
     }
   })
@@ -68,24 +69,24 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/' variant='back' />
+  <Button title={useTranslations('common').t('navigation.back')} href='/' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
-      <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
+      <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>{t('page.title')}</h1>
     </div>
     {
       page.data.length === 0 ? (
-        <p>No posts yet.</p>
+        <p>{t('page.no_posts')}</p>
       ) : (
         <div class='grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
           <section aria-label='Blog posts list' class='animate' id='content'>
             {/* header */}
             <div class='mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row'>
               <span class='text-muted-foreground'>
-                Page {page.currentPage} - Showing {page.data.length} of {collectionsCount} posts
+                {t('page.summary', { page: page.currentPage, count: page.data.length, total: collectionsCount })}
               </span>
               <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
-                View all posts by years →
+                {t('page.view_archives')}
               </a>
             </div>
             {/* posts */}
@@ -102,7 +103,7 @@ const paginationProps = {
             <aside class='animate' id='sidebar'>
               <h2 class='mb-4 flex items-center text-lg font-semibold'>
                 <Icon name='tag-2' class='me-2' />
-                Tags
+                {t('sidebar.tags')}
               </h2>
               <ul class='text-bgColor flex flex-wrap gap-2'>
                 {uniqueTags.map((tag) => (
@@ -113,7 +114,7 @@ const paginationProps = {
               </ul>
               <span class='mt-4 block sm:text-end'>
                 <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
-                  View all →
+                  {t('sidebar.view_all')}
                 </a>
               </span>
             </aside>
