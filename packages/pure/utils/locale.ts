@@ -1,4 +1,4 @@
-import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getRelativeLocaleUrl, getRelativeLocaleUrlList } from 'astro:i18n'
 import projectContext from 'virtual:project-context'
 import isAbsoluteUrl from './is-absolute-url'
 
@@ -152,4 +152,14 @@ export function useTranslations(namespace = 'common', locale?: string) {
   }
 
   return { t, messages, locale: rawLocale, namespace }
+}
+
+export async function getStaticPaths() {
+  const configured = projectContext?.i18n?.locales || []
+  const fallback = projectContext?.i18n?.defaultLocale || 'en'
+  const urls = getRelativeLocaleUrlList()
+    .map((u) => u.replace(/^\//, '').replace(/\/$/, ''))
+    .filter(Boolean)
+  const langs = Array.from(new Set((configured.length ? configured : [fallback]).concat(urls)))
+  return langs.map((lang) => ({ params: { lang } }))
 }
