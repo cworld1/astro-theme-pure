@@ -18,3 +18,4 @@ export { showToast } from './toast'
 
 // Locale helpers
 export { localizeLink as localeHref, initializeRuntimeLocale, getLocale, resolveMenu, useTranslations } from './locale'
+export { redirectToPreferredLocale, initLocaleRedirect } from './locale-client-redirect'

@@ -54,7 +54,7 @@ const shouldShow = Array.isArray(locales) && locales.length > 1
     <ul class='dropdown min-w-[10rem] rounded-md border bg-background shadow-md'>
       {locales.map((loc) => (
         <li>
-          <a href={buildHref(loc)} class='block px-3 py-2 text-sm hover:bg-muted'>
+          <a href={buildHref(loc)} data-locale={loc} class='block px-3 py-2 text-sm hover:bg-muted'>
             {getDisplayName(loc)} ({codeLabel(loc)})
           </a>
         </li>
@@ -64,6 +64,8 @@ const shouldShow = Array.isArray(locales) && locales.length > 1
 )}
 
 <script>
+  import config from 'virtual:config'
+  import projectContext from 'virtual:project-context'
   class LanguageSwitchEl extends HTMLElement {
     dropdown!: HTMLElement | null
     trigger!: HTMLElement | null
@@ -111,6 +113,35 @@ const shouldShow = Array.isArray(locales) && locales.length > 1
 
       document.addEventListener('click', (ev) => {
         if (!this.contains(ev.target as Node)) close()
+      })
+
+      const effectiveRemember = !!(
+        config.i18n?.rememberSelectedLocale ||
+        (config.i18n?.browserPreferredLocale && config.i18n?.rememberSelectedLocale === false)
+      )
+      this.querySelectorAll('.dropdown a').forEach((a) => {
+        a.addEventListener('click', (ev) => {
+          const href = a.getAttribute('href') || ''
+          const targetLocale = a.getAttribute('data-locale') || ''
+          if (targetLocale) {
+            if (effectiveRemember) {
+              try {
+                localStorage.setItem('locale', targetLocale)
+              } catch (_) {}
+              const serverOutput = projectContext?.build?.format === 'server'
+              if (serverOutput) {
+                document.cookie = `locale=${encodeURIComponent(targetLocale)};path=/;max-age=31536000;SameSite=Lax`
+              }
+            }
+          }
+          ev.preventDefault()
+          try {
+            const to = new URL(href, location.origin).href
+            location.assign(to)
+          } catch (_) {
+            location.assign(href)
+          }
+        })
       })
     }
   }

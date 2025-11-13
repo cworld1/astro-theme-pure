@@ -181,7 +181,16 @@ export const ThemeConfigSchema = () =>
 
       /** Share buttons to show */
       share: ShareSchema()
-    })
+    }),
+
+    i18n: z
+      .object({
+        /** Enable client/server redirect based on browser preferred language */
+        browserPreferredLocale: z.boolean().optional().default(false),
+        /** Remember user-selected locale and prefer it for future visits */
+        rememberSelectedLocale: z.boolean().optional().default(false)
+      })
+      .optional()
   })
 
 export type ThemeUserConfig = z.input<ReturnType<typeof ThemeConfigSchema>>

@@ -29,6 +29,10 @@ initializeRuntimeLocale(Astro.currentLocale)
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
+    <script is:inline type='module'>
+      import { initLocaleRedirect } from '../../packages/pure/utils/locale-client-redirect'
+      initLocaleRedirect()
+    </script>
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>
