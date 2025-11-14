@@ -1,4 +1,4 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from '../packages/pure/types'
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -32,6 +32,10 @@ export const theme: ThemeUserConfig = {
   titleDelimiter: '•',
   prerender: true,
   npmCDN: 'https://cdn.jsdelivr.net/npm',
+  i18n: {
+    browserPreferredLocale: true,
+    rememberSelectedLocale: true
+  },
 
   // Still in test
   head: [
@@ -46,13 +50,36 @@ export const theme: ThemeUserConfig = {
 
   /** Configure the header of your site. */
   header: {
-    menu: [
-      { title: 'Blog', link: '/blog' },
-      { title: 'Docs', link: '/docs' },
-      { title: 'Projects', link: '/projects' },
-      { title: 'Links', link: '/links' },
-      { title: 'About', link: '/about' }
-    ]
+    // menu: [
+    //   { title: 'Blog', link: '/blog' },
+    //   { title: 'Docs', link: '/docs' },
+    //   { title: 'Projects', link: '/projects' },
+    //   { title: 'Links', link: '/links' },
+    //   { title: 'About', link: '/about' }
+    // ],
+    menu:{ 
+      en: [
+        { title: 'Blog', link: '/blog' },
+        { title: 'Docs', link: '/docs' },
+        { title: 'Projects', link: '/projects' },
+        { title: 'Links', link: '/links' },
+        { title: 'About', link: '/about' }
+      ],
+      es: [
+        { title: 'Blog', link: '/blog' },
+        { title: 'Docs', link: '/docs' },
+        { title: 'Proyectos', link: '/projects' },
+        { title: 'Links', link: '/links' },
+        { title: 'Acerca de', link: '/about' }
+      ],
+      zh: [
+        { title: '博客', link: '/blog' },
+        { title: '文档', link: '/docs' },
+        { title: '项目', link: '/projects' },
+        { title: '链接', link: '/links' },
+        { title: '关于', link: '/about' }
+      ]
+    }
   },
 
   /** Configure the footer of your site. */

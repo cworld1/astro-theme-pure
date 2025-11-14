@@ -10,8 +10,9 @@ function removeDupsAndLowerCase(array: string[]) {
 
 // Define blog collection
 const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  // Load Markdown and MDX files from default blog and localized blog directories.
+  // This enables posts under `src/content/blog` and `src/content/localized/<lang>/blog`.
+  loader: glob({ base: './src/content', pattern: ['blog/**/*.{md,mdx}', 'localized/*/blog/**/*.{md,mdx}'] }),
   // Required
   schema: ({ image }) =>
     z.object({
@@ -34,6 +35,8 @@ const blog = defineCollection({
         .optional(),
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
       language: z.string().optional(),
+      // Locale code (e.g., en, en-US, zh). Used for filtering by locale.
+      lang: z.string().optional(),
       draft: z.boolean().default(false),
       // Special fields
       comment: z.boolean().default(true)

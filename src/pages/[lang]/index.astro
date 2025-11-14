@@ -3,7 +3,8 @@ import { Image } from 'astro:assets'
 
 import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale } from 'astro-pure/server'
 import { Button, Card, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
@@ -11,16 +12,19 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
-import { initializeRuntimeLocale } from 'astro-pure/utils'
+import { localizeLink, initializeRuntimeLocale } from 'astro-pure/utils'
 
 initializeRuntimeLocale(Astro.currentLocale)
+export const prerender = true
+
+export { getStaticPaths } from 'astro-pure/utils'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
 const backend = ['Vercel', 'Waline']
 
 const MAX_POSTS = 10
-const allPosts = await getBlogCollection()
+const allPosts = await getBlogCollectionByLocale(Astro.currentLocale)
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
@@ -75,7 +79,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
           at eum oratio possit voluptatum.
         </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
+        <Button title='More about me' class='w-fit self-end' href={localizeLink('/about')} variant='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
@@ -87,7 +91,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
                 </li>
               ))}
             </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+            <Button title='More posts' class='w-fit self-end' href={localizeLink('/blog')} variant='ahead' />
           </Section>
         )
       }
@@ -162,7 +166,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             imagePath='/src/assets/projects/kseniia-zapiatkina-yATU3rg8tNI-unsplash.jpg'
           />
           <ProjectCard
-            href='/projects'
+            href={localizeLink('/projects')}
             heading='More projects'
             subheading='Check out more projects'
             imagePath='/src/assets/projects/wen-qiao-g_w8I64FiO0-unsplash.jpg'

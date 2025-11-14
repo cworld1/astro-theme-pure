@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:content'
+import { getBaseLocale } from './locale'
 
 type Collections = CollectionEntry<CollectionKey>[]
 
@@ -10,6 +11,38 @@ export async function getBlogCollection(contentType: CollectionKey = 'blog') {
     // Not in production & draft is not false
     return prod ? !data.draft : true
   })
+}
+
+/**
+ * Locale-aware version of `getBlogCollection`.
+ * - Filters out draft posts based on environment (same as `getBlogCollection`).
+ * - When `locale` is provided, only returns entries whose `data.language` matches the base locale.
+ */
+export async function getBlogCollectionByLocale(
+  locale?: string,
+  contentType: CollectionKey = 'blog'
+) {
+  const targetBase = locale ? getBaseLocale(locale) : undefined
+  return await getCollection(
+    contentType,
+    ({ data, id }: CollectionEntry<typeof contentType>) => {
+      const draftOk = prod ? !data.draft : true
+      if (!draftOk) return false
+
+      // If no locale provided, return all (respecting draft filter)
+      if (!targetBase) return false
+
+      let entryBase: string | undefined
+      if ('lang' in data && data.lang) {
+        entryBase = getBaseLocale(data.lang)
+      } else {
+        const m = id?.match(/^localized\/(\w+?)\//i)
+        entryBase = m ? getBaseLocale(m[1]) : getBaseLocale()
+      }
+
+      return entryBase?.toLowerCase() === targetBase.toLowerCase()
+    }
+  )
 }
 
 function getYearFromCollection<T extends CollectionKey>(

@@ -1,0 +1,20 @@
+export default {
+  meta: {
+    description: '我的博客的一些文章或归档',
+    title: '博客'
+  },
+  page: {
+    title: '博客',
+    no_posts: '暂无文章。',
+    summary: '第 {page} 页 - 显示 {total} 篇中的 {count} 篇',
+    view_archives: '按年份查看所有文章 →'
+  },
+  sidebar: {
+    tags: '标签',
+    view_all: '查看全部 →'
+  },
+  paginator: {
+    prev_posts: '← 上一页文章',
+    next_posts: '下一页文章 →'
+  }
+}
