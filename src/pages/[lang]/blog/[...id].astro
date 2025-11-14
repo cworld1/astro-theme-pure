@@ -2,7 +2,7 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content'
 import PostLayout from '@/layouts/BlogPost.astro'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
-import { localizeLink, initializeRuntimeLocale, normalizeLocaleBlogId } from '../../../../packages/pure/utils/locale'
+import { localizeLink, initializeRuntimeLocale, normalizeLocaleBlogId } from 'astro-pure/utils'
 
 export const prerender = true
 

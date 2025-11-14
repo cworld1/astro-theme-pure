@@ -5,8 +5,7 @@ import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ } from '@/site-config'
-import { initializeRuntimeLocale, localizeLink } from '../../packages/pure/utils/locale'
-import { useTranslations } from '../../packages/pure/utils/locale'
+import { initializeRuntimeLocale, localizeLink, useTranslations } from 'astro-pure/utils'
 
 initializeRuntimeLocale(Astro.currentLocale)
 

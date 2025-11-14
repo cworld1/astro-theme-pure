@@ -2,9 +2,9 @@
 import { Image } from 'astro:assets'
 
 import { Quote } from 'astro-pure/advanced'
-import { PostPreview } from '../../../packages/pure/components/pages'
+import { PostPreview } from 'astro-pure/components/pages'
 import { sortMDByDate } from 'astro-pure/server'
-import { getBlogCollectionByLocale } from '../../../packages/pure/utils/server'
+import { getBlogCollectionByLocale } from 'astro-pure/server'
 import { Button, Card, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
@@ -12,12 +12,12 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
-import { localizeLink, initializeRuntimeLocale } from '../../../packages/pure/utils/locale'
+import { localizeLink, initializeRuntimeLocale } from 'astro-pure/utils'
 
 initializeRuntimeLocale(Astro.currentLocale)
-
 export const prerender = true
-export { getStaticPaths } from '../../../packages/pure/utils/locale'
+
+export { getStaticPaths } from 'astro-pure/utils'
 
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']

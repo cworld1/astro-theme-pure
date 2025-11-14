@@ -17,5 +17,14 @@ export { getTheme, listenThemeChange, setTheme } from './theme'
 export { showToast } from './toast'
 
 // Locale helpers
-export { localizeLink as localeHref, initializeRuntimeLocale, getLocale, resolveMenu, useTranslations } from './locale'
+export {
+  localizeLink,
+  localizeLink as localeHref,
+  initializeRuntimeLocale,
+  getLocale,
+  resolveMenu,
+  useTranslations,
+  normalizeLocaleBlogId,
+  getStaticPaths
+} from './locale'
 export { redirectToPreferredLocale, initLocaleRedirect } from './locale-client-redirect'

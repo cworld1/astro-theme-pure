@@ -3,13 +3,13 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator } from 'astro-pure/components/pages'
-import { PostPreview } from '../../../../packages/pure/components/pages'
-import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate } from '../../../../packages/pure/utils/server'
+import { PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
-import { useTranslations, localizeLink, initializeRuntimeLocale } from '../../../../packages/pure/utils/locale'
+import { useTranslations, localizeLink, initializeRuntimeLocale } from 'astro-pure/utils'
 
 export const prerender = true
 

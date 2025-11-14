@@ -1,10 +1,10 @@
 ---
 import { render, type CollectionEntry } from 'astro:content'
-import { normalizeLocaleBlogId } from '../../../packages/pure/utils/locale'
+import { normalizeLocaleBlogId } from 'astro-pure/utils'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PostLayout from '@/layouts/BlogPost.astro'
-import { localizeLink, initializeRuntimeLocale } from 'packages/pure/utils/locale'
+import { localizeLink, initializeRuntimeLocale } from 'astro-pure/utils'
 
 export const prerender = true
 

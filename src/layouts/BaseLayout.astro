@@ -1,11 +1,9 @@
 ---
-import { ThemeProvider } from 'astro-pure/components/basic'
-import Header from '../../packages/pure/components/basic/Header.astro'
-import Footer from '../../packages/pure/components/basic/Footer.astro'
+import { ThemeProvider, Header, Footer } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
-import { initializeRuntimeLocale } from '../../packages/pure/utils/locale'
+import { initializeRuntimeLocale } from 'astro-pure/utils'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -30,7 +28,7 @@ initializeRuntimeLocale(Astro.currentLocale)
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
     <script is:inline type='module'>
-      import { initLocaleRedirect } from '../../packages/pure/utils/locale-client-redirect'
+      import { initLocaleRedirect } from 'astro-pure/utils'
       initLocaleRedirect()
     </script>
   </head>
