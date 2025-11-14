@@ -4,6 +4,8 @@ import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
 import { initializeRuntimeLocale } from 'astro-pure/utils'
+import { LocaleRedirect } from 'astro-pure/components/basic'
+import projectContext from 'virtual:project-context'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -27,10 +29,7 @@ initializeRuntimeLocale(Astro.currentLocale)
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
-    <script is:inline type='module'>
-      import { initLocaleRedirect } from 'astro-pure/utils'
-      initLocaleRedirect()
-    </script>
+    <LocaleRedirect />
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>

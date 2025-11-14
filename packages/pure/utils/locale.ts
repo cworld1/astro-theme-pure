@@ -1,4 +1,3 @@
-import { getRelativeLocaleUrl, getRelativeLocaleUrlList } from 'astro:i18n'
 import projectContext from 'virtual:project-context'
 import isAbsoluteUrl from './is-absolute-url'
 
@@ -23,6 +22,7 @@ type LocalizeLinkFn = ((path: string) => string) & { set: (locale?: string) => v
 export const localizeLink: LocalizeLinkFn = Object.assign(
   (path: string) => {
     const locale = getLocale()
+    const defaultLocale = projectContext?.i18n?.defaultLocale ?? 'en'
     if (!path) return path
     const lower = path.toLowerCase()
     if (
@@ -34,16 +34,15 @@ export const localizeLink: LocalizeLinkFn = Object.assign(
     ) {
       return path
     }
-    try {
-      let url = getRelativeLocaleUrl(locale, path)
-      if (projectContext?.trailingSlash === 'never') {
-        url = url.replace(/\/(?=[?#]|$)/, '')
-        if (url === '') url = '/'
-      }
-      return url
-    } catch (_) {
-      return path
+    let url = path
+    if (path.startsWith('/')) {
+      url = locale === defaultLocale ? path : `/${locale}${path}`.replace(/\/+/, '/')
     }
+    if (projectContext?.trailingSlash === 'never') {
+      url = url.replace(/\/(?=[?#]|$)/, '')
+      if (url === '') url = '/'
+    }
+    return url
   },
   { set: initializeRuntimeLocale }
 )
@@ -165,9 +164,15 @@ export function useTranslations(namespace: string | string[] = 'common', locale?
 export async function getStaticPaths() {
   const configured = projectContext?.i18n?.locales || []
   const fallback = projectContext?.i18n?.defaultLocale || 'en'
-  const urls = getRelativeLocaleUrlList()
-    .map((u) => u.replace(/^\//, '').replace(/\/$/, ''))
-    .filter(Boolean)
-  const langs = Array.from(new Set((configured.length ? configured : [fallback]).concat(urls)))
-  return langs.map((lang) => ({ params: { lang } }))
+  try {
+    const mod = await import('astro:i18n') as any
+    const urls = (mod?.getRelativeLocaleUrlList?.() || [])
+      .map((u: string) => u.replace(/^\//, '').replace(/\/$/, ''))
+      .filter(Boolean)
+    const langs = Array.from(new Set((configured.length ? configured : [fallback]).concat(urls)))
+    return langs.map((lang) => ({ params: { lang } }))
+  } catch {
+    const langs = configured.length ? configured : [fallback]
+    return langs.map((lang) => ({ params: { lang } }))
+  }
 }
