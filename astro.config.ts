@@ -115,7 +115,6 @@ export default defineConfig({
   },
   redirects: {
     [`/${DEFAULT_LOCALE}`]: '/',                                // /en  -> /
-    [`/${DEFAULT_LOCALE}/[...slug]`]: '/[...slug]',             // /en/foo/bar -> /foo/bar
   },
   vite: {
     plugins: [
