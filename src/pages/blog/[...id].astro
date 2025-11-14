@@ -4,8 +4,11 @@ import { normalizeLocaleBlogId } from '../../../packages/pure/utils/locale'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PostLayout from '@/layouts/BlogPost.astro'
+import { localizeLink, initializeRuntimeLocale } from 'packages/pure/utils/locale'
 
 export const prerender = true
+
+initializeRuntimeLocale(Astro.currentLocale)
 
 export async function getStaticPaths() {
   const posts = sortMDByDate(await getBlogCollection())

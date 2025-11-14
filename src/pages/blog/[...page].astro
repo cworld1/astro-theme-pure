@@ -8,8 +8,11 @@ import { getBlogCollection, getUniqueTags, sortMDByDate } from 'astro-pure/serve
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
+import { localizeLink, initializeRuntimeLocale } from 'packages/pure/utils/locale'
 
 export const prerender = true
+
+initializeRuntimeLocale(Astro.currentLocale)
 
 export const getStaticPaths = (async ({ paginate }) => {
   const collections = sortMDByDate(await getBlogCollection())

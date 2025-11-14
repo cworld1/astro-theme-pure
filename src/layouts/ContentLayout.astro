@@ -5,6 +5,12 @@ import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ } from '@/site-config'
+import { initializeRuntimeLocale, localizeLink } from '../../packages/pure/utils/locale'
+import { useTranslations } from '../../packages/pure/utils/locale'
+
+initializeRuntimeLocale(Astro.currentLocale)
+
+const { t } = useTranslations(['common'])
 
 interface Props {
   meta: SiteMeta
@@ -16,7 +22,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
-  <Button title='Back' href={back} variant='back' />
+  <Button title={t('navigation.back')} href={localizeLink(back)} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     <aside

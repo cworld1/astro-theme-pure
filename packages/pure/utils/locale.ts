@@ -35,7 +35,12 @@ export const localizeLink: LocalizeLinkFn = Object.assign(
       return path
     }
     try {
-      return getRelativeLocaleUrl(locale, path)
+      let url = getRelativeLocaleUrl(locale, path)
+      if (projectContext?.trailingSlash === 'never') {
+        url = url.replace(/\/(?=[?#]|$)/, '')
+        if (url === '') url = '/'
+      }
+      return url
     } catch (_) {
       return path
     }
@@ -43,25 +48,6 @@ export const localizeLink: LocalizeLinkFn = Object.assign(
   { set: initializeRuntimeLocale }
 )
 
-export const buildLocale = (locale?: string) => (path: string) => {
-  const useLocale = locale ?? getLocale()
-  if (!path) return path
-  const lower = path.toLowerCase()
-  if (
-    isAbsoluteUrl(path) ||
-    lower.startsWith('#') ||
-    lower.startsWith('mailto:') ||
-    lower.startsWith('tel:') ||
-    lower.startsWith('javascript:')
-  ) {
-    return path
-  }
-  try {
-    return getRelativeLocaleUrl(useLocale, path)
-  } catch (_) {
-    return path
-  }
-}
 
 /**
  * Normalize a blog entry id to be used in routes.
@@ -137,12 +123,34 @@ const interpolate = (template: string, params?: Record<string, any>) => {
  * Create a translator for a given namespace and locale.
  * Falls back to base locale and then to English.
  */
-export function useTranslations(namespace = 'common', locale?: string) {
+export function useTranslations(namespace: string | string[] = 'common', locale?: string) {
   const rawLocale = locale ?? getLocale()
   const base = getBaseLocale(rawLocale)
 
-  const messages =
-    LOCALes[rawLocale]?.[namespace] || LOCALes[base]?.[namespace] || LOCALes['en']?.[namespace] || {}
+  const mergeObjects = (target: Record<string, any>, source: Record<string, any>) => {
+    const result: Record<string, any> = { ...target }
+    for (const [k, v] of Object.entries(source)) {
+      if (v && typeof v === 'object' && !Array.isArray(v)) {
+        const tv = result[k]
+        result[k] = mergeObjects(tv && typeof tv === 'object' ? tv : {}, v)
+      } else {
+        result[k] = v
+      }
+    }
+    return result
+  }
+
+  const namespaces = Array.isArray(namespace) ? namespace : [namespace]
+  const merged = namespaces
+    .slice()
+    .reverse()
+    .reduce((acc, ns) => {
+      const src =
+        LOCALes[rawLocale]?.[ns] || LOCALes[base]?.[ns] || LOCALes['en']?.[ns] || {}
+      return mergeObjects(acc as Record<string, any>, src as Record<string, any>)
+    }, {} as Messages)
+
+  const messages = merged
 
   const t = (key: string, params?: Record<string, any>): string => {
     const value = typeof key === 'string' ? getByPath(messages as Record<string, any>, key) : undefined

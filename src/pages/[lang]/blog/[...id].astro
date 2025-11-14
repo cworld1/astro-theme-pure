@@ -1,10 +1,12 @@
 ---
-import { type CollectionEntry, getCollection, getEntry, render } from 'astro:content'
+import { type CollectionEntry, getCollection, render } from 'astro:content'
 import PostLayout from '@/layouts/BlogPost.astro'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
-import { normalizeLocaleBlogId } from '../../../../packages/pure/utils/locale'
+import { localizeLink, initializeRuntimeLocale, normalizeLocaleBlogId } from '../../../../packages/pure/utils/locale'
 
 export const prerender = true
+
+initializeRuntimeLocale(Astro.currentLocale)
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
@@ -27,11 +29,13 @@ interface Props {
 }
 
 const { post, posts } = Astro.props as Props
-const { headings, remarkPluginFrontmatter } = await render(post as CollectionEntry<'blog'>)
+const { Content, headings, remarkPluginFrontmatter } = await render(post as CollectionEntry<'blog'>)
 ---
 <PostLayout
   headings={headings}
   remarkPluginFrontmatter={remarkPluginFrontmatter}
   post={post}
   posts={posts}
-  />
+>
+  <Content />
+</PostLayout>

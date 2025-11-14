@@ -9,9 +9,11 @@ import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
-import { useTranslations } from '../../../../packages/pure/utils/locale'
+import { useTranslations, localizeLink, initializeRuntimeLocale } from '../../../../packages/pure/utils/locale'
 
 export const prerender = true
+
+initializeRuntimeLocale(Astro.currentLocale)
 
 export const getStaticPaths = (async ({ paginate }) => {
   // Derive locale path slugs from Astro i18n configuration
@@ -46,7 +48,7 @@ interface Props {
 
 const { page, uniqueTags, collectionsCount } = Astro.props
 
-const { t } = useTranslations('blog')
+const { t } = useTranslations(['blog', 'common'])
 const meta = {
   description: t('meta.description'),
   title: t('meta.title')
@@ -69,7 +71,7 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title={useTranslations('common').t('navigation.back')} href='/' variant='back' />
+  <Button title={t('navigation.back')} href={localizeLink('/')} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>{t('page.title')}</h1>
@@ -85,7 +87,7 @@ const paginationProps = {
               <span class='text-muted-foreground'>
                 {t('page.summary', { page: page.currentPage, count: page.data.length, total: collectionsCount })}
               </span>
-              <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
+              <a aria-label='View all blog by years' href={localizeLink('/archives')} data-astro-prefetch>
                 {t('page.view_archives')}
               </a>
             </div>
@@ -108,12 +110,12 @@ const paginationProps = {
               <ul class='text-bgColor flex flex-wrap gap-2'>
                 {uniqueTags.map((tag) => (
                   <li>
-                    <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+                    <Button title={tag} href={localizeLink(`/tags/${tag}`)} variant='pill' />
                   </li>
                 ))}
               </ul>
               <span class='mt-4 block sm:text-end'>
-                <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
+                <a aria-label='View all blog categories' href={localizeLink('/tags')} data-astro-prefetch>
                   {t('sidebar.view_all')}
                 </a>
               </span>
