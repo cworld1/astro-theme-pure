@@ -1,12 +1,14 @@
 ---
-title: 'Shiki Code'
-description: 'Some methods for better using shiki code'
+title: 'Content Presentation'
+description: 'About Content Page Rendering'
 order: 5
 ---
 
 import { MdxRepl } from 'astro-pure/user'
 
-## Basic Usage
+## Shiki Code
+
+### Basic Usage
 
 For `.astro` file:
 
@@ -26,7 +28,7 @@ git log --oneline
 ```
 ````
 
-## Add Title
+### Add Title
 
 <MdxRepl width='80%'>
 ```shell title="start.sh"
@@ -48,7 +50,7 @@ bun dev
 </Fragment>
 </MdxRepl>
 
-## Show Diff
+### Show Diff
 
 Supports add and del lines.
 
@@ -82,7 +84,7 @@ git push
 </Fragment>
 </MdxRepl>
 
-## Show Highlight
+### Show Highlight
 
 <MdxRepl width='80%'>
 ```html
@@ -133,3 +135,33 @@ function draw(t,c) { ctx.fillStyle=c; ctx.fillRect(t%sz*sz+1,~~(t/sz)*sz+1,sz-2,
 ````
 </Fragment>
 </MdxRepl>
+
+## Content Obsolete Warning
+
+Add a warning message if the article is old enough.
+
+```astro title="src/layouts/BlogPost.astro"
+---
+// ...
+---
+  <Hero {data} {remarkPluginFrontmatter} slot='header'>
+    <Fragment slot='description'>
+      {!isDraft && enableComment && <PageInfo comment class='mt-1' />}
+      { // [!code ++]
+        Math.floor((Date.now() - new Date(articleDate).getTime()) / 86400000) > 365 && ( // [!code ++]
+          <p class='mt-1 text-sm italic text-primary' style='--primary:41 90% 50%'> <!-- [!code ++] -->
+            This article was last updated over a year ago. Some information may be outdated. <!-- [!code ++] -->
+          </p> /* [!code ++] */
+        ) // [!code ++]
+      } <!-- [!code ++] -->
+    </Fragment>
+  </Hero>
+```
+
+It will render like this:
+
+{
+  <p class='mt-1 text-sm italic text-primary' style='--primary:41 90% 50%'>
+    This article was last updated over a year ago. Some information may be outdated.
+  </p>
+}
