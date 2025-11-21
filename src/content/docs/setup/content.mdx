@@ -17,7 +17,7 @@ In Astro, you can author your content in a variety of ways:
 - Using a [third-party content management system (CMS)](https://docs.astro.build/en/guides/content/#headless-cms-authoring), then pulling that content into a `.astro` page.
 - Other options (less commonly used for content-heavy pages) include [`.astro` files](https://docs.astro.build/en/basics/astro-pages/#astro-pages) and [`.html` files](https://docs.astro.build/en/basics/astro-pages/#html-pages).
 
-For this theme, `.md` and `.mdx` is suopported by default.
+For this theme, `.md` and `.mdx` is supported by default.
 
 ### Markdown Authoring
 
@@ -34,7 +34,7 @@ description: 'I like writing articles.' # (Required, 10 to 160)
 publishDate: '2024-11-30 00:08:00' # (Required, Date)
 tags:
   - Markdown # (Also can write format like next line)
-heroImage: { src: './thumbnail.jpg', alt: 'an image targetting my article', color: '#B4C6DA' }
+heroImage: { src: './thumbnail.jpg', alt: 'an image targeting my article', color: '#B4C6DA' }
 # thumbnail.jpg should be in the same folder as the article
 draft: false # (set true will only show in development)
 language: 'English' # (String as you like)
@@ -50,12 +50,12 @@ If you have a lot of assets, you can create a folder for title like `src/content
 
 <Aside type='tip'>
 
-If you want to use remote image for `heroImage`, please add `inferSize: true` or specificed `width` and `height` to the object `heroImage`. Example:
+If you want to use remote image for `heroImage`, please add `inferSize: true` or specified `width` and `height` to the object `heroImage`. Example:
 
 ```yaml
 heroImage:
   { src: 'https://img.tukuppt.com/ad_preview/00/15/09/5e715a320b68e.jpg!/fw/980', inferSize: true }
-# Or specificed width and height
+# Or specified width and height
 heroImage:
   { src: 'https://img.tukuppt.com/ad_preview/00/15/09/5e715a320b68e.jpg!/fw/980', width: 980, height: 551 }
 ```
@@ -136,7 +136,7 @@ A page must produce a full HTML document. If not explicitly included, Astro will
 
 To avoid repeating the same HTML elements on every page, you can move common `<head>` and `<body>` elements into your own [layout components](/en/basics/layouts/). You can use as many or as few layout components as you'd like.
 
-And in this theme, luckly you can use `BaseLayout.astro` as your layout component.
+And in this theme, luckily you can use `BaseLayout.astro` as your layout component.
 
 ```astro title="src/pages/mypage.astro"
 ---
@@ -162,7 +162,7 @@ const highlightColor = '#44AEF6' // Optional
 
 ### Markdown/MDX Pages
 
-While `.astro` pages have some flexsible features and be friendly to inline / module scripts, `.md` and `.mdx` pages are more suitable for content-focused pages.
+While `.astro` pages have some flexible features and be friendly to inline / module scripts, `.md` and `.mdx` pages are more suitable for content-focused pages.
 
 Astro also treats any Markdown (`.md`) files inside of `src/pages/` as pages in your final website. If you have the [MDX Integration installed](https://docs.astro.build/en/guides/integrations-guide/mdx/#installation), it also treats MDX (`.mdx`) files the same way.
 
