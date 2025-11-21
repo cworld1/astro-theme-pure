@@ -20,10 +20,10 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",
-    "@astrojs/rss": "^4.0.13",
-    "@astrojs/vercel": "^9.0.0",
-    "@waline/client": "^3.7.1",
-    "astro": "^5.15.5",
+    "@astrojs/rss": "^4.0.14",
+    "@astrojs/vercel": "^9.0.1",
+    "@waline/client": "^3.8.0",
+    "astro": "^5.16.0",
     "astro-pure": "1.3.6",
     "katex": "^0.16.25",
     "rehype-katex": "^7.0.1",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
-    "@typescript-eslint/parser": "^8.46.4",
+    "@typescript-eslint/parser": "^8.47.0",
     "eslint": "^9.39.1",
     "eslint-plugin-astro": "^1.5.0",
     "prettier": "^3.6.2",
