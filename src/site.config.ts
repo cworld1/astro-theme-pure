@@ -1,4 +1,4 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from '../packages/pure/types'
+import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 export const theme: ThemeUserConfig = {
   // [Basic]
@@ -33,10 +33,6 @@ export const theme: ThemeUserConfig = {
   titleDelimiter: '•',
   prerender: true, // pagefind search is not supported with prerendering disabled
   npmCDN: 'https://cdn.jsdelivr.net/npm',
-  i18n: {
-    browserPreferredLocale: true,
-    rememberSelectedLocale: true
-  },
 
   // Still in test
   head: [

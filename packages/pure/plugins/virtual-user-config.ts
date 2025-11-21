@@ -19,12 +19,9 @@ function resolveVirtualModuleId<T extends string>(id: T): `\0${T}` {
 export function vitePluginUserConfig(
   opts: UserConfig,
   {
-    build,
     legacy,
     root,
-    srcDir,
-    trailingSlash,
-    i18n
+    srcDir
   }: Pick<AstroConfig, 'root' | 'srcDir' | 'trailingSlash' | 'i18n'> & {
     build: Pick<AstroConfig['build'], 'format'>
     legacy: Pick<AstroConfig['legacy'], 'collections'>
@@ -61,17 +58,6 @@ export function vitePluginUserConfig(
   /** Map of virtual module names to their code contents as strings. */
   const modules = {
     'virtual:config': `export default ${JSON.stringify(opts)}`,
-    'virtual:project-context': `export default ${JSON.stringify({
-      build: { format: build.format },
-      legacyCollections: legacy.collections,
-      root,
-      srcDir,
-      trailingSlash,
-      i18n: {
-        defaultLocale: i18n?.defaultLocale,
-        locales: i18n?.locales
-      }
-    })}`,
     /**
      * Module containing imports of user-specified custom CSS files.
      */

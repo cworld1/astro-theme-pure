@@ -1,0 +1,41 @@
+{
+  "navigation": {
+    "back": "返回"
+  },
+  "paginator": {
+    "previous": "上一页",
+    "next": "下一页",
+    "prev_sr": "跳转到上一页",
+    "next_sr": "跳转到下一页"
+  },
+  "search": {
+    "dev_disabled": "您当前处于开发模式，搜索功能已禁用。"
+  },
+  "toc": {
+    "title": "目录",
+    "scroll_to_section": "滚动到章节：{section}"
+  },
+  "tocHeading": {
+    "scroll_to_section_prefix": "滚动到章节："
+  },
+  "hero": {
+    "draft": "（草稿）",
+    "update_label": "更新",
+    "blur_alt": "模糊图片",
+    "tag_aria_prefix": "查看更多带有标签的博客 "
+  },
+  "backToTop": {
+    "aria_label": "返回顶部"
+  },
+  "copyright": {
+    "author_label": "作者",
+    "published_at_label": "发布时间",
+    "copyright_label": "版权",
+    "license_text": "CC BY-NC-SA 4.0",
+    "sponsor_text": "请我喝杯咖啡 ☕。",
+    "link_copied_toast": "链接已复制！"
+  },
+  "postPreview": {
+    "draft_prefix": "（草稿）"
+  }
+}

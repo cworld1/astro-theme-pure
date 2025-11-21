@@ -12,7 +12,10 @@ function removeDupsAndLowerCase(array: string[]) {
 const blog = defineCollection({
   // Load Markdown and MDX files from default blog and localized blog directories.
   // This enables posts under `src/content/blog` and `src/content/localized/<lang>/blog`.
-  loader: glob({ base: './src/content', pattern: ['blog/**/*.{md,mdx}', 'localized/*/blog/**/*.{md,mdx}'] }),
+  loader: glob({
+    base: './src/content',
+    pattern: ['blog/**/*.{md,mdx}', 'localized/*/blog/**/*.{md,mdx}']
+  }),
   // Required
   schema: ({ image }) =>
     z.object({
@@ -59,4 +62,14 @@ const docs = defineCollection({
     })
 })
 
-export const collections = { blog, docs }
+type I18nJSON = string | number | boolean | { [key: string]: I18nJSON }
+const I18nScalar = z.union([z.string(), z.number(), z.boolean()])
+const I18nJSONSchema: z.ZodType<I18nJSON> = z.lazy(() =>
+  z.union([I18nScalar, z.record(I18nJSONSchema)])
+)
+const i18n = defineCollection({
+  loader: glob({ base: './src/content/i18n', pattern: '**/*.json' }),
+  schema: () => z.record(I18nJSONSchema)
+})
+
+export const collections = { blog, docs, i18n }

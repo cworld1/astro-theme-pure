@@ -1,26 +1,22 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { i18n } from 'astro:config/client'
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import { toPaths as getConfiguredLocalePaths } from 'astro:i18n'
+
+import { normalizeLocaleBlogId } from 'astro-pure/utils'
 import PostLayout from '@/layouts/BlogPost.astro'
-import { getRelativeLocaleUrlList } from 'astro:i18n'
-import { localizeLink, initializeRuntimeLocale, normalizeLocaleBlogId } from 'astro-pure/utils'
 
 export const prerender = true
 
-initializeRuntimeLocale(Astro.currentLocale)
-
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
-  // Derive locale path slugs from Astro i18n configuration
-  const locales = getRelativeLocaleUrlList()
-    .map((url) => url.replace(/^\//, '').replace(/\/$/, ''))
-    .filter(Boolean)
-
-  return posts.flatMap((post) => {
-    return locales.map((lang) => ({
+  const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
+  return posts.flatMap((post) =>
+    locales.map((lang) => ({
       params: { lang, id: normalizeLocaleBlogId(post.id) },
-      props: { post, posts },
+      props: { post, posts }
     }))
-  })
+  )
 }
 
 interface Props {
@@ -31,6 +27,7 @@ interface Props {
 const { post, posts } = Astro.props as Props
 const { Content, headings, remarkPluginFrontmatter } = await render(post as CollectionEntry<'blog'>)
 ---
+
 <PostLayout
   headings={headings}
   remarkPluginFrontmatter={remarkPluginFrontmatter}

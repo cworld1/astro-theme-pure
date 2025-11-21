@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "description": "Some posts or archives of my blog",
+    "title": "Blog"
+  },
+  "page": {
+    "title": "Blog",
+    "no_posts": "No posts yet.",
+    "summary": "Page {page} - Showing {count} of {total} posts",
+    "view_archives": "View all posts by years →"
+  },
+  "sidebar": {
+    "tags": "Tags",
+    "view_all": "View all →"
+  },
+  "paginator": {
+    "prev_posts": "← Previous Posts",
+    "next_posts": "Next Posts →"
+  }
+}
