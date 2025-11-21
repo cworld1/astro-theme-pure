@@ -1,11 +1,9 @@
 ---
-import { ThemeProvider, Header, Footer } from 'astro-pure/components/basic'
+import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
+import { ensureContentI18nLoaded } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
-import { initializeRuntimeLocale } from 'astro-pure/utils'
-import { LocaleRedirect } from 'astro-pure/components/basic'
-import projectContext from 'virtual:project-context'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -23,14 +21,14 @@ const {
   ...props
 } = Astro.props
 
-initializeRuntimeLocale(Astro.currentLocale)
+const currentLocale = Astro.currentLocale || config.locale.lang || 'en'
+await ensureContentI18nLoaded(currentLocale)
 ---
 
-<html lang={Astro.currentLocale}>
+<html lang={currentLocale}>
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
-    <LocaleRedirect />
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>

@@ -1,0 +1,41 @@
+{
+  "navigation": {
+    "back": "Back"
+  },
+  "paginator": {
+    "previous": "Previous",
+    "next": "Next",
+    "prev_sr": "Go to previous page",
+    "next_sr": "Go to next page"
+  },
+  "search": {
+    "dev_disabled": "You are in development mode, search is disabled."
+  },
+  "toc": {
+    "title": "Table of Contents",
+    "scroll_to_section": "Scroll to section: {section}"
+  },
+  "tocHeading": {
+    "scroll_to_section_prefix": "Scroll to section: "
+  },
+  "hero": {
+    "draft": "(Draft)",
+    "update_label": "Update",
+    "blur_alt": "Blur image",
+    "tag_aria_prefix": "See more blogs with the tag "
+  },
+  "backToTop": {
+    "aria_label": "Back to top"
+  },
+  "copyright": {
+    "author_label": "Author",
+    "published_at_label": "Published on",
+    "copyright_label": "Copyright",
+    "license_text": "CC BY-NC-SA 4.0",
+    "sponsor_text": "Buy me a coffee ☕.",
+    "link_copied_toast": "Link copied!"
+  },
+  "postPreview": {
+    "draft_prefix": "(Draft) "
+  }
+}

@@ -1,8 +1,10 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import config from 'virtual:config'
 
+import { isAbsoluteUrl } from 'astro-pure/utils'
+
 import { Icon } from '../user'
-import { localizeLink } from '../../utils/locale'
 
 const footerConf = config.footer
 let social = footerConf.social || {}
@@ -28,7 +30,17 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                 {footerLink1.map(({ title, link, style }, index) => (
                   <>
                     <!- prettier-ignore -->
-                    <a href={link} target='_blank' class={style}>{title}</a>
+                    <a
+                      href={
+                        isAbsoluteUrl(link)
+                          ? link
+                          : getRelativeLocaleUrl(Astro.currentLocale as string, link)
+                      }
+                      target='_blank'
+                      class={style}
+                    >
+                      {title}
+                    </a>
                     {index < footerLink1.length - 1 && <span class='mx-1'>•</span>}
                   </>
                 ))}
@@ -48,7 +60,17 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                       .filter(({ pos }) => pos === 2)
                       .map(({ title, link, style }) => (
                         <span>
-                          <a href={link} target='_blank' class={style}>{title}</a>
+                          <a
+                            href={
+                              isAbsoluteUrl(link)
+                                ? link
+                                : getRelativeLocaleUrl(Astro.currentLocale as string, link)
+                            }
+                            target='_blank'
+                            class={style}
+                          >
+                            {title}
+                          </a>
                         </span>
                       ))}
                   </span>
@@ -56,6 +78,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
               )
             }
           </div>
+          
           {
             footerConf.credits && (
               <span>

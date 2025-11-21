@@ -1,52 +1,10 @@
-import projectContext from 'virtual:project-context'
-import isAbsoluteUrl from './is-absolute-url'
-
 // Menu types
 export type MenuItem = { title: string; link: string }
 export type LocaleMenuRecord = Record<string, MenuItem[]>
 export type HeaderMenuInput = MenuItem[] | LocaleMenuRecord
 export type ResolvedMenu = MenuItem[]
 
-// Global locale state for link building, set once at layout level
-let currentLocale: string | undefined
-const defaultHrefLocale = projectContext?.i18n?.defaultLocale ?? 'en'
-
-export const initializeRuntimeLocale = (locale?: string) => {
-  currentLocale = locale
-}
-
-export const getLocale = () => currentLocale ?? defaultHrefLocale
-
-type LocalizeLinkFn = ((path: string) => string) & { set: (locale?: string) => void }
-
-export const localizeLink: LocalizeLinkFn = Object.assign(
-  (path: string) => {
-    const locale = getLocale()
-    const defaultLocale = projectContext?.i18n?.defaultLocale ?? 'en'
-    if (!path) return path
-    const lower = path.toLowerCase()
-    if (
-      isAbsoluteUrl(path) ||
-      lower.startsWith('#') ||
-      lower.startsWith('mailto:') ||
-      lower.startsWith('tel:') ||
-      lower.startsWith('javascript:')
-    ) {
-      return path
-    }
-    let url = path
-    if (path.startsWith('/')) {
-      url = locale === defaultLocale ? path : `/${locale}${path}`.replace(/\/+/, '/')
-    }
-    if (projectContext?.trailingSlash === 'never') {
-      url = url.replace(/\/(?=[?#]|$)/, '')
-      if (url === '') url = '/'
-    }
-    return url
-  },
-  { set: initializeRuntimeLocale }
-)
-
+const defaultHrefLocale = 'en'
 
 /**
  * Normalize a blog entry id to be used in routes.
@@ -87,8 +45,8 @@ export const resolveMenu = (
 type Messages = Record<string, unknown>
 type NamespacedLocales = Record<string, Record<string, Messages>>
 
-// Eagerly load all locale files: ../i18n/locales/<locale>/<namespace>.ts
-const eagerLocaleModules = import.meta.glob('../i18n/locales/*/*.ts', { eager: true }) as Record<
+// Eagerly load all locale files: ../i18n/<locale>/<namespace>.json
+const eagerLocaleModules = import.meta.glob('../i18n/*/*.json', { eager: true }) as Record<
   string,
   { default?: Messages } | Messages
 >
@@ -96,7 +54,7 @@ const eagerLocaleModules = import.meta.glob('../i18n/locales/*/*.ts', { eager: t
 // Build a { locale: { namespace: messages } } lookup
 const LOCALes: NamespacedLocales = {}
 for (const [path, mod] of Object.entries(eagerLocaleModules)) {
-  const m = path.match(/\/locales\/(.*?)\/(.*?)\.ts$/)
+  const m = path.match(/\/i18n\/(.*?)\/(.*?)\.json$/)
   if (!m) continue
   const [, locale, ns] = m
   const messages = (mod as any).default ?? mod
@@ -104,9 +62,31 @@ for (const [path, mod] of Object.entries(eagerLocaleModules)) {
   LOCALes[locale][ns] = messages as Messages
 }
 
+const deepMerge = (a: Record<string, any>, b: Record<string, any>) => {
+  const result: Record<string, any> = { ...a }
+  for (const [k, v] of Object.entries(b)) {
+    const av = result[k]
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      result[k] = deepMerge(av && typeof av === 'object' ? av : {}, v)
+    } else {
+      result[k] = v
+    }
+  }
+  return result
+}
+
+export function mergeContentLocale(locale: string, ns: string, record: Record<string, any>) {
+  if (!locale || !ns || !record || typeof record !== 'object') return
+  LOCALes[locale] ??= {}
+  const base = (LOCALes[locale][ns] || {}) as Record<string, any>
+  LOCALes[locale][ns] = deepMerge(base, record)
+}
+
 // Helper: access nested key via dot path
 const getByPath = (obj: Record<string, any>, key: string) => {
-  return key.split('.').reduce((acc, part) => (acc && acc[part] != null ? acc[part] : undefined), obj)
+  return key
+    .split('.')
+    .reduce((acc, part) => (acc && acc[part] != null ? acc[part] : undefined), obj)
 }
 
 // Helper: simple template interpolation using {name}
@@ -123,7 +103,7 @@ const interpolate = (template: string, params?: Record<string, any>) => {
  * Falls back to base locale and then to English.
  */
 export function useTranslations(namespace: string | string[] = 'common', locale?: string) {
-  const rawLocale = locale ?? getLocale()
+  const rawLocale = locale ?? defaultHrefLocale
   const base = getBaseLocale(rawLocale)
 
   const mergeObjects = (target: Record<string, any>, source: Record<string, any>) => {
@@ -144,15 +124,15 @@ export function useTranslations(namespace: string | string[] = 'common', locale?
     .slice()
     .reverse()
     .reduce((acc, ns) => {
-      const src =
-        LOCALes[rawLocale]?.[ns] || LOCALes[base]?.[ns] || LOCALes['en']?.[ns] || {}
+      const src = LOCALes[rawLocale]?.[ns] || LOCALes[base]?.[ns] || LOCALes['en']?.[ns] || {}
       return mergeObjects(acc as Record<string, any>, src as Record<string, any>)
     }, {} as Messages)
 
   const messages = merged
 
   const t = (key: string, params?: Record<string, any>): string => {
-    const value = typeof key === 'string' ? getByPath(messages as Record<string, any>, key) : undefined
+    const value =
+      typeof key === 'string' ? getByPath(messages as Record<string, any>, key) : undefined
     if (typeof value === 'string') return interpolate(value, params)
     if (value != null) return String(value)
     return key
@@ -161,18 +141,9 @@ export function useTranslations(namespace: string | string[] = 'common', locale?
   return { t, messages, locale: rawLocale, namespace }
 }
 
-export async function getStaticPaths() {
-  const configured = projectContext?.i18n?.locales || []
-  const fallback = projectContext?.i18n?.defaultLocale || 'en'
-  try {
-    const mod = await import('astro:i18n') as any
-    const urls = (mod?.getRelativeLocaleUrlList?.() || [])
-      .map((u: string) => u.replace(/^\//, '').replace(/\/$/, ''))
-      .filter(Boolean)
-    const langs = Array.from(new Set((configured.length ? configured : [fallback]).concat(urls)))
-    return langs.map((lang) => ({ params: { lang } }))
-  } catch {
-    const langs = configured.length ? configured : [fallback]
-    return langs.map((lang) => ({ params: { lang } }))
-  }
+export function toLocaleCapitalCase(str: string, locale: string = 'en') {
+  return str
+    .split(/\s+/) // split on any whitespace
+    .map((w) => (w ? w[0].toLocaleUpperCase(locale) + w.slice(1) : w))
+    .join(' ')
 }

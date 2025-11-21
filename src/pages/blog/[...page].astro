@@ -7,11 +7,8 @@ import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-p
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
-import { localizeLink, initializeRuntimeLocale } from 'astro-pure/utils'
 
 export const prerender = true
-
-initializeRuntimeLocale(Astro.currentLocale)
 
 export const getStaticPaths = (async ({ paginate }) => {
   const collections = sortMDByDate(await getBlogCollection())
@@ -29,7 +26,7 @@ interface Props {
   collectionsCount: number
 }
 
-const { page, uniqueTags, collectionsCount } = Astro.props
+const { page, uniqueTags, collectionsCount } = Astro.props as Props
 
 const meta = {
   description: 'Some posts or archives of my blog',
@@ -76,7 +73,7 @@ const paginationProps = {
             {/* posts */}
             <ul class='flex flex-col gap-y-4 text-start'>
               {page.data.map((post) => (
-                <PostPreview {post} detailed />
+                <PostPreview post={post} detailed />
               ))}
             </ul>
             <Paginator {...paginationProps} />

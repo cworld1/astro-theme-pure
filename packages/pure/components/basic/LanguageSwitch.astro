@@ -1,161 +1,140 @@
 ---
-import projectContext from 'virtual:project-context'
+import { i18n } from 'astro:config/client'
+import { toPaths as getConfiguredLocalePaths, getRelativeLocaleUrl } from 'astro:i18n'
+
+import { stripLocaleAndBasePathPrefixes } from 'astro-pure/server'
+import { toLocaleCapitalCase } from 'astro-pure/utils'
+
 import { Icon } from '../user'
 
-const locales = projectContext?.i18n?.locales ?? []
-const defaultLocale = projectContext?.i18n?.defaultLocale ?? 'en'
-const currentLocale = Astro.currentLocale ?? defaultLocale
+const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
+const defaultLocale = i18n?.defaultLocale ?? 'en'
+const currentLocale = Astro.currentLocale || defaultLocale
 const pathname = Astro.url?.pathname ?? '/'
 
-const baseOf = (loc: string) => loc.split('-')[0]
-const codeLabel = (loc: string) => {
-  const base = baseOf(loc)
-  return base.slice(0, 1).toUpperCase() + base.slice(1).toLowerCase()
+const cleanPath = stripLocaleAndBasePathPrefixes(pathname)
+const buildSwitchLanguageHref = (locale: string) => {
+  return cleanPath === '/' ? getRelativeLocaleUrl(locale) : getRelativeLocaleUrl(locale, cleanPath)
 }
 
-const stripLocalePrefix = (path: string) => {
-  for (const loc of locales) {
-    const seg = `/${loc}`
-    if (path === seg) return '/'
-    if (path.startsWith(seg + '/')) return path.slice(seg.length) || '/'
-  }
-  return path || '/'
-}
-
-const basePath = stripLocalePrefix(pathname)
-
-const buildHref = (loc: string) => {
-  if (loc === defaultLocale) return basePath
-  return `/${loc}${basePath === '/' ? '' : basePath}`
-}
-
-const getDisplayName = (loc: string) => {
-  const lang = baseOf(loc)
+const getDisplayName = (locale: string) => {
   try {
-    const name = new Intl.DisplayNames(loc, { type: 'language' }).of(lang)
-    if (!name) return codeLabel(loc)
-    const trimmed = name.trim()
-    return trimmed.slice(0, 1).toUpperCase() + trimmed.slice(1)
+    const name = new Intl.DisplayNames(locale, { type: 'language' }).of(locale)
+    if (!name) return locale
+    return toLocaleCapitalCase(name, locale)
   } catch (_) {
-    return codeLabel(loc)
+    return locale
   }
 }
+
+const getDisplayCode = (locale: string) =>
+  locale.slice(0, 1).toLocaleUpperCase(locale) + locale.slice(1)
 
 const shouldShow = Array.isArray(locales) && locales.length > 1
 ---
 
-{shouldShow && (
-  <language-switch class='relative'>
-    <button type='button' class='rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl inline-flex items-center gap-1' data-trigger>
-      <span class='sr-only'>Language</span>
-      <Icon name='earth' class='size-5' />
-      <span class='text-sm'>{codeLabel(currentLocale)}</span>
-    </button>
-    <ul class='dropdown min-w-[10rem] rounded-md border bg-background shadow-md'>
-      {locales.map((loc) => (
-        <li>
-          <a href={buildHref(loc)} data-locale={loc} class='block px-3 py-2 text-sm hover:bg-muted'>
-            {getDisplayName(loc)} ({codeLabel(loc)})
-          </a>
-        </li>
-      ))}
-    </ul>
-  </language-switch>
-)}
+{
+  shouldShow && (
+    <language-switch class='relative'>
+      <button
+        type='button'
+        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl inline-flex items-center gap-1'
+        data-trigger
+        aria-expanded='false'
+        aria-haspopup='listbox'
+      >
+        <span class='sr-only'>Language</span>
+        <Icon name='earth' class='size-5' />
+        <span class='text-sm'>{getDisplayCode(currentLocale)}</span>
+      </button>
+      <ul class='dropdown min-w-[10rem] rounded-md border bg-background shadow-md'>
+        {locales.map((loc) => {
+          const active = (loc || '').split('-')[0] === (currentLocale || '').split('-')[0]
+          return (
+            <li>
+              <a
+                href={buildSwitchLanguageHref(loc)}
+                data-locale={loc}
+                aria-current={active ? 'true' : undefined}
+                class={
+                  'block px-3 py-2 text-sm hover:bg-muted' + (active ? ' bg-muted font-medium' : '')
+                }
+              >
+                {getDisplayName(loc)} ({getDisplayCode(loc)})
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </language-switch>
+  )
+}
 
 <script>
-  import config from 'virtual:config'
-  import projectContext from 'virtual:project-context'
-  class LanguageSwitchEl extends HTMLElement {
-    dropdown!: HTMLElement | null
-    trigger!: HTMLElement | null
-    connectedCallback() {
-      this.trigger = this.querySelector('[data-trigger]')
-      this.dropdown = this.querySelector('.dropdown')
+  ;(function () {
+    //JS Fallback
+    //Just for edge cases when CSS version alone and keyboard don't work
+    var switchElement = document.querySelector('language-switch')
+    if (!(switchElement instanceof Element)) return
+    var languageSwitch = switchElement
+    var triggerButton = languageSwitch.querySelector('[data-trigger]')
+    if (!triggerButton) return
 
-      const position = () => {
-        if (!this.trigger || !this.dropdown) return
-        const rect = this.trigger.getBoundingClientRect()
-        const width = Math.max(160, this.dropdown.offsetWidth || 160)
-        const left = Math.max(8, rect.right - width)
-        const top = rect.bottom + 6
-        this.dropdown.style.left = `${left}px`
-        this.dropdown.style.top = `${top}px`
-        this.dropdown.style.minWidth = `${width}px`
-      }
-
-      const open = () => {
-        if (!this.dropdown) return
-        this.dataset.open = 'true'
-        position()
-      }
-      const close = () => {
-        this.dataset.open = 'false'
-      }
-
-      this.trigger?.addEventListener('click', (ev) => {
-        ev.preventDefault()
-        if (this.dataset.open === 'true') close()
-        else open()
-      })
-
-      this.trigger?.addEventListener('mouseenter', open)
-      // Keep open when hovering the dropdown; close when leaving it
-      this.dropdown?.addEventListener('mouseenter', open)
-      this.dropdown?.addEventListener('mouseleave', close)
-
-      window.addEventListener('scroll', () => {
-        if (this.dataset.open === 'true') position()
-      })
-      window.addEventListener('resize', () => {
-        if (this.dataset.open === 'true') position()
-      })
-
-      document.addEventListener('click', (ev) => {
-        if (!this.contains(ev.target as Node)) close()
-      })
-
-      const effectiveRemember = !!(
-        config.i18n?.rememberSelectedLocale ||
-        (config.i18n?.browserPreferredLocale && config.i18n?.rememberSelectedLocale === false)
-      )
-      this.querySelectorAll('.dropdown a').forEach((a) => {
-        a.addEventListener('click', (ev) => {
-          const href = a.getAttribute('href') || ''
-          const targetLocale = a.getAttribute('data-locale') || ''
-          if (targetLocale) {
-            if (effectiveRemember) {
-              try {
-                localStorage.setItem('locale', targetLocale)
-              } catch (_) {}
-              const serverOutput = projectContext?.build?.format === 'server'
-              if (serverOutput) {
-                document.cookie = `locale=${encodeURIComponent(targetLocale)};path=/;max-age=31536000;SameSite=Lax`
-              }
-            }
-          }
-          ev.preventDefault()
-          try {
-            const to = new URL(href, location.origin).href
-            location.assign(to)
-          } catch (_) {
-            location.assign(href)
-          }
-        })
-      })
+    var openMenu = function () {
+      languageSwitch.setAttribute('data-open', 'true')
+      var trigger = languageSwitch.querySelector('[data-trigger]')
+      if (trigger) trigger.setAttribute('aria-expanded', 'true')
     }
-  }
-  customElements.define('language-switch', LanguageSwitchEl)
-  ;(window as any).Intl?.DisplayNames
+
+    var closeMenu = function () {
+      languageSwitch.removeAttribute('data-open')
+      var trigger = languageSwitch.querySelector('[data-trigger]')
+      if (trigger) trigger.setAttribute('aria-expanded', 'false')
+    }
+
+    triggerButton.addEventListener('click', function () {
+      var isOpen = languageSwitch.getAttribute('data-open') === 'true'
+      if (isOpen) closeMenu()
+      else openMenu()
+    })
+
+    document.addEventListener(
+      'pointerdown',
+      function (event) {
+        var eventTarget = event.target
+        if (!(eventTarget instanceof Node)) return
+        if (!languageSwitch.contains(eventTarget)) closeMenu()
+      },
+      true
+    )
+  })()
 </script>
 
 <style>
+  language-switch {
+    position: relative;
+    display: inline-block;
+  }
+  language-switch::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 6px;
+    z-index: 1;
+  }
   language-switch .dropdown {
     display: none;
-    position: fixed;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
     z-index: 1000;
   }
   language-switch:hover .dropdown,
+  language-switch:focus-within .dropdown {
+    display: block;
+  }
   language-switch[data-open='true'] .dropdown {
     display: block;
   }

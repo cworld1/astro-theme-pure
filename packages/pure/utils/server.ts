@@ -1,9 +1,18 @@
 import { type CollectionEntry, type CollectionKey, getCollection } from 'astro:content'
-import { getBaseLocale } from './locale'
+import { i18n } from 'astro:config/client'
+import { toPaths as getConfiguredLocalePaths, getLocaleByPath } from 'astro:i18n'
+import config from 'virtual:config'
+
+import { getBaseLocale, mergeContentLocale } from './locale'
 
 type Collections = CollectionEntry<CollectionKey>[]
 
 export const prod = import.meta.env.PROD
+
+const loadedContentLocales = new Set<string>()
+
+const hasUserI18nFiles =
+  Object.keys(import.meta.glob('/src/content/i18n/**/*.json', { eager: false })).length > 0
 
 /** Note: this function filters out draft posts based on the environment */
 export async function getBlogCollection(contentType: CollectionKey = 'blog') {
@@ -23,33 +32,61 @@ export async function getBlogCollectionByLocale(
   contentType: CollectionKey = 'blog'
 ) {
   const targetBase = locale ? getBaseLocale(locale) : undefined
-  return await getCollection(
-    contentType,
-    ({ data, id }: CollectionEntry<typeof contentType>) => {
-      const draftOk = prod ? !data.draft : true
-      if (!draftOk) return false
+  return await getCollection(contentType, ({ data, id }: CollectionEntry<typeof contentType>) => {
+    const draftOk = prod ? !data.draft : true
+    if (!draftOk) return false
 
-      // If no locale provided, return all (respecting draft filter)
-      if (!targetBase) return false
+    // If no locale provided, return all (respecting draft filter)
+    if (!targetBase) return true
 
-      let entryBase: string | undefined
-      if ('lang' in data && data.lang) {
-        entryBase = getBaseLocale(data.lang)
-      } else {
-        const m = id?.match(/^localized\/(\w+?)\//i)
-        entryBase = m ? getBaseLocale(m[1]) : getBaseLocale()
-      }
+    // Prefer folder-based locale for localized entries
+    const m = id?.match(/^localized\/([^/]+)\//i)
+    if (m) return getBaseLocale(m[1]).toLowerCase() === targetBase.toLowerCase()
 
-      return entryBase?.toLowerCase() === targetBase.toLowerCase()
+    // Fallback to frontmatter `lang`
+    if ('lang' in data && (data as { lang?: string }).lang) {
+      const entryBase = getBaseLocale((data as { lang?: string }).lang as string)
+      return entryBase.toLowerCase() === targetBase.toLowerCase()
     }
-  )
+
+    const defaultBase = getBaseLocale(config.locale?.lang as string)
+    return targetBase?.toLowerCase() === defaultBase.toLowerCase()
+  })
+}
+
+export async function ensureContentI18nLoaded(locale: string) {
+  if (!locale || loadedContentLocales.has(locale)) return
+  if (!hasUserI18nFiles) {
+    loadedContentLocales.add(locale)
+    return
+  }
+  let entries: CollectionEntry<'i18n'>[] = []
+  try {
+    entries = await getCollection('i18n', (entry: CollectionEntry<'i18n'>) =>
+      entry.id.startsWith(`${locale}/`)
+    )
+  } catch {
+    loadedContentLocales.add(locale)
+    return
+  }
+  if (!entries.length) {
+    loadedContentLocales.add(locale)
+    return
+  }
+  for (const entry of entries) {
+    const parts = entry.id.split('/')
+    const ns = parts[1] || 'common'
+    mergeContentLocale(locale, ns, entry.data as Record<string, any>)
+  }
+  loadedContentLocales.add(locale)
 }
 
 function getYearFromCollection<T extends CollectionKey>(
   collection: CollectionEntry<T>
 ): number | undefined {
-  const dateStr = collection.data.updatedDate ?? collection.data.publishDate
-  return dateStr ? new Date(dateStr).getFullYear() : undefined
+  const data = collection.data as { updatedDate?: Date; publishDate?: Date }
+  const d = data.updatedDate ?? data.publishDate
+  return d?.getFullYear()
 }
 export function groupCollectionsByYear<T extends CollectionKey>(
   collections: Collections
@@ -72,15 +109,19 @@ export function groupCollectionsByYear<T extends CollectionKey>(
 
 export function sortMDByDate(collections: Collections): Collections {
   return collections.sort((a, b) => {
-    const aDate = new Date(a.data.updatedDate ?? a.data.publishDate ?? 0).valueOf()
-    const bDate = new Date(b.data.updatedDate ?? b.data.publishDate ?? 0).valueOf()
+    const ad = a.data as { updatedDate?: Date; publishDate?: Date }
+    const bd = b.data as { updatedDate?: Date; publishDate?: Date }
+    const aDate = (ad.updatedDate ?? ad.publishDate)?.valueOf() ?? 0
+    const bDate = (bd.updatedDate ?? bd.publishDate)?.valueOf() ?? 0
     return bDate - aDate
   })
 }
 
 /** Note: This function doesn't filter draft posts, pass it the result of getAllPosts above to do so. */
 export function getAllTags(collections: Collections) {
-  return collections.flatMap((collection) => [...collection.data.tags])
+  return collections.flatMap((collection) => [
+    ...((collection.data as { tags?: string[] }).tags || [])
+  ])
 }
 
 /** Note: This function doesn't filter draft posts, pass it the result of getAllPosts above to do so. */
@@ -96,4 +137,47 @@ export function getUniqueTagsWithCount(collections: Collections): [string, numbe
       new Map<string, number>()
     )
   ].sort((a, b) => b[1] - a[1])
+}
+
+export async function getLangStaticPaths() {
+  const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
+  return locales.map((lang) => ({ params: { lang } }))
+}
+
+export function stripLocaleAndBasePathPrefixes(path: string) {
+  return stripLocale(stripBase(path, import.meta.env.BASE_URL))
+}
+
+function stripBase(path: string, rawBase?: string): string {
+  const raw = rawBase || '/'
+  const tmp = '/' + raw.replace(/^\/+|\/+$/g, '')
+  const base = tmp === '//' ? '/' : tmp
+
+  if (base === '/') return path
+  if (path === base) return '/'
+  const pref = base + '/'
+  if (path.startsWith(pref)) return path.slice(base.length)
+
+  return path
+}
+
+function stripLocale(path: string): string {
+  const parts = path.split('/')
+
+  const idx = parts.findIndex((seg, i) => {
+    if (i === 0 || !seg) return false
+    try {
+      return !!getLocaleByPath(seg)
+    } catch {
+      return false
+    }
+  })
+
+  if (idx > 0) {
+    parts.splice(idx, 1)
+  }
+
+  let out = parts.join('/') || '/'
+  if (!out.startsWith('/')) out = '/' + out
+  return out
 }

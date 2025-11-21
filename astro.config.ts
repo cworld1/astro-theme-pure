@@ -23,6 +23,10 @@ import {
 } from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
+// Others
+// import { visualizer } from 'rollup-plugin-visualizer'
+const DEFAULT_LOCALE = 'en'
+
 // https://astro.build/config
 export default defineConfig({
   // [Basic]
@@ -142,11 +146,8 @@ export default defineConfig({
       // zh: DEFAULT_LOCALE
     },
     routing: {
-      fallbackType: "rewrite",
+      fallbackType: 'rewrite'
     }
-  },
-  redirects: {
-    [`/${DEFAULT_LOCALE}`]: '/',                                // /en  -> /
   },
   vite: {
     plugins: [
