@@ -1,5 +1,7 @@
 import { glob } from 'astro/loaders'
 import { defineCollection, z } from 'astro:content'
+import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array
@@ -67,9 +69,12 @@ const I18nScalar = z.union([z.string(), z.number(), z.boolean()])
 const I18nJSONSchema: z.ZodType<I18nJSON> = z.lazy(() =>
   z.union([I18nScalar, z.record(I18nJSONSchema)])
 )
-const i18n = defineCollection({
-  loader: glob({ base: './src/content/i18n', pattern: '**/*.json' }),
-  schema: () => z.record(I18nJSONSchema)
-})
+const hasI18nDir = existsSync(fileURLToPath(new URL('./content/i18n', import.meta.url)))
+const i18n = hasI18nDir
+  ? defineCollection({
+      loader: glob({ base: './src/content/i18n', pattern: '**/*.json' }),
+      schema: () => z.record(I18nJSONSchema)
+    })
+  : undefined
 
-export const collections = { blog, docs, i18n }
+export const collections = hasI18nDir ? { blog, docs, i18n } : { blog, docs }
