@@ -15,10 +15,12 @@ const hasUserI18nFiles =
   Object.keys(import.meta.glob('/src/content/i18n/**/*.json', { eager: false })).length > 0
 
 /** Note: this function filters out draft posts based on the environment */
-export async function getBlogCollection(contentType: CollectionKey = 'blog') {
-  return await getCollection(contentType, ({ data }: CollectionEntry<typeof contentType>) => {
-    // Not in production & draft is not false
-    return prod ? !data.draft : true
+export async function getBlogCollection<T extends CollectionKey = 'blog'>(
+  contentType: T = 'blog' as T
+) {
+  return await getCollection(contentType, (entry: CollectionEntry<T>) => {
+    const draft = (entry.data as { draft?: boolean }).draft
+    return prod ? !draft : true
   })
 }
 
@@ -27,24 +29,21 @@ export async function getBlogCollection(contentType: CollectionKey = 'blog') {
  * - Filters out draft posts based on environment (same as `getBlogCollection`).
  * - When `locale` is provided, only returns entries whose `data.language` matches the base locale.
  */
-export async function getBlogCollectionByLocale(
+export async function getBlogCollectionByLocale<T extends CollectionKey = 'blog'>(
   locale?: string,
-  contentType: CollectionKey = 'blog'
+  contentType: T = 'blog' as T
 ) {
   const targetBase = locale ? getBaseLocale(locale) : undefined
-  return await getCollection(contentType, ({ data, id }: CollectionEntry<typeof contentType>) => {
-    const draftOk = prod ? !data.draft : true
+  return await getCollection(contentType, ({ data, id }: CollectionEntry<T>) => {
+    const draftOk = prod ? !(data as { draft?: boolean }).draft : true
     if (!draftOk) return false
 
-    // If no locale provided, return all (respecting draft filter)
     if (!targetBase) return true
 
-    // Prefer folder-based locale for localized entries
     const m = id?.match(/^localized\/([^/]+)\//i)
     if (m) return getBaseLocale(m[1]).toLowerCase() === targetBase.toLowerCase()
 
-    // Fallback to frontmatter `lang`
-    if ('lang' in data && (data as { lang?: string }).lang) {
+    if ('lang' in (data as any) && (data as { lang?: string }).lang) {
       const entryBase = getBaseLocale((data as { lang?: string }).lang as string)
       return entryBase.toLowerCase() === targetBase.toLowerCase()
     }
@@ -60,11 +59,12 @@ export async function ensureContentI18nLoaded(locale: string) {
     loadedContentLocales.add(locale)
     return
   }
-  let entries: CollectionEntry<'i18n'>[] = []
+  let entries: CollectionEntry<CollectionKey>[] = []
   try {
-    entries = await getCollection('i18n', (entry: CollectionEntry<'i18n'>) =>
-      entry.id.startsWith(`${locale}/`)
-    )
+    entries = (await getCollection(
+      'i18n' as CollectionKey,
+      (entry: CollectionEntry<CollectionKey>) => entry.id?.startsWith(`${locale}/`)
+    )) 
   } catch {
     loadedContentLocales.add(locale)
     return
@@ -74,8 +74,8 @@ export async function ensureContentI18nLoaded(locale: string) {
     return
   }
   for (const entry of entries) {
-    const parts = entry.id.split('/')
-    const ns = parts[1] || 'common'
+    const parts = String(entry.id).split('/')
+    const ns = (parts[1] || '').replace(/\.json$/i, '') || 'common'
     mergeContentLocale(locale, ns, entry.data as Record<string, any>)
   }
   loadedContentLocales.add(locale)

@@ -1,12 +1,12 @@
 ---
-import type { CollectionEntry, CollectionKey } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
 import { cn } from '../../utils'
 import { normalizeLocaleBlogId } from '../../utils/locale'
 
 type Props = {
   id: string
-  collections: CollectionEntry<CollectionKey>[]
+  collections: CollectionEntry<'blog'>[]
   class?: string
 }
 
