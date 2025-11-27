@@ -1,20 +1,27 @@
 {
-  "meta": {
-    "description": "我的博客的一些文章或归档",
-    "title": "博客"
+  "title": "博客",
+  "no_posts": "暂无文章",
+  "archives": {
+    "view_all": "按年份查看全部 →"
   },
-  "page": {
-    "title": "博客",
-    "no_posts": "暂无文章。",
-    "summary": "第 {page} 页 - 显示 {total} 篇中的 {count} 篇",
-    "view_archives": "按年份查看所有文章 →"
+  "tags": {
+    "title": "标签",
+    "view_all": "查看全部 →",
+    "all_title": "全部标签",
+    "none": "暂无标签",
+    "description": "我写过的所有主题列表"
   },
-  "sidebar": {
-    "tags": "标签",
-    "view_all": "查看全部 →"
+  "pagination": {
+    "previous_posts": "← 上一页文章",
+    "next_posts": "下一页文章 →",
+    "previous_tags": "← 上一页标签",
+    "next_tags": "下一页标签 →",
+    "page_status_posts": "第 {page} 页 - 显示 {count} / {total} 篇文章"
   },
-  "paginator": {
-    "prev_posts": "← 上一页文章",
-    "next_posts": "下一页文章 →"
+  "search": {
+    "title": "搜索",
+    "description": "在整个博客中搜索相关文章",
+    "intro": "输入搜索关键词或短语以搜索博客。",
+    "disabled": "Pagefind 已禁用。"
   }
 }

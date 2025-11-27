@@ -21,5 +21,6 @@ export {
   resolveMenu,
   useTranslations,
   normalizeLocaleBlogId,
-  toLocaleCapitalCase
+  toLocaleCapitalCase,
+  getLanguageDisplayName
 } from './locale'

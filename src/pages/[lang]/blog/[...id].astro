@@ -1,38 +1,37 @@
 ---
-import { i18n } from 'astro:config/client'
-import { getCollection, render, type CollectionEntry } from 'astro:content'
-import { toPaths as getConfiguredLocalePaths } from 'astro:i18n'
+import { render, type CollectionEntry } from 'astro:content'
 
+import { getBlogCollectionByLocale, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
 import { normalizeLocaleBlogId } from 'astro-pure/utils'
 import PostLayout from '@/layouts/BlogPost.astro'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
-  const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
-  return posts.flatMap((post) =>
-    locales.map((lang) => ({
-      params: { lang, id: normalizeLocaleBlogId(post.id) },
-      props: { post, posts }
-    }))
-  )
+  const langPaths = await getLangStaticPaths()
+  const out: { params: { lang: string; id: string }; props: { post: CollectionEntry<'blog'>; posts: CollectionEntry<'blog'>[] } }[] = []
+  for (const lp of langPaths) {
+    const lang = lp.params.lang as string
+    const posts = sortMDByDate(await getBlogCollectionByLocale<'blog'>(lang)) as CollectionEntry<'blog'>[]
+    for (const post of posts) {
+      out.push({
+        params: { lang, id: normalizeLocaleBlogId(post.id) },
+        props: { post: post as CollectionEntry<'blog'>, posts }
+      })
+    }
+  }
+  return out
 }
 
-interface Props {
+type Props = {
   post: CollectionEntry<'blog'>
   posts: CollectionEntry<'blog'>[]
 }
 
 const { post, posts } = Astro.props as Props
-const { Content, headings, remarkPluginFrontmatter } = await render(post as CollectionEntry<'blog'>)
+const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---
 
-<PostLayout
-  headings={headings}
-  remarkPluginFrontmatter={remarkPluginFrontmatter}
-  post={post}
-  posts={posts}
->
+<PostLayout {post} {posts} {headings} {remarkPluginFrontmatter}>
   <Content />
 </PostLayout>

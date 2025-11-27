@@ -3,7 +3,7 @@ import { Image } from 'astro:assets'
 import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 
-import { cn } from '../../utils'
+import { cn, getLanguageDisplayName } from '../../utils'
 import { normalizeLocaleBlogId } from '../../utils/locale'
 import { Button, FormattedDate, Icon } from '../user'
 
@@ -101,10 +101,10 @@ const postDate = data.updatedDate ?? data.publishDate
                 {remarkPluginFrontmatter.minutesRead}
               </span>
               {/* language */}
-              {data.language && (
+              {data.lang && (
                 <span class='flex items-center gap-1'>
                   <Icon name='earth' class='size-4' />
-                  {data.language}
+                  {getLanguageDisplayName(data.lang)}
                 </span>
               )}
             </div>
@@ -113,7 +113,7 @@ const postDate = data.updatedDate ?? data.publishDate
                 <ul class='tag-list mt-1 flex gap-2'>
                   {data.tags.map((tag: string) => (
                     <li>
-                      <Button as='a' title={tag} href={`/tags/${tag}`} variant='pill' />
+                      <Button as='a' title={tag} href={getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)} variant='pill' />
                     </li>
                   ))}
                 </ul>

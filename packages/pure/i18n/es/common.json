@@ -2,21 +2,12 @@
   "navigation": {
     "back": "Atrás"
   },
-  "paginator": {
-    "previous": "Anterior",
-    "next": "Siguiente",
-    "prev_sr": "Ir a la página anterior",
-    "next_sr": "Ir a la página siguiente"
-  },
   "search": {
     "dev_disabled": "Estás en modo de desarrollo, la búsqueda está deshabilitada."
   },
   "toc": {
     "title": "Tabla de contenido",
     "scroll_to_section": "Desplazarse a la sección: {section}"
-  },
-  "tocHeading": {
-    "scroll_to_section_prefix": "Desplazarse a la sección: "
   },
   "hero": {
     "draft": "(Borrador)",
@@ -35,7 +26,7 @@
     "sponsor_text": "Invítame a un café ☕.",
     "link_copied_toast": "¡Enlace copiado!"
   },
-  "postPreview": {
+  "post_preview": {
     "draft_prefix": "(Borrador) "
   }
 }

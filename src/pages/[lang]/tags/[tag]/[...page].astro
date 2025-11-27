@@ -3,7 +3,7 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, getUniqueTags, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
@@ -13,37 +13,35 @@ import { useTranslations } from 'astro-pure/utils'
 export const prerender = true
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const allPosts = (await getBlogCollection('blog')) as CollectionEntry<'blog'>[]
-  const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
-  const uniqueTags = getUniqueTags(allPostsByDate)
+  const langPaths = await getLangStaticPaths()
+  const out: any[] = []
+  for (const lp of langPaths) {
+    const lang = lp.params.lang as string
+    const allPosts = (await getBlogCollectionByLocale(lang)) as CollectionEntry<'blog'>[]
+    const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
+    const uniqueTags = getUniqueTags(allPostsByDate)
 
-  return uniqueTags.flatMap((tag) => {
-    const filterPosts = allPostsByDate.filter((post) => post.data.tags?.includes(tag))
-    return paginate(filterPosts, {
-      pageSize: config.content.blogPageSize,
-      params: { tag }
-    })
-  })
+    out.push(
+      ...uniqueTags.flatMap((tag) => {
+        const filterPosts = allPostsByDate.filter((post) => post.data.tags?.includes(tag))
+        return paginate(filterPosts, {
+          pageSize: config.content.blogPageSize,
+          params: { lang, tag }
+        })
+      })
+    )
+  }
+  return out
 }
 
 interface Props {
   page: Page<CollectionEntry<'blog'>>
 }
 
-const { page } = Astro.props as unknown as Props
+const { page } = Astro.props as Props
 const { tag } = Astro.params
 const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
 const { t } = useTranslations(['common', 'blog'], currentLocale)
-const baseLocale = (currentLocale || '').split('-')[0].toLowerCase()
-const defaultBase = (config.locale?.lang as string || 'en').split('-')[0].toLowerCase()
-const filtered: CollectionEntry<'blog'>[] = page.data.filter((post: CollectionEntry<'blog'>) => {
-  const id = post.id || ''
-  const m = id.match(/^localized\/([^/]+)\//i)
-  if (m) return (m[1] || '').split('-')[0].toLowerCase() === baseLocale
-  const pl = ((post.data as any).lang || '') as string
-  if (pl) return pl.split('-')[0].toLowerCase() === baseLocale
-  return baseLocale === defaultBase
-})
 
 const meta = {
   description: `View all posts with the tag - ${tag}`,
@@ -67,7 +65,7 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href='/blog' variant='back' />
+  <Button title={t('navigation.back')} href={`/${Astro.params.lang}/blog`} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 flex items-end gap-x-2 text-3xl font-medium'>
@@ -78,7 +76,7 @@ const paginationProps = {
 
     <section id='content' class='animate' aria-label='Blog post list'>
       <ul class='flex flex-col gap-y-3 text-start'>
-        {filtered.map((post: CollectionEntry<'blog'>) => <PostPreview {post} detailed />)}
+        {page.data.map((post) => <PostPreview as='h2' {post} detailed />)}
       </ul>
       <Paginator {...paginationProps} />
     </section>
