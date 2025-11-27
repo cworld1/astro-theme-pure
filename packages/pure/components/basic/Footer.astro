@@ -13,7 +13,7 @@ let social = footerConf.social || {}
 if (!social.rss)
   social.rss = {
     label: 'RSS',
-    url: '/rss.xml'
+    url: getRelativeLocaleUrl(Astro.currentLocale as string, '/rss.xml')
   }
 
 const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
