@@ -1,14 +1,20 @@
 ---
 import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollectionByLocale, groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, groupCollectionsByYear, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { i18n } from 'astro:config/client'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
 
 export const prerender = true
 
-const currentLocale = Astro.currentLocale
-const allPosts = await getBlogCollectionByLocale(currentLocale)
+export async function getStaticPaths() {
+  return await getLangStaticPaths()
+}
+
+const { lang } = Astro.params
+const allPosts = await getBlogCollectionByLocale(lang)
 const allPostsByDate = sortMDByDate(allPosts)
 const allPostsByYear = groupCollectionsByYear(allPostsByDate)
 
@@ -19,7 +25,7 @@ const meta = {
 const { t } = useTranslations(['common'], Astro.currentLocale)
 ---
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href='/blog' variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale || i18n?.defaultLocale || 'en', '/blog')} variant='back' />
 
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
@@ -33,7 +39,7 @@ const { t } = useTranslations(['common'], Astro.currentLocale)
         allPostsByYear.map(([year, posts]) => (
           <div class='relative mt-20'>
             <h2
-              class='absolute -start-6 -top-16 z-0 text-9xl font-bold text-transparent opacity-12 dark:opacity-25'
+              class='absolute -start-6 -top-16 z-0 text-9xl font-bold text-transparent opacity-10'
               style='-webkit-text-stroke-width:2px;-webkit-text-stroke-color:hsl(var(--foreground)/var(--un-text-opacity))'
             >
               <samp>{year}</samp>

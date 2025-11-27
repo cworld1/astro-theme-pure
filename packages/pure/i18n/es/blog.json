@@ -1,20 +1,27 @@
 {
-  "meta": {
-    "description": "Algunas entradas o archivos de mi blog",
-    "title": "Blog"
+  "title": "Blog",
+  "no_posts": "Aún no hay publicaciones.",
+  "archives": {
+    "view_all": "Ver todas las publicaciones por años →"
   },
-  "page": {
-    "title": "Blog",
-    "no_posts": "Todavía no hay entradas.",
-    "summary": "Página {page} - Mostrando {count} de {total} entradas",
-    "view_archives": "Ver todas las entradas por años →"
+  "tags": {
+    "title": "Etiquetas",
+    "view_all": "Ver todas →",
+    "all_title": "Todas las etiquetas",
+    "none": "Aún no hay etiquetas.",
+    "description": "Lista de todos los temas sobre los que he escrito en mis publicaciones"
   },
-  "sidebar": {
-    "tags": "Etiquetas",
-    "view_all": "Ver todo →"
+  "pagination": {
+    "previous_posts": "← Publicaciones anteriores",
+    "next_posts": "Siguientes publicaciones →",
+    "previous_tags": "← Etiquetas anteriores",
+    "next_tags": "Siguientes etiquetas →",
+    "page_status_posts": "Página {page} - Mostrando {count} de {total} publicaciones"
   },
-  "paginator": {
-    "prev_posts": "← Entradas anteriores",
-    "next_posts": "Entradas siguientes →"
+  "search": {
+    "title": "Buscar",
+    "description": "Buscar publicaciones relacionadas de todo el blog",
+    "intro": "Ingresa un término o frase para buscar en el blog.",
+    "disabled": "Pagefind está deshabilitado."
   }
 }

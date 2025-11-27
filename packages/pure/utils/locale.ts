@@ -143,7 +143,17 @@ export function useTranslations(namespace: string | string[] = 'common', locale?
 
 export function toLocaleCapitalCase(str: string, locale: string = 'en') {
   return str
-    .split(/\s+/) // split on any whitespace
+     .split(/\s+/)
     .map((w) => (w ? w[0].toLocaleUpperCase(locale) + w.slice(1) : w))
     .join(' ')
+}
+
+export function getLanguageDisplayName(locale: string, displayLocale?: string) {
+  try {
+    const loc = displayLocale || locale
+    const name = new Intl.DisplayNames(loc, { type: 'language' }).of(locale)
+    return name || locale
+  } catch (_) {
+    return locale
+  }
 }

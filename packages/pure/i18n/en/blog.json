@@ -1,20 +1,27 @@
 {
-  "meta": {
-    "description": "Some posts or archives of my blog",
-    "title": "Blog"
+  "title": "Blog",
+  "no_posts": "No posts yet.",
+  "archives": {
+    "view_all": "View all posts by years →"
   },
-  "page": {
-    "title": "Blog",
-    "no_posts": "No posts yet.",
-    "summary": "Page {page} - Showing {count} of {total} posts",
-    "view_archives": "View all posts by years →"
+  "tags": {
+    "title": "Tags",
+    "view_all": "View all →",
+    "all_title": "All Tags",
+    "none": "No tags yet.",
+    "description": "A list of all the topics I've written about in my posts"
   },
-  "sidebar": {
-    "tags": "Tags",
-    "view_all": "View all →"
+  "pagination": {
+    "previous_posts": "← Previous Posts",
+    "next_posts": "Next Posts →",
+    "previous_tags": "← Previous Tags",
+    "next_tags": "Next Tags →",
+    "page_status_posts": "Page {page} - Showing {count} of {total} posts"
   },
-  "paginator": {
-    "prev_posts": "← Previous Posts",
-    "next_posts": "Next Posts →"
+  "search": {
+    "title": "Search",
+    "description": "Search relative posts of the whole blog",
+    "intro": "Enter a search term or phrase to search the blog.",
+    "disabled": "Pagefind is disabled."
   }
 }

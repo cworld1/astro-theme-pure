@@ -3,7 +3,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n'
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
-import { cn, isAbsoluteUrl, useTranslations } from 'astro-pure/utils'
+import { cn, useTranslations } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ } from '@/site-config'
 
@@ -21,9 +21,10 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
 <PageLayout {meta} {highlightColor} {...props}>
   <Button
     title={t('navigation.back')}
-    href={isAbsoluteUrl(back as string)
-      ? (back as string)
-      : getRelativeLocaleUrl(Astro.currentLocale as string, back as string)}
+    href={back ? 
+      getRelativeLocaleUrl(Astro.currentLocale as string, back as string)
+      : getRelativeLocaleUrl(Astro.currentLocale as string)
+    }
     variant='back'
   />
   <main class='mt-6 items-start gap-x-10 md:flex'>

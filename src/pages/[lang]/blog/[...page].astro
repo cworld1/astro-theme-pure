@@ -1,37 +1,35 @@
 ---
 import type { GetStaticPaths, Page } from 'astro'
-import { i18n } from 'astro:config/client'
 import type { CollectionEntry } from 'astro:content'
-import { toPaths as getConfiguredLocalePaths, getRelativeLocaleUrl } from 'astro:i18n'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
-import { useTranslations } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
+import { i18n } from 'astro:config/client'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { useTranslations } from 'astro-pure/utils'
 
 export const prerender = true
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
-
-  const paths: ReturnType<typeof paginate>[number][] = []
-  for (const lang of locales) {
-    const localizedCollections = sortMDByDate(await getBlogCollectionByLocale(lang))
-    const uniqueTags = getUniqueTags(localizedCollections)
-    const collectionsCount = localizedCollections.length
-
-    paths.push(
-      ...paginate(localizedCollections, {
+  const langPaths = await getLangStaticPaths()
+  const out: any[] = []
+  for (const lp of langPaths) {
+    const lang = lp.params.lang as string
+    const collections = sortMDByDate(await getBlogCollectionByLocale(lang))
+    const uniqueTags = getUniqueTags(collections)
+    const collectionsCount = collections.length
+    out.push(
+      ...paginate(collections, {
         pageSize: config.content.blogPageSize,
         params: { lang },
         props: { uniqueTags, collectionsCount }
       })
     )
   }
-
-  return paths
+  return out
 }) satisfies GetStaticPaths
 
 interface Props {
@@ -40,65 +38,59 @@ interface Props {
   collectionsCount: number
 }
 
-const { page, uniqueTags, collectionsCount } = Astro.props as unknown as Props
-const tags = uniqueTags
+const { page, uniqueTags, collectionsCount } = Astro.props as Props
 
-const { t } = useTranslations(['blog', 'common'], Astro.currentLocale)
+const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
+const { t } = useTranslations(['common', 'blog'], currentLocale)
 const meta = {
-  description: t('meta.description'),
-  title: t('meta.title')
+  description: 'Some posts or archives of my blog',
+  title: t('title')
 }
 
 const paginationProps = {
   ...(page.url.prev && {
     prevUrl: {
-      text: t('paginator.prev_posts'),
+      text: t('pagination.previous_posts'),
       url: page.url.prev
     }
   }),
   ...(page.url.next && {
     nextUrl: {
-      text: t('paginator.next_posts'),
+      text: t('pagination.next_posts'),
       url: page.url.next
     }
   })
 }
+
+const archivesHref = getRelativeLocaleUrl(currentLocale, '/archives')
+const listTagsHref = getRelativeLocaleUrl(currentLocale, '/tags')
+const tagHref = (tag: string) => getRelativeLocaleUrl(currentLocale, `/tags/${tag}`)
 ---
 
 <PageLayout {meta}>
-  <Button
-    title={t('navigation.back')}
-    href={getRelativeLocaleUrl(Astro.currentLocale as string)}
-    variant='back'
-  />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(currentLocale)} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
-      <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>{t('page.title')}</h1>
+      <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>{t('title')}</h1>
     </div>
     {
       page.data.length === 0 ? (
-        <p>{t('page.no_posts')}</p>
+        <p>{t('no_posts')}</p>
       ) : (
         <div class='grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
           <section aria-label='Blog posts list' class='animate' id='content'>
-            {/* header */}
             <div class='mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row'>
               <span class='text-muted-foreground'>
-                {t('page.summary', {
+                {t('pagination.page_status_posts', {
                   page: page.currentPage,
                   count: page.data.length,
                   total: collectionsCount
                 })}
               </span>
-              <a
-                aria-label='View all blog by years'
-                href={getRelativeLocaleUrl(Astro.currentLocale as string, '/archives')}
-                data-astro-prefetch
-              >
-                {t('page.view_archives')}
+              <a aria-label='View all blog by years' href={archivesHref} data-astro-prefetch>
+                {t('archives.view_all')}
               </a>
             </div>
-            {/* posts */}
             <ul class='flex flex-col gap-y-4 text-start'>
               {page.data.map((post) => (
                 <PostPreview post={post} detailed />
@@ -107,31 +99,22 @@ const paginationProps = {
             <Paginator {...paginationProps} />
           </section>
 
-          {/* sidebar */}
-          {!!tags.length && (
+          {!!uniqueTags.length && (
             <aside class='animate' id='sidebar'>
               <h2 class='mb-4 flex items-center text-lg font-semibold'>
                 <Icon name='tag-2' class='me-2' />
-                {t('sidebar.tags')}
+                {t('tags.title')}
               </h2>
               <ul class='text-bgColor flex flex-wrap gap-2'>
-                {tags.map((tag: string) => (
+                {uniqueTags.map((tag) => (
                   <li>
-                    <Button
-                      title={tag}
-                      href={getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)}
-                      variant='pill'
-                    />
+                    <Button title={tag} href={tagHref(tag)} variant='pill' />
                   </li>
                 ))}
               </ul>
               <span class='mt-4 block sm:text-end'>
-                <a
-                  aria-label='View all blog categories'
-                  href={getRelativeLocaleUrl(Astro.currentLocale as string, '/tags')}
-                  data-astro-prefetch
-                >
-                  {t('sidebar.view_all')}
+                <a aria-label='View all blog categories' href={listTagsHref} data-astro-prefetch>
+                  {t('tags.view_all')}
                 </a>
               </span>
             </aside>
