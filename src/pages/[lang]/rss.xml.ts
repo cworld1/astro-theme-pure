@@ -8,10 +8,17 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
-
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import config from 'virtual:config'
+
+import {
+  getBlogCollectionByLocale,
+  sortMDByDate,
+  getLangStaticPaths
+} from 'astro-pure/server'
 import { normalizeLocaleBlogId } from 'astro-pure/utils'
+
+export { getLangStaticPaths as getStaticPaths }
+export const prerender = true
 
 // Get dynamic import of images as a map collection
 // Support images from both default and localized blog directories
@@ -25,12 +32,8 @@ const imagesGlob = {
 }
 
 const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
-  // Replace image links with the correct path
   function remarkReplaceImageLink() {
-    /**
-     * @param {Root} tree
-     */
-    return async (tree: Root) => {
+    return async function (tree: Root) {
       const promises: Promise<void>[] = []
       visit(tree, 'image', (node) => {
         if (node.url.startsWith('/images')) {
@@ -89,25 +92,26 @@ const resolveHeroImageUrl = async (post: CollectionEntry<'blog'>, site: URL) => 
 }
 
 const GET = async (context: AstroGlobal) => {
-  const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
+  const currentLocale = (context.params?.lang as string) || 'en'
+  const allPostsByDate = sortMDByDate(
+    (await getBlogCollectionByLocale<'blog'>(currentLocale)) as CollectionEntry<'blog'>[]
+  ) as CollectionEntry<'blog'>[]
   const siteUrl = context.site ?? new URL(import.meta.env.SITE)
 
   return rss({
-    // Basic configs
     trailingSlash: false,
     xmlns: { h: 'http://www.w3.org/TR/html4/' },
     stylesheet: '/scripts/pretty-feed-v3.xsl',
 
-    // Contents
     title: config.title,
     description: config.description,
     site: import.meta.env.SITE,
     items: await Promise.all(
-      allPostsByDate.map(async (post) => {
+      allPostsByDate.map(async (post: CollectionEntry<'blog'>) => {
         const hero = await resolveHeroImageUrl(post, siteUrl)
         return {
           pubDate: post.data.publishDate,
-          link: `/blog/${normalizeLocaleBlogId(post.id)}`,
+          link: `/${currentLocale}/blog/${normalizeLocaleBlogId(post.id)}`,
           customData:
             hero
               ? `<h:img src="${hero}" />\n          <enclosure url="${hero}" />`
