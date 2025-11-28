@@ -16,7 +16,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
-  <Button title='Back' href={back} variant='back' />
+  <Button title='返回' href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     <aside
