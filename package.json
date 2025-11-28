@@ -1,5 +1,8 @@
 {
   "name": "astro-theme-pure",
+  "workspaces": [
+    "packages/*"
+  ],
   "type": "module",
   "version": "4.0.9",
   "scripts": {
