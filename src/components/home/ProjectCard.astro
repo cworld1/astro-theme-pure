@@ -35,7 +35,7 @@ if (!images[imagePath])
 <Tag
   class={cn(
     className,
-    'project-card group overflow-hidden relative flex flex-col gap-y-3 rounded-2xl border bg-muted ',
+    'project-card group overflow-hidden relative flex flex-col justify-end rounded-2xl border bg-muted ',
     href && 'transition-all hover:border-foreground/25 hover:shadow-sm'
   )}
   href={href}
@@ -44,10 +44,10 @@ if (!images[imagePath])
   <Image
     src={images[imagePath]()}
     alt={altText ?? heading}
-    class='absolute top-0 w-full h-full object-cover opacity-60 transition-opacity group-hover:opacity-100 dark:opacity-35'
+    class='absolute w-full h-full object-cover opacity-60 transition-opacity group-hover:opacity-100 dark:opacity-35'
     loading='lazy'
   />
-  <div class='project-card-fg z-10 flex flex-1 flex-col gap-y-0.5 px-5 pb-4 pt-36 transition-all'>
+  <div class='project-card-fg z-10 flex flex-col gap-y-0.5 px-5 pb-4 pt-36 transition-all'>
     <h2 class='text-lg font-medium'>{heading}</h2>
     <p class='text-muted-foreground'>{subheading}</p>
   </div>
