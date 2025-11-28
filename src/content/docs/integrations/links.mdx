@@ -1,0 +1,155 @@
+---
+title: 'Friend Links'
+description: 'Configurations for friend links'
+order: 4
+---
+
+import { Steps } from 'astro-pure/user'
+
+## Remove Links Page
+
+Links page is a page for showing your friend blog links, which is enabled by default.
+
+If you want to remove the links page for any reason, follow the steps in this section. Otherwise, you can skip ahead to the next chapter.
+
+Set `links.enable` to `false` in `src/site.config.ts`:
+
+```ts title="src/site.config.ts"
+export const integ: IntegrationUserConfig = {
+  // ...
+  links: {
+    enable: false // [!code highlight]
+  }
+}
+```
+
+And also, remember to delete the following folders & files:
+
+- `src/components/links/`
+- `src/pages/links/`
+- `public/links.json`
+
+## Basic Configurations
+
+A basic configuration for friend links is in `src/site.config.ts`. You can add your friend's logbook or your own link info.
+
+```ts title="src/site.config.ts"
+export const integ: IntegrationUserConfig = {
+  links: {
+    // Friend logbook
+    logbook: [
+      { date: '2025-03-16', content: 'Is there a leakage?' },
+      { date: '2025-03-16', content: 'A leakage of what?' },
+      { date: '2025-03-16', content: 'I have a full seat of water, like, full of water!' },
+      { date: '2025-03-16', content: 'Must be the water.' },
+      { date: '2025-03-16', content: 'Let\'s add that to the words of wisdom.' },
+    ],
+    // Yourself link info
+    applyTip: {
+      name: theme.title,
+      desc: theme.description || 'Null',
+      url: 'https://astro-pure.js.org/',
+      avatar: 'https://astro-pure.js.org/favicon/favicon.ico'
+    }
+  },
+}
+```
+
+## Friend Links
+
+The friend links configurations are at `public/links.json`.
+
+```json title="public/links.json"
+{
+  "friends": [
+    {
+      "id_name": "cf-links",
+      "desc": "Common links included in circle friends",
+      "link_list": [
+        { // [!code highlight:6]
+          "name": "Elysia",
+          "intro": "Hi, did you miss me? Anywhere and anytime, Elysia will return all your expectations.",
+          "link": "https://honkaiimpact3.fandom.com/wiki/Elysia",
+          "avatar": "https://0.gravatar.com/avatar/"
+          // Here you can also leave some other fields as notes
+        },
+      ]
+    },
+    {
+      "id_name": "inactive-links",
+      "desc": "Inactive or rule-breaking friends",
+      "link_list": [] // you can temporarily leave some bad links here
+    },
+    {
+      "id_name": "special-links",
+      "desc": "Other special links",
+      "link_list": [] // special links which are note your friends
+    }
+  ]
+}
+```
+
+## Integrated with `Friend-Circle-Lite`
+
+[Friend-Circle-Lite](https://github.com/willow-god/Friend-Circle-Lite) is a stripped-down friend-link app with no backend and running only using github action.
+
+It requires:
+
+1. A github repository with github actions enabled by cron.
+2. A static site server like Vercel, Netlify, GitHub Pages, etc.
+
+This theme has not integrated it and will not provide support for it in the future. But don't worry, this doc will guide you to integrate it.
+
+<Steps>
+
+1. Fork the [Friend-Circle-Lite](https://github.com/cworld1/friend-circle-lite).
+2. Modify the `config.yaml` in your forked repository:
+
+   ```yaml title="config.yaml"
+   spider_settings:
+      enable: true
+      json_url: "<your-site>/links.json" # [!code highlight]
+      article_count: 4
+   ```
+
+3. Go to "Actions" page and run workflow "Friend Circle Lite" manually to check if it works. This will also generate server files in "page" branch.
+
+4. Checkout [docs](https://github.com/willow-god/Friend-Circle-Lite?tab=readme-ov-file#%E9%83%A8%E7%BD%B2%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99) to deploy the server files to your static site server.
+
+5. Add [fetching script file `friendCircle.ts`](https://gist.github.com/cworld1/cf0dc6daa89264e6d745d3e68ef8c01c) to your project at path `src/plugins`.
+
+6. Add [style file `fc.css`](https://gist.github.com/cworld1/cf0dc6daa89264e6d745d3e68ef8c01c?permalink_comment_id=5311916#gistcomment-5311916) to your project at path `src/assets/styles`.
+
+7. Add initialize code in `src/components/pages/links/index.astro`:
+
+   ```astro title="src/components/pages/links/index.astro"
+   ---
+   const headings = [
+      // ...
+      { depth: 2, slug: 'small-circle', text: 'Small Circle' }, // [!code highlight]
+   ]
+   ---
+
+   <PageLayout>
+      {/* ... */}
+      <!-- [!code highlight:16] -->
+      <h2 id='small-circle'>Small Circle</h2>
+      <div id='friend-circle-lite-root' class='not-prose'>Loading...</div>
+      <script>
+         import '@/assets/styles/fc.css'
+
+         import { FriendCircle } from '@/plugins/friendCircle'
+
+         const fc = new FriendCircle()
+         fc.init({
+            private_api_url: '<your-fc-lite-server>',
+            page_turning_number: 10,
+            error_img: 'https://cravatar.cn/avatar/57d8260dfb55501c37dde588e7c3852c'
+         })
+         fc.load()
+      </script>
+   </PageLayout>
+   ```
+
+</Steps>
+
