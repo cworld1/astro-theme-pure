@@ -3,18 +3,18 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
-import { i18n } from 'astro:config/client'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
+import { i18n } from 'astro:config/client'
 
 export const prerender = true
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const collections = sortMDByDate(await getBlogCollection())
+  const collections = sortMDByDate(await getBlogCollectionByLocale(i18n!.defaultLocale))
   const uniqueTags = getUniqueTagsWithCount(collections).map(([tag]) => tag)
   const collectionsCount = collections.length
   return paginate(collections, {
@@ -31,13 +31,12 @@ interface Props {
 
 const { page, uniqueTags, collectionsCount } = Astro.props as Props
 
-const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
-const archivesHref = getRelativeLocaleUrl(currentLocale, '/archives')
-const listTagsHref = getRelativeLocaleUrl(currentLocale, '/tags')
-const tagHref = (tag: string) => getRelativeLocaleUrl(currentLocale, `/tags/${tag}`)
-const { t } = useTranslations(['common', 'blog'], currentLocale)
+const archivesHref = getRelativeLocaleUrl(Astro.currentLocale as string, '/archives')
+const listTagsHref = getRelativeLocaleUrl(Astro.currentLocale as string, '/tags')
+const tagHref = (tag: string) => getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 const meta = {
-  description: 'Some posts or archives of my blog',
+  description: t('description'),
   title: t('title')
 }
 
@@ -55,11 +54,11 @@ const paginationProps = {
     }
   })
 }
-// translations and urls declared above
+
 ---
 
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(currentLocale, '/')} variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string, '/')} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>{t('title')}</h1>
@@ -79,7 +78,7 @@ const paginationProps = {
                   total: collectionsCount
                 })}
               </span>
-              <a aria-label='View all blog by years' href={archivesHref} data-astro-prefetch>
+              <a aria-label={t('archives.view_all')} href={archivesHref} data-astro-prefetch>
                 {t('archives.view_all')}
               </a>
             </div>
@@ -110,7 +109,7 @@ const paginationProps = {
                 }
               </ul>
               <span class='mt-4 block sm:text-end'>
-                <a aria-label='View all blog categories' href={listTagsHref} data-astro-prefetch>
+                <a aria-label={t('tags.view_all')} href={listTagsHref} data-astro-prefetch>
                   {t('tags.view_all')}
                 </a>
               </span>

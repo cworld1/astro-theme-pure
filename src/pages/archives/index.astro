@@ -1,32 +1,34 @@
 ---
 import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollectionByLocale, groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, groupCollectionsByYear, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
 
 export const prerender = true
 
-const currentLocale = Astro.currentLocale
-const allPosts = await getBlogCollectionByLocale(currentLocale)
+export { getLangStaticPaths as getStaticPaths }
+
+const allPosts = await getBlogCollectionByLocale(Astro.currentLocale)
 const allPostsByDate = sortMDByDate(allPosts)
 const allPostsByYear = groupCollectionsByYear(allPostsByDate)
 
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 const meta = {
-  description: 'A list of all the years of creating my posts',
-  title: 'Archives'
+  description: t('archives.description'),
+  title: t('archives.title')
 }
-const { t } = useTranslations(['common'], Astro.currentLocale)
 ---
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href='/blog' variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')} variant='back' />
 
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
-      <h1 class='mb-6 text-3xl font-medium'>Archives</h1>
+      <h1 class='mb-6 text-3xl font-medium'>{t('archives.title')}</h1>
     </div>
 
-    {allPosts.length === 0 && <p>No posts yet.</p>}
+    {allPosts.length === 0 && <p>{t('no_posts')}</p>}
 
     <section id='content' class='animate' aria-label='Blog post list'>
       {

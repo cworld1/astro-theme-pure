@@ -6,7 +6,6 @@ import { Button, Icon } from 'astro-pure/user'
 import { cn, useTranslations } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ } from '@/site-config'
-
 const { t } = useTranslations(['common'], Astro.currentLocale)
 
 interface Props {
@@ -22,7 +21,7 @@ const { meta, highlightColor, back = '/', ...props } = Astro.props
   <Button
     title={t('navigation.back')}
     href={back ? 
-      getRelativeLocaleUrl(Astro.currentLocale as string, back as string)
+      getRelativeLocaleUrl(Astro.currentLocale as string, back)
       : getRelativeLocaleUrl(Astro.currentLocale as string)
     }
     variant='back'

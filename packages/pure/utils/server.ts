@@ -139,8 +139,16 @@ export function getUniqueTagsWithCount(collections: Collections): [string, numbe
   ].sort((a, b) => b[1] - a[1])
 }
 
+export async function getLangLocales() {
+  const all = getConfiguredLocalePaths(i18n?.locales ?? [])
+  const prefixDefault =
+    typeof i18n?.routing === 'object' ? i18n.routing.prefixDefaultLocale : false
+  const def = i18n?.defaultLocale ?? (config.locale?.lang as string) ?? 'en'
+  return prefixDefault ? all : all.filter((l) => getBaseLocale(l) !== getBaseLocale(def))
+}
+
 export async function getLangStaticPaths() {
-  const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
+  const locales = await getLangLocales()
   return locales.map((lang) => ({ params: { lang } }))
 }
 

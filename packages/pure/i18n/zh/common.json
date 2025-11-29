@@ -28,5 +28,6 @@
   },
   "post_preview": {
     "draft_prefix": "（草稿）"
-  }
+  },
+  "not_found_description": "未找到"
 }

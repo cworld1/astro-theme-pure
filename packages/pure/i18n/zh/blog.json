@@ -1,7 +1,10 @@
 {
   "title": "博客",
   "no_posts": "暂无文章",
+  "description": "一些文章或博客归档",
   "archives": {
+    "title": "归档",
+    "description": "创建我文章的所有年份列表",
     "view_all": "按年份查看全部 →"
   },
   "tags": {
@@ -9,7 +12,9 @@
     "view_all": "查看全部 →",
     "all_title": "全部标签",
     "none": "暂无标签",
-    "description": "我写过的所有主题列表"
+    "description": "我写过的所有主题列表",
+    "tag_page_description": "查看所有带有该标签的文章 - {tag}",
+    "tag_page_title": "标签：{tag}"
   },
   "pagination": {
     "previous_posts": "← 上一页文章",

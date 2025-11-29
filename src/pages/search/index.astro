@@ -1,32 +1,39 @@
 ---
 import { PFSearch } from 'astro-pure/components/pages'
 import { Button } from 'astro-pure/user'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { useTranslations } from 'astro-pure/utils'
 import { integ } from '@/site-config'
 
+export { getLangStaticPaths as getStaticPaths } from 'astro-pure/server'
+
+const { t } = useTranslations(['blog', 'common'], Astro.currentLocale)
 const meta = {
-  description: 'Search relative posts of the whole blog',
-  title: 'Search'
+  description: t('search.description'),
+  title: t('search.title')
 }
-const { t } = useTranslations(['common'], Astro.currentLocale)
 ---
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href='/blog' variant='back' />
+  <Button
+    title={t('navigation.back')}
+    href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')}
+    variant='back'
+  />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
-      <h1 class='mb-6 text-3xl font-medium'>Search</h1>
+      <h1 class='mb-6 text-3xl font-medium'>{t('search.title')}</h1>
     </div>
 
     <div id='content' class='animate'>
       {
         integ.pagefind ? (
           <>
-            <p>Enter a search term or phrase to search the blog.</p>
+            <p>{t('search.intro')}</p>
             <PFSearch />
           </>
         ) : (
-          <p>Pagefind is disabled.</p>
+          <p>{t('search.disabled')}</p>
         )
       }
     </div>

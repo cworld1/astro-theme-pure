@@ -1,7 +1,10 @@
 {
   "title": "Blog",
   "no_posts": "No posts yet.",
+  "description": "Some posts or archives of my blog",
   "archives": {
+    "title": "Archives",
+    "description": "A list of all the years of creating my posts",
     "view_all": "View all posts by years →"
   },
   "tags": {
@@ -9,7 +12,9 @@
     "view_all": "View all →",
     "all_title": "All Tags",
     "none": "No tags yet.",
-    "description": "A list of all the topics I've written about in my posts"
+    "description": "A list of all the topics I've written about in my posts",
+    "tag_page_description": "View all posts with the tag - {tag}",
+    "tag_page_title": "Tag: {tag}"
   },
   "pagination": {
     "previous_posts": "← Previous Posts",

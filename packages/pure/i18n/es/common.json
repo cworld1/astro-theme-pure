@@ -28,5 +28,6 @@
   },
   "post_preview": {
     "draft_prefix": "(Borrador) "
-  }
+  },
+  "not_found_description": "No encontrado"
 }

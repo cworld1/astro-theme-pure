@@ -3,17 +3,17 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, getUniqueTags, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import config from '@/site-config'
 import { i18n } from 'astro:config/client'
+import config from '@/site-config'
 import { useTranslations } from 'astro-pure/utils'
 
 export const prerender = true
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const allPosts = (await getBlogCollection('blog')) as CollectionEntry<'blog'>[]
+  const allPosts = (await getBlogCollectionByLocale(i18n?.defaultLocale || 'en')) as CollectionEntry<'blog'>[]
   const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
   const uniqueTags = getUniqueTags(allPostsByDate)
 
@@ -32,22 +32,11 @@ interface Props {
 
 const { page } = Astro.props as unknown as Props
 const { tag } = Astro.params
-const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
-const { t } = useTranslations(['common', 'blog'], currentLocale)
-const baseLocale = (currentLocale || '').split('-')[0].toLowerCase()
-const defaultBase = (config.locale?.lang as string || 'en').split('-')[0].toLowerCase()
-const filtered: CollectionEntry<'blog'>[] = page.data.filter((post: CollectionEntry<'blog'>) => {
-  const id = post.id || ''
-  const m = id.match(/^localized\/([^/]+)\//i)
-  if (m) return (m[1] || '').split('-')[0].toLowerCase() === baseLocale
-  const pl = ((post.data as any).lang || '') as string
-  if (pl) return pl.split('-')[0].toLowerCase() === baseLocale
-  return baseLocale === defaultBase
-})
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 
 const meta = {
-  description: `View all posts with the tag - ${tag}`,
-  title: `Tag: ${tag}`
+  description: t('tags.description', { tag }),
+  title: t('tags.title', { tag })
 }
 
 const paginationProps = {

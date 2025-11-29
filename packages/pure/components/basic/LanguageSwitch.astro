@@ -7,9 +7,7 @@ import { toLocaleCapitalCase } from 'astro-pure/utils'
 
 import { Icon } from '../user'
 
-const locales = getConfiguredLocalePaths(i18n?.locales ?? [])
-const defaultLocale = i18n?.defaultLocale ?? 'en'
-const currentLocale = Astro.currentLocale || defaultLocale
+const locales = getConfiguredLocalePaths(i18n!.locales)
 const pathname = Astro.url?.pathname ?? '/'
 
 const cleanPath = stripLocaleAndBasePathPrefixes(pathname)
@@ -45,11 +43,11 @@ const shouldShow = Array.isArray(locales) && locales.length > 1
       >
         <span class='sr-only'>Language</span>
         <Icon name='earth' class='size-5' />
-        <span class='text-sm'>{getDisplayCode(currentLocale)}</span>
+        <span class='text-sm'>{getDisplayCode(Astro.currentLocale as string)}</span>
       </button>
       <ul class='dropdown min-w-[10rem] rounded-md border bg-background shadow-md'>
         {locales.map((loc) => {
-          const active = (loc || '').split('-')[0] === (currentLocale || '').split('-')[0]
+          const active = (loc || '').split('-')[0] === (Astro.currentLocale as string || '').split('-')[0]
           return (
             <li>
               <a

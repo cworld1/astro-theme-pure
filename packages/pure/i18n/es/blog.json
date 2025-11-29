@@ -1,7 +1,10 @@
 {
   "title": "Blog",
   "no_posts": "Aún no hay publicaciones.",
+  "description": "Algunas publicaciones o archivos de mi blog",
   "archives": {
+    "title": "Archivo",
+    "description": "Una lista de todos los años de creación de mis publicaciones",
     "view_all": "Ver todas las publicaciones por años →"
   },
   "tags": {
@@ -9,7 +12,9 @@
     "view_all": "Ver todas →",
     "all_title": "Todas las etiquetas",
     "none": "Aún no hay etiquetas.",
-    "description": "Lista de todos los temas sobre los que he escrito en mis publicaciones"
+    "description": "Lista de todos los temas sobre los que he escrito en mis publicaciones",
+    "tag_page_description": "Ver todas las publicaciones con la etiqueta - {tag}",
+    "tag_page_title": "Etiqueta: {tag}"
   },
   "pagination": {
     "previous_posts": "← Publicaciones anteriores",

@@ -3,49 +3,46 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate, getLangLocales } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
-import { i18n } from 'astro:config/client'
 import { useTranslations } from 'astro-pure/utils'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 export const prerender = true
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const langPaths = await getLangStaticPaths()
-  const out: any[] = []
-  for (const lp of langPaths) {
-    const lang = lp.params.lang as string
-    const allPosts = (await getBlogCollectionByLocale(lang)) as CollectionEntry<'blog'>[]
-    const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
-    const uniqueTags = getUniqueTags(allPostsByDate)
+  const locales = await getLangLocales()
+  const pathsByLocale = await Promise.all(
+    locales.map(async (lang) => {
+      const allPosts = (await getBlogCollectionByLocale(lang)) as CollectionEntry<'blog'>[]
+      const allPostsByDate = sortMDByDate(allPosts) as CollectionEntry<'blog'>[]
+      const uniqueTags = getUniqueTags(allPostsByDate)
 
-    out.push(
-      ...uniqueTags.flatMap((tag) => {
-        const filterPosts = allPostsByDate.filter((post) => post.data.tags?.includes(tag))
-        return paginate(filterPosts, {
+      return uniqueTags.flatMap((tag) => {
+        const filteredPosts = allPostsByDate.filter((post) => post.data.tags?.includes(tag))
+        return paginate(filteredPosts, {
           pageSize: config.content.blogPageSize,
           params: { lang, tag }
         })
       })
-    )
-  }
-  return out
+    })
+  )
+  return pathsByLocale.flat()
 }
 
 interface Props {
   page: Page<CollectionEntry<'blog'>>
 }
 
-const { page } = Astro.props as Props
+const { page } = Astro.props as unknown as Props
 const { tag } = Astro.params
-const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
-const { t } = useTranslations(['common', 'blog'], currentLocale)
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 
 const meta = {
-  description: `View all posts with the tag - ${tag}`,
-  title: `Tag: ${tag}`
+  description: t('tags.tag_page_description', { tag }),
+  title: t('tags.tag_page_title', { tag })
 }
 
 const paginationProps = {
@@ -65,7 +62,7 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href={`/${Astro.params.lang}/blog`} variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 flex items-end gap-x-2 text-3xl font-medium'>
