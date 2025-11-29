@@ -6,6 +6,8 @@ import { Button, Icon } from 'astro-pure/user'
 import config from 'virtual:config'
 import { cn, useTranslations } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { integ } from '@/site-config'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 type Props = MarkdownLayoutProps<{
   title: string
@@ -25,7 +27,15 @@ const socialImage = heroImage?.src ?? config.socialCard
 ---
 
 <PageLayout meta={{ title, description, ogImage: socialImage }}>
-  <Button title={t('navigation.back')} href={back ?? '/'} variant='back' />
+  <Button
+    title={t('navigation.back')}
+    href={
+      back
+        ? getRelativeLocaleUrl(Astro.currentLocale as string, back)
+        : getRelativeLocaleUrl(Astro.currentLocale as string)
+    }
+    variant='back'
+  />
   <main class='mt-6 items-start gap-x-10 md:flex lg:mt-10'>
     {
       !!headings.length && (

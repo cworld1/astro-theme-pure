@@ -9,12 +9,7 @@ import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
 import config from 'virtual:config'
-
-import {
-  getBlogCollectionByLocale,
-  sortMDByDate,
-  getLangStaticPaths
-} from 'astro-pure/server'
+import { getBlogCollectionByLocale, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
 import { normalizeLocaleBlogId } from 'astro-pure/utils'
 
 export { getLangStaticPaths as getStaticPaths }

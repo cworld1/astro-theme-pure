@@ -3,15 +3,13 @@ import { getBlogCollectionByLocale, getUniqueTagsWithCount } from 'astro-pure/se
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { i18n } from 'astro:config/client'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
 
-const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
-const allPosts = await getBlogCollectionByLocale(currentLocale)
+const allPosts = await getBlogCollectionByLocale(Astro.currentLocale)
 const allTags = getUniqueTagsWithCount(allPosts)
 
-const { t } = useTranslations(['common', 'blog'], currentLocale)
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 const meta = {
   description: t('tags.description'),
   title: t('tags.all_title')
@@ -19,7 +17,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(currentLocale, '/blog')} variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>{t('tags.title')}</h1>
@@ -32,7 +30,7 @@ const meta = {
             {allTags.map(([tag, val]) => (
               <li>
                 <Button
-                  href={getRelativeLocaleUrl(Astro.currentLocale || i18n?.defaultLocale || 'en', `/tags/${tag}`)}
+                  href={getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)}
                   variant='pill'
                   class={cn(
                     'items-start gap-x-1',

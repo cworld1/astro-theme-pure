@@ -1,9 +1,13 @@
 ---
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { useTranslations } from 'astro-pure/utils'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { i18n } from 'astro:config/client'
 
+const { t } = useTranslations(['common'], Astro.currentLocale)
 const meta = {
-  description: 'Not found',
+  description: t('not_found_description'),
   title: '404'
 }
 ---
@@ -13,6 +17,6 @@ const meta = {
     <h1 class='block text-7xl font-bold sm:text-9xl'>404</h1>
     <p class='mt-3 text-muted-foreground'>Oops, something went wrong.</p>
     <p class='text-lg'>Sorry, we couldn't find your page.</p>
-    <Button title='Back to home' href='/' variant='ahead' class='mt-5' />
+    <Button title='Back to home' href={getRelativeLocaleUrl(i18n?.defaultLocale || 'en')} variant='ahead' class='mt-5' />
   </div>
 </PageLayout>

@@ -3,33 +3,30 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTags, sortMDByDate, getLangLocales } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
-import { i18n } from 'astro:config/client'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
 
 export const prerender = true
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const langPaths = await getLangStaticPaths()
-  const out: any[] = []
-  for (const lp of langPaths) {
-    const lang = lp.params.lang as string
-    const collections = sortMDByDate(await getBlogCollectionByLocale(lang))
-    const uniqueTags = getUniqueTags(collections)
-    const collectionsCount = collections.length
-    out.push(
-      ...paginate(collections, {
+  const locales = await getLangLocales()
+  const pages = await Promise.all(
+    locales.map(async (lang) => {
+      const collections = sortMDByDate(await getBlogCollectionByLocale(lang))
+      const uniqueTags = getUniqueTags(collections)
+      const collectionsCount = collections.length
+      return paginate(collections, {
         pageSize: config.content.blogPageSize,
         params: { lang },
         props: { uniqueTags, collectionsCount }
       })
-    )
-  }
-  return out
+    })
+  )
+  return pages.flat()
 }) satisfies GetStaticPaths
 
 interface Props {
@@ -38,12 +35,15 @@ interface Props {
   collectionsCount: number
 }
 
-const { page, uniqueTags, collectionsCount } = Astro.props as Props
+let { page, uniqueTags, collectionsCount } = Astro.props as Props
 
-const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
-const { t } = useTranslations(['common', 'blog'], currentLocale)
+if(!Astro.currentLocale) {
+  
+}
+
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 const meta = {
-  description: 'Some posts or archives of my blog',
+  description: t('description'),
   title: t('title')
 }
 
@@ -62,13 +62,13 @@ const paginationProps = {
   })
 }
 
-const archivesHref = getRelativeLocaleUrl(currentLocale, '/archives')
-const listTagsHref = getRelativeLocaleUrl(currentLocale, '/tags')
-const tagHref = (tag: string) => getRelativeLocaleUrl(currentLocale, `/tags/${tag}`)
+const archivesHref = getRelativeLocaleUrl(Astro.currentLocale as string, '/archives')
+const listTagsHref = getRelativeLocaleUrl(Astro.currentLocale as string, '/tags')
+const tagHref = (tag: string) => getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)
 ---
 
 <PageLayout {meta}>
-  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(currentLocale)} variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string)} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>{t('title')}</h1>

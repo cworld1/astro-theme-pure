@@ -1,27 +1,26 @@
 ---
 import { render, type CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
 
-import { getBlogCollectionByLocale, sortMDByDate, getLangStaticPaths } from 'astro-pure/server'
+import { getBlogCollectionByLocale, sortMDByDate, getLangLocales } from 'astro-pure/server'
 import { normalizeLocaleBlogId } from 'astro-pure/utils'
 import PostLayout from '@/layouts/BlogPost.astro'
 
 export const prerender = true
 
-export async function getStaticPaths() {
-  const langPaths = await getLangStaticPaths()
-  const out: { params: { lang: string; id: string }; props: { post: CollectionEntry<'blog'>; posts: CollectionEntry<'blog'>[] } }[] = []
-  for (const lp of langPaths) {
-    const lang = lp.params.lang as string
-    const posts = sortMDByDate(await getBlogCollectionByLocale<'blog'>(lang)) as CollectionEntry<'blog'>[]
-    for (const post of posts) {
-      out.push({
+export const getStaticPaths = (async () => {
+  const locales = await getLangLocales()
+  const out = await Promise.all(
+    locales.map(async (lang) => {
+      const posts = sortMDByDate(await getBlogCollectionByLocale<'blog'>(lang)) as CollectionEntry<'blog'>[]
+      return posts.map((post) => ({
         params: { lang, id: normalizeLocaleBlogId(post.id) },
-        props: { post: post as CollectionEntry<'blog'>, posts }
-      })
-    }
-  }
-  return out
-}
+        props: { post, posts }
+      }))
+    })
+  )
+  return out.flat()
+}) satisfies GetStaticPaths
 
 type Props = {
   post: CollectionEntry<'blog'>

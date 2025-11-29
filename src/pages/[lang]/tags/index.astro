@@ -1,19 +1,17 @@
 ---
-import { getBlogCollectionByLocale, getUniqueTagsWithCount, getLangStaticPaths } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTagsWithCount, getLangLocales } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { i18n } from 'astro:config/client'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const paths = await getLangStaticPaths()
+  const locales = await getLangLocales()
   return await Promise.all(
-    paths.map(async (p) => {
-      const lang = p.params.lang as string
+    locales.map(async (lang) => {
       const allPosts = await getBlogCollectionByLocale(lang)
       const allTags = getUniqueTagsWithCount(allPosts)
       return { params: { lang }, props: { allTags } }
@@ -25,13 +23,12 @@ interface Props {
   allTags: [string, number][]
 }
 
+const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 const { allTags } = Astro.props as Props
-const currentLocale = Astro.currentLocale || i18n?.defaultLocale || 'en'
-const { t } = useTranslations(['common', 'blog'], currentLocale)
 ---
 
 <PageLayout meta={{ description: t('tags.description'), title: t('tags.all_title') }}>
-  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(currentLocale, '/blog')} variant='back' />
+  <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>{t('tags.title')}</h1>
@@ -44,7 +41,7 @@ const { t } = useTranslations(['common', 'blog'], currentLocale)
             {allTags.map(([tag, val]) => (
               <li>
                 <Button
-                  href={getRelativeLocaleUrl(currentLocale, `/tags/${tag}`)}
+                  href={getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)}
                   variant='pill'
                   class={cn(
                     'items-start gap-x-1',
