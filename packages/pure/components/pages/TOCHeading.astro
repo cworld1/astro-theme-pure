@@ -1,6 +1,8 @@
 ---
+import { cn } from 'astro-pure/utils'
+import config from '@/site-config'
+
 import { type TocItem } from '../../plugins/toc'
-import { cn } from '../../utils'
 
 interface Props {
   heading: TocItem
@@ -11,6 +13,8 @@ const {
 } = Astro.props
 // TODO: Temporary fix for the issue with the headings that end with link reference text
 const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText
+
+const { tocCollapse: collapse } = config.content || {}
 ---
 
 <li>
@@ -29,7 +33,7 @@ const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText
   </div>
   {
     !!subheadings.length && (
-      <ul>
+      <ul class={cn(collapse && depth >= 2 && 'hidden', 'toc-submenu')}>
         {subheadings.map((subheading) => (
           <Astro.self heading={subheading} />
         ))}

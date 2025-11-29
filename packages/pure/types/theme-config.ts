@@ -188,7 +188,10 @@ export const ThemeConfigSchema = () =>
       blogPageSize: z.number().optional().default(8),
 
       /** Share buttons to show */
-      share: ShareSchema()
+      share: ShareSchema(),
+
+      /** Enable Table of Contents */
+      tocCollapse: z.boolean().optional().default(true)
     })
   })
 
