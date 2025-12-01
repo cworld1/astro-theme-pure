@@ -29,5 +29,14 @@
   "post_preview": {
     "draft_prefix": "(Draft) "
   },
-  "not_found_description": "Not found"
+  "not_found_description": "Not found",
+  "theme": {
+    "set_message": "Set theme to",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "share": {
+    "copied_link": "Link copied!"
+  }
 }

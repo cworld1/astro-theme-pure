@@ -29,5 +29,14 @@
   "post_preview": {
     "draft_prefix": "（草稿）"
   },
-  "not_found_description": "未找到"
+  "not_found_description": "未找到",
+  "theme": {
+    "set_message": "主题已切换为",
+    "dark": "深色",
+    "light": "浅色",
+    "system": "系统"
+  },
+  "share": {
+    "copied_link": "链接已复制！"
+  }
 }
