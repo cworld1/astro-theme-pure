@@ -30,6 +30,9 @@ const { class: className } = Astro.props
       super()
     }
 
+    private _previewBox: HTMLElement | null = null
+    private _abortController = new AbortController()
+
     connectedCallback() {
       // Prevent Vue log errors
       ;(globalThis as unknown as { __VUE_OPTIONS_API__: boolean }).__VUE_OPTIONS_API__ = true
@@ -49,6 +52,91 @@ const { class: className } = Astro.props
         reaction: ['/icons/heart-item.svg'],
         ...walineConfig.additionalConfigs
       })
+
+      this._initEmojiPreview()
+    }
+
+    disconnectedCallback() {
+      this._abortController.abort()
+      this._previewBox?.remove()
+    }
+
+    // Initialize the emoji preview functionality
+    _initEmojiPreview() {
+      const PREVIEW_ID = 'waline-picker-preview'
+      if (matchMedia('(hover: none)').matches || document.getElementById(PREVIEW_ID)) return
+
+      this._previewBox = document.createElement('div')
+      this._previewBox.id = PREVIEW_ID
+      document.body.appendChild(this._previewBox)
+
+      const { signal } = this._abortController
+      const events = ['mouseover', 'mouseout'] as const
+
+      events.forEach((event) =>
+        document.body.addEventListener(event, this._handleEvent, { signal })
+      )
+    }
+
+    // Centralized event handler
+    private _handleEvent = (e: Event) => {
+      const mouseEvent = e as MouseEvent
+      switch (e.type) {
+        case 'mouseover':
+          this._onHover(mouseEvent)
+          break
+        case 'mouseout':
+          this._onLeave(mouseEvent)
+          break
+      }
+    }
+
+    // Handle mouse hover on emoji buttons
+    private _onHover = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+
+      const btn = target.closest('.wl-emoji-popup button') as HTMLElement
+      if (!btn || btn.closest('.wl-tabs')) return
+
+      const img = btn.querySelector('img.wl-emoji') as HTMLImageElement
+      if (img?.src && this._previewBox) {
+        const currentImg = this._previewBox.firstElementChild as HTMLImageElement
+        if (currentImg?.src !== img.src) {
+          this._previewBox.innerHTML = `<img src="${img.src}">`
+        }
+
+        this._updatePos(btn)
+        this._previewBox.classList.add('active')
+      }
+    }
+
+    // Handle mouse leaving the emoji button
+    private _onLeave = (e: MouseEvent) => {
+      const btn = (e.target as HTMLElement).closest('.wl-emoji-popup button')
+      if (btn && !btn.closest('.wl-tabs')) {
+        this._previewBox?.classList.remove('active')
+      }
+    }
+
+    // Calculate and set the position based on the target element
+    private _updatePos(target: HTMLElement) {
+      if (!this._previewBox) return
+
+      const rect = target.getBoundingClientRect()
+      const SIZE = 100
+      const GAP = 10
+      const { innerWidth: winW } = window
+
+      let left = rect.left + rect.width / 2 - SIZE / 2
+      let top = rect.top - SIZE - GAP
+
+      if (left < GAP) left = GAP
+      if (left + SIZE > winW - GAP) left = winW - SIZE - GAP
+      if (top < 0) {
+        top = rect.bottom + GAP
+      }
+
+      this._previewBox.style.transform = `translate3d(${left}px, ${top}px, 0)`
     }
   }
 
@@ -56,6 +144,41 @@ const { class: className } = Astro.props
 </script>
 
 <style>
+  /*Emoji preview box*/
+  :global(#waline-picker-preview) {
+    --w-size: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--w-size);
+    height: var(--w-size);
+    z-index: 114514;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    will-change: transform;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease;
+  }
+
+  :global(#waline-picker-preview.active) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  :global(#waline-picker-preview img) {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
   /* Basic theme */
   #waline {
     /* Font size */
