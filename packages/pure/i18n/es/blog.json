@@ -1,0 +1,32 @@
+{
+  "title": "Blog",
+  "no_posts": "Aún no hay publicaciones.",
+  "description": "Algunas publicaciones o archivos de mi blog",
+  "archives": {
+    "title": "Archivo",
+    "description": "Una lista de todos los años de creación de mis publicaciones",
+    "view_all": "Ver todas las publicaciones por años →"
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "view_all": "Ver todas →",
+    "all_title": "Todas las etiquetas",
+    "none": "Aún no hay etiquetas.",
+    "description": "Lista de todos los temas sobre los que he escrito en mis publicaciones",
+    "tag_page_description": "Ver todas las publicaciones con la etiqueta - {tag}",
+    "tag_page_title": "Etiqueta: {tag}"
+  },
+  "pagination": {
+    "previous_posts": "← Publicaciones anteriores",
+    "next_posts": "Siguientes publicaciones →",
+    "previous_tags": "← Etiquetas anteriores",
+    "next_tags": "Siguientes etiquetas →",
+    "page_status_posts": "Página {page} - Mostrando {count} de {total} publicaciones"
+  },
+  "search": {
+    "title": "Buscar",
+    "description": "Buscar publicaciones relacionadas de todo el blog",
+    "intro": "Ingresa un término o frase para buscar en el blog.",
+    "disabled": "Pagefind está deshabilitado."
+  }
+}

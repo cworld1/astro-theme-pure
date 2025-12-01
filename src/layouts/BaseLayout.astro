@@ -1,5 +1,6 @@
 ---
 import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
+import { ensureContentI18nLoaded } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
@@ -19,9 +20,11 @@ const {
   highlightColor,
   ...props
 } = Astro.props
+
+await ensureContentI18nLoaded(Astro.currentLocale as string)
 ---
 
-<html lang={config.locale.lang}>
+<html lang={Astro.currentLocale as string}>
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />

@@ -1,9 +1,11 @@
 ---
 import { Image } from 'astro:assets'
 import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
-import { cn } from '../../utils'
+import { cn, getLanguageDisplayName } from '../../utils'
+import { normalizeLocaleBlogId } from '../../utils/locale'
 import { Button, FormattedDate, Icon } from '../user'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
@@ -37,7 +39,10 @@ const postDate = data.updatedDate ?? data.publishDate
       !detailed && 'sm:flex-row',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
-    href={`/blog/${id}`}
+    href={getRelativeLocaleUrl(
+      Astro.currentLocale as string,
+      `/blog/${normalizeLocaleBlogId(id)}/`
+    )}
     data-astro-prefetch
   >
     {
@@ -101,10 +106,10 @@ const postDate = data.updatedDate ?? data.publishDate
                 {remarkPluginFrontmatter.minutesRead}
               </span>
               {/* language */}
-              {data.language && (
+              {data.lang && (
                 <span class='flex items-center gap-1'>
                   <Icon name='earth' class='size-4' />
-                  {data.language}
+                  {getLanguageDisplayName(data.lang)}
                 </span>
               )}
             </div>
@@ -119,7 +124,11 @@ const postDate = data.updatedDate ?? data.publishDate
       <ul class='tag-list mt-1 flex flex-wrap gap-2'>
         {data.tags.map((tag: string) => (
           <li>
-            <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+            <Button
+              title={tag}
+              href={getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)}
+              variant='pill'
+            />
           </li>
         ))}
       </ul>

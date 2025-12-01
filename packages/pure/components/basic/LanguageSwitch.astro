@@ -1,0 +1,139 @@
+---
+import { i18n } from 'astro:config/client'
+import { toPaths as getConfiguredLocalePaths, getRelativeLocaleUrl } from 'astro:i18n'
+
+import { stripLocaleAndBasePathPrefixes } from 'astro-pure/server'
+import { toLocaleCapitalCase } from 'astro-pure/utils'
+
+import { Icon } from '../user'
+
+const locales = getConfiguredLocalePaths(i18n!.locales)
+const pathname = Astro.url?.pathname ?? '/'
+
+const cleanPath = stripLocaleAndBasePathPrefixes(pathname)
+const buildSwitchLanguageHref = (locale: string) => {
+  return cleanPath === '/' ? getRelativeLocaleUrl(locale) : getRelativeLocaleUrl(locale, cleanPath)
+}
+
+const getDisplayName = (locale: string) => {
+  try {
+    const name = new Intl.DisplayNames(locale, { type: 'language' }).of(locale)
+    if (!name) return locale
+    return toLocaleCapitalCase(name, locale)
+  } catch (_) {
+    return locale
+  }
+}
+
+const getDisplayCode = (locale: string) =>
+  locale.slice(0, 1).toLocaleUpperCase(locale) + locale.slice(1)
+
+const shouldShow = Array.isArray(locales) && locales.length > 1
+---
+
+{
+  shouldShow && (
+    <language-switch class='relative'>
+      <button
+        type='button'
+        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl inline-flex items-center gap-1'
+        data-trigger
+        aria-expanded='false'
+        aria-haspopup='listbox'
+      >
+        <span class='sr-only'>Language</span>
+        <Icon name='earth' class='size-5' />
+        <span class='text-sm'>{getDisplayCode(Astro.currentLocale as string)}</span>
+      </button>
+      <ul class='dropdown min-w-[10rem] rounded-md border bg-background shadow-md'>
+        {locales.map((loc) => {
+          const active = (loc || '').split('-')[0] === (Astro.currentLocale as string || '').split('-')[0]
+          return (
+            <li>
+              <a
+                href={buildSwitchLanguageHref(loc)}
+                data-locale={loc}
+                aria-current={active ? 'true' : undefined}
+                class={
+                  'block px-3 py-2 text-sm hover:bg-muted' + (active ? ' bg-muted font-medium' : '')
+                }
+              >
+                {getDisplayName(loc)} ({getDisplayCode(loc)})
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </language-switch>
+  )
+}
+
+<script>
+  ;(function () {
+    //JS Fallback
+    //Just for edge cases when CSS version alone and keyboard don't work
+    var switchElement = document.querySelector('language-switch')
+    if (!(switchElement instanceof Element)) return
+    var languageSwitch = switchElement
+    var triggerButton = languageSwitch.querySelector('[data-trigger]')
+    if (!triggerButton) return
+
+    var openMenu = function () {
+      languageSwitch.setAttribute('data-open', 'true')
+      var trigger = languageSwitch.querySelector('[data-trigger]')
+      if (trigger) trigger.setAttribute('aria-expanded', 'true')
+    }
+
+    var closeMenu = function () {
+      languageSwitch.removeAttribute('data-open')
+      var trigger = languageSwitch.querySelector('[data-trigger]')
+      if (trigger) trigger.setAttribute('aria-expanded', 'false')
+    }
+
+    triggerButton.addEventListener('click', function () {
+      var isOpen = languageSwitch.getAttribute('data-open') === 'true'
+      if (isOpen) closeMenu()
+      else openMenu()
+    })
+
+    document.addEventListener(
+      'pointerdown',
+      function (event) {
+        var eventTarget = event.target
+        if (!(eventTarget instanceof Node)) return
+        if (!languageSwitch.contains(eventTarget)) closeMenu()
+      },
+      true
+    )
+  })()
+</script>
+
+<style>
+  language-switch {
+    position: relative;
+    display: inline-block;
+  }
+  language-switch::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 6px;
+    z-index: 1;
+  }
+  language-switch .dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    z-index: 1000;
+  }
+  language-switch:hover .dropdown,
+  language-switch:focus-within .dropdown {
+    display: block;
+  }
+  language-switch[data-open='true'] .dropdown {
+    display: block;
+  }
+</style>

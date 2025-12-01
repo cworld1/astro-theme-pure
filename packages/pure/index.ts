@@ -73,7 +73,47 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         updateConfig({
           vite: {
             // @ts-ignore
-            plugins: [vitePluginUserConfig(userConfig, config)]
+            plugins: [vitePluginUserConfig(userConfig, config)],
+            resolve: {
+              alias: [
+                {
+                  find: 'astro-pure/advanced',
+                  replacement: fileURLToPath(new URL('./components/advanced/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/user',
+                  replacement: fileURLToPath(new URL('./components/user/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/components/pages',
+                  replacement: fileURLToPath(new URL('./components/pages/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/components/basic',
+                  replacement: fileURLToPath(new URL('./components/basic/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/types',
+                  replacement: fileURLToPath(new URL('./types/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/libs',
+                  replacement: fileURLToPath(new URL('./libs/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/server',
+                  replacement: fileURLToPath(new URL('./utils/server.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure/utils',
+                  replacement: fileURLToPath(new URL('./utils/index.ts', import.meta.url))
+                },
+                {
+                  find: 'astro-pure',
+                  replacement: dirname(fileURLToPath(import.meta.url))
+                }
+              ]
+            }
           },
           markdown: {
             remarkPlugins,
