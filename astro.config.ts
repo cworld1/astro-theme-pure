@@ -113,7 +113,6 @@ export default defineConfig({
 
   // [Experimental]
   experimental: {
-    contentIntellisense: true,
     // Allow compatible editors to support intellisense features for content collection entries
     // https://docs.astro.build/en/reference/experimental-flags/content-intellisense/
     contentIntellisense: true,
