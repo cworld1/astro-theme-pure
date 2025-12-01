@@ -53,7 +53,7 @@ const { class: className } = Astro.props
         ...walineConfig.additionalConfigs
       })
 
-      this._initEmojiPreview()
+      if (walineConfig.emojiPreview) this._initEmojiPreview()
     }
 
     disconnectedCallback() {

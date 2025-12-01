@@ -54,6 +54,8 @@ export const IntegrationConfigSchema = () =>
       server: z.string().optional(),
       /** The emoji to use for the Waline comment system. */
       emoji: z.array(z.string()).optional(),
+      /** Enable emoji preview box for the Waline comment system. */
+      emojiPreview: z.boolean().default(false),
       /** Additional configurations for the Waline comment system. */
       additionalConfigs: z.record(z.string(), z.any()).default({})
     })
