@@ -7,9 +7,11 @@ import { Icon } from '../user'
 import LanguageSwitch from './LanguageSwitch.astro'
 
 const menu = resolveMenu(config.header.menu, Astro.currentLocale, Astro.url?.pathname)
+
+const currentLocale = Astro.currentLocale as string
 ---
 
-<header-component
+<header-component current-locale={currentLocale}
   class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <slot name='branding'>
@@ -88,10 +90,13 @@ const menu = resolveMenu(config.header.menu, Astro.currentLocale, Astro.url?.pat
   }
 </script>
 <script>
-  import { setTheme, showToast } from '../../utils'
-
+  import { setTheme, showToast, useTranslations } from '../../utils'
+  
   class HeaderComponent extends HTMLElement {
     connectedCallback() {
+      const currentLocale = this.getAttribute('current-locale') || 'en'
+      const { t } = useTranslations('common', currentLocale)
+
       // Header
       let preScrollY = window.scrollY
       this.classList.toggle('not-top', preScrollY > 20)
@@ -111,7 +116,7 @@ const menu = resolveMenu(config.header.menu, Astro.currentLocale, Astro.url?.pat
         // document.dispatchEvent(toggleDarkModeEvent)
         const newTheme = setTheme(undefined, true)
         darkModeBtn.dataset.theme = newTheme
-        showToast({ message: `Set theme to ${newTheme}` })
+        showToast({ message: `${t('theme.set_message')} ${t('theme.' + newTheme)}` })
       })
 
       // Menu

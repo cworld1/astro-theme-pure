@@ -29,5 +29,14 @@
   "post_preview": {
     "draft_prefix": "(Borrador) "
   },
-  "not_found_description": "No encontrado"
+  "not_found_description": "No encontrado",
+  "theme": {
+    "set_message": "Esquema de color",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "del sistema"
+  },
+  "share": {
+    "copied_link": "¡Enlace copiado!"
+  }
 }
