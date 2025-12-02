@@ -1,6 +1,8 @@
 ---
 import type { MarkdownHeading } from 'astro'
 
+import config from '@/site-config'
+
 import { generateToc } from '../../plugins/toc'
 import TOCHeading from './TOCHeading.astro'
 
@@ -13,9 +15,11 @@ interface Props {
 const { headings, class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
+
+const { tocCollapse: collapse } = config.content || {}
 ---
 
-<toc-heading class={className} {...props}>
+<toc-heading class={className} data-collapse={String(collapse)} {...props}>
   <h2 class='font-semibold'>TABLE OF CONTENTS</h2>
   <ul class='mt-4 text-card-foreground'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
@@ -42,9 +46,12 @@ const toc = generateToc(headings)
     headings: HTMLElement[] = []
     tocLinks: TOCLink[] = []
     headingProgress: Record<string, HeadingProgress> = {}
+    collapse = false
 
     constructor() {
       super()
+      this.collapse = this.dataset.collapse === 'true'
+
       // Initialize the headings and tocLinks
       this.headings = Array.from(
         document.querySelectorAll(
@@ -77,28 +84,76 @@ const toc = generateToc(headings)
       })
 
       this.tocLinks.forEach(({ element: el, progressBar: bar, slug }, i) => {
-        const { inView, progress } = this.headingProgress[slug]
+        const { inView, progress } = this.headingProgress[slug] || { inView: false, progress: 0 }
         if (this.headingProgress[slug]) {
           el.classList.toggle('highlight', inView)
           el.classList.toggle('highlight-bg-translucent', inView)
           el.classList.toggle(
             'rounded-t-2xl',
-            inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
+            inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug]?.inView)
           )
           el.classList.toggle(
             'rounded-b-2xl',
             inView &&
               (i == this.tocLinks.length - 1 ||
-                !this.headingProgress[this.tocLinks[i + 1]?.slug].inView)
+                !this.headingProgress[this.tocLinks[i + 1]?.slug]?.inView)
           )
           bar.classList.toggle('is-read', !inView && progress == 1)
           bar.classList.toggle('highlight-bg', inView)
           bar.style.setProperty('height', `${progress * 90}%`)
         }
       })
+
+      if (this.collapse) {
+        this.updateCollapseState()
+      }
+    }
+
+    updateCollapseState = () => {
+      const activeLinks = this.tocLinks.filter((link) =>
+        link.element.classList.contains('highlight')
+      )
+      const ulsToShow = new Set<HTMLElement>()
+
+      activeLinks.forEach((link) => {
+        const li = link.element.closest('li')
+        if (li) {
+          // Show children
+          const siblingUl = li.querySelector('ul')
+          if (siblingUl) ulsToShow.add(siblingUl as HTMLElement)
+
+          // Show parents
+          let parent = li.parentElement
+          while (parent && parent.tagName === 'UL') {
+            ulsToShow.add(parent as HTMLElement)
+            const nextParent = parent.parentElement?.closest('ul')
+            parent = nextParent instanceof HTMLElement ? nextParent : null
+          }
+        }
+      })
+
+      const allUls = this.querySelectorAll('ul.toc-submenu')
+      allUls.forEach((ul) => {
+        if (ulsToShow.has(ul as HTMLElement)) {
+          ul.classList.remove('hidden')
+          ul.classList.add('expanded')
+        } else {
+          ul.classList.remove('expanded')
+          // Delay adding hidden to allow transition, or just rely on CSS
+          // ul.classList.add('hidden')
+        }
+      })
     }
 
     connectedCallback() {
+      // Remove hidden class from all submenus to allow CSS transition
+      if (this.collapse) {
+        const allUls = this.querySelectorAll('ul.toc-submenu')
+        allUls.forEach((ul) => {
+          ul.classList.remove('hidden')
+        })
+      }
+
       // Smooth scroll
       this.tocLinks.forEach((link) => {
         link.element.addEventListener('click', (e) => {
@@ -131,5 +186,20 @@ const toc = generateToc(headings)
 <style>
   toc-heading :global(.toc-item) {
     display: flow-root;
+  }
+
+  /* CSS Transition for TOC collapse */
+  toc-heading[data-collapse='true'] :global(.toc-submenu) {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      max-height 0.3s ease-in-out,
+      opacity 0.3s ease-in-out;
+  }
+
+  toc-heading[data-collapse='true'] :global(.toc-submenu.expanded) {
+    max-height: 100vh; /* Adjust this value if TOC is very long */
+    opacity: 1;
   }
 </style>

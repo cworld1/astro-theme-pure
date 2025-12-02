@@ -99,7 +99,9 @@ export const theme: ThemeUserConfig = {
     /** Blog page size for pagination (optional) */
     blogPageSize: 8,
     // Currently support weibo, x, bluesky
-    share: ['weibo', 'x', 'bluesky']
+    share: ['weibo', 'x', 'bluesky'],
+    /** Whether to collapse the Table of Contents */
+    tocCollapse: true
   }
 }
 
