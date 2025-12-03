@@ -6,7 +6,6 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
 // Local integrations
-// Local rehype & remark plugins
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
 import {
@@ -24,24 +23,24 @@ import config from './src/site.config.ts'
 
 // https://astro.build/config
 export default defineConfig({
-  // Top-Level Options
+  // [Basic]
   site: 'https://astro-pure.js.org',
-  // Deploy to a sub path; See https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
+  // Deploy to a sub path; see https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
   // base: '/astro-pure/',
   trailingSlash: 'never',
+  // root: './my-project-directory',
+  prefetch: true,
+  server: { host: true },
 
-  // Adapter
+  // [Adapter]
   // https://docs.astro.build/en/guides/deploy/
-  // 1. Vercel (serverless)
   adapter: vercel(),
   output: 'server',
-  // 2. Vercel (static)
-  // adapter: vercelStatic(),
-  // 3. Local (standalone)
+  // Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',
-  // ---
 
+  // [Assets]
   image: {
     responsiveStyles: true,
     service: {
@@ -49,26 +48,7 @@ export default defineConfig({
     }
   },
 
-  integrations: [
-    // astro-pure will automatically add sitemap, mdx & unocss
-    // sitemap(),
-    // mdx(),
-    AstroPureIntegration(config)
-    // @playform/compress have potential build issue with this template
-    // (await import('@playform/compress')).default({ SVG: false, Exclude: ['index.*.js'] })
-
-    // Temporary fix vercel adapter
-    // static build method is not needed
-  ],
-  // root: './my-project-directory',
-
-  // Prefetch Options
-  prefetch: true,
-  // Server Options
-  server: {
-    host: true
-  },
-  // Markdown Options
+  // [Markdown]
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [
@@ -102,8 +82,24 @@ export default defineConfig({
       ]
     }
   },
+
+  // [Integrations]
+  integrations: [
+    // astro-pure will automatically add sitemap, mdx & unocss
+    // sitemap(),
+    // mdx(),
+    AstroPureIntegration(config)
+    // Compress recommend
+    // https://docs.astro.build/en/guides/integrations-guide/partytown/
+  ],
+
+  // [Experimental]
   experimental: {
-    contentIntellisense: true, // allow vscode plugin to support *mdx files
+    // Allow compatible editors to support intellisense features for content collection entries
+    // https://docs.astro.build/en/reference/experimental-flags/content-intellisense/
+    contentIntellisense: true,
+    // Enable SVGO optimization for SVG assets
+    // https://docs.astro.build/en/reference/experimental-flags/svg-optimization/
     fonts: [
       {
         provider: fontProviders.fontshare(),
