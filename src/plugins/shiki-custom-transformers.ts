@@ -57,7 +57,7 @@ export const addTitle = (): ShikiTransformer => {
       const div = h(
         'div',
         {
-          class: 'title text-sm text-foreground px-3 py-1 bg-primary-foreground rounded-lg border'
+          class: 'title text-sm text-foreground px-3 py-1 bg-card rounded-lg border'
         },
         meta.title.toString()
       )
@@ -92,7 +92,7 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
       const button = h(
         'button',
         {
-          class: 'copy text-muted-foreground p-1 box-content border rounded bg-primary-foreground',
+          class: 'copy text-muted-foreground p-1 box-content border rounded-lg bg-card',
           'aria-label': 'Copy code',
           'data-code': this.source,
           onclick: `
@@ -149,7 +149,7 @@ export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
       const collapse = h(
         'button',
         {
-          class: 'collapse-toggle bg-primary-foreground text-muted-foreground rounded m-2',
+          class: 'collapse-toggle bg-card text-muted-foreground rounded-lg m-2',
           'aria-label': 'Toggle collapse code block',
           onclick: "this.parentElement.classList.toggle('collapsed')"
         },

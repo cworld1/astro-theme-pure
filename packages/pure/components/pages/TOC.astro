@@ -17,7 +17,7 @@ const toc = generateToc(headings)
 
 <toc-heading class={className} {...props}>
   <h2 class='font-medium'>TABLE OF CONTENTS</h2>
-  <ul class='mt-4 text-card-foreground'>
+  <ul class='mt-4'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ul>
 </toc-heading>

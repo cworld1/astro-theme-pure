@@ -35,7 +35,7 @@ const [owner, repoName] = repo.split('/')
           </div>
         </div>
       </div>
-      <div class='flex-shrink-0 rounded-full bg-primary-foreground p-1'>
+      <div class='flex-shrink-0 rounded-full bg-card p-1'>
         <Icon name='github' />
       </div>
     </div>
@@ -83,7 +83,7 @@ const [owner, repoName] = repo.split('/')
   .loading .load-block {
     color: transparent;
     border-radius: calc(var(--radius) - 3px);
-    background-color: hsl(var(--primary-foreground) / var(--un-bg-opacity, 1));
+    background-color: hsl(var(--card) / var(--un-bg-opacity, 1));
     animation: pulsate 2s infinite linear;
     user-select: none;
   }
@@ -94,7 +94,7 @@ const [owner, repoName] = repo.split('/')
     opacity: 0.5;
   }
   :not(.loading) #gh-avatar {
-    background-color: hsl(var(--primary-foreground) / var(--un-bg-opacity));
+    background-color: hsl(var(--card) / var(--un-bg-opacity));
   }
 </style>
 

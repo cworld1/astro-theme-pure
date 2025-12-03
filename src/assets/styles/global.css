@@ -54,7 +54,7 @@ span.katex-display {
 .astro-code {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   background-color: hsl(var(--muted) / var(--un-bg-opacity, 1)) !important;
   display: flex;
   flex-direction: column;
@@ -164,7 +164,7 @@ span.katex-display {
       margin-right: 0.5rem;
       border-radius: 0.25rem;
       color: hsl(var(--muted-foreground) / var(--un-text-opacity, 1));
-      background-color: hsl(var(--primary-foreground) / var(--un-bg-opacity, 1));
+      background-color: hsl(var(--card) / var(--un-bg-opacity, 1));
       border: 1px solid hsl(var(--border) / var(--un-border-opacity, 1));
     }
     &.copied {
