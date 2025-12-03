@@ -117,6 +117,39 @@ import { QRCode } from 'astro-pure/advanced'
 </Fragment>
 </MdxRepl>
 
+### Toast
+
+<MdxRepl>
+import { Button } from 'astro-pure/user'
+
+<Button
+  title='Click Me'
+  onClick={`document.dispatchEvent(
+    new CustomEvent('toast', {
+      detail: {
+        message: 'Hello from toast!',
+        time: 5000
+      }
+    })
+  )`} /> 
+<Fragment slot='desc'>
+```jsx
+import { Button } from 'astro-pure/basic'
+
+<Button
+  title='Click Me'
+  onClick={`document.dispatchEvent(
+    new CustomEvent('toast', {
+      detail: {
+        message: 'Hello from toast!',
+        time: 5000
+      }
+    })
+  )`} /> 
+```
+</Fragment>
+</MdxRepl>
+
 ### Medium Zoom
 
 Try click the following image.
