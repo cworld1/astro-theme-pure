@@ -6,45 +6,37 @@ import type { HTMLTag, Polymorphic } from 'astro/types'
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
 
-type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
-  post: CollectionEntry<CollectionKey>
+type Props<T extends CollectionKey> = {
+  post: CollectionEntry<T>
   detailed?: boolean
   class?: string
 }
 
-const { as: Tag = 'div', post, detailed = false, class: className } = Astro.props
-
+const { post, detailed = false, class: className } = Astro.props
 const { id, data } = post
-
 const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.updatedDate ?? data.publishDate
 ---
 
-<li
-  class={cn(
-    'post-preview group/card flex flex-col relative rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted',
-    detailed && 'max-sm:px-4 sm:py-5',
-    className
-  )}
-  style={detailed &&
-    data.heroImage?.color &&
-    `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
-    --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
->
+<li class={cn('post-preview', className)}>
   <a
     class={cn(
-      'group/link w-full flex flex-col transition-all hover:text-primary',
-      !detailed && 'sm:flex-row',
+      'group w-full relative flex flex-col rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted hover:text-primary',
+      detailed ? 'max-sm:px-4 sm:py-5' : 'sm:flex-row',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
     href={`/blog/${id}`}
     data-astro-prefetch
+    style={detailed &&
+      data.heroImage?.color &&
+      `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
+    --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
   >
     {
       detailed && data.heroImage && (
         <Image
           alt={data.heroImage.alt || data.title}
-          class='cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover/card:opacity-70 md:h-full md:w-3/5'
+          class='cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover:opacity-70 md:h-full md:w-3/5'
           loading='eager'
           {...data.heroImage}
         />
@@ -53,7 +45,7 @@ const postDate = data.updatedDate ?? data.publishDate
 
     <FormattedDate class='min-w-[95px] py-1 text-xs' date={postDate} />
 
-    <Tag class='z-10 flex-grow'>
+    <div class='z-10 flex-grow'>
       {/* title */}
       <div class='flex justify-between'>
         <div class={detailed && 'font-medium'}>
@@ -69,16 +61,16 @@ const postDate = data.updatedDate ?? data.publishDate
           stroke-width='2.5'
           stroke-linecap='round'
           stroke-linejoin='round'
-          class='preview-redirect my-1 stroke-muted-foreground group-hover/link:stroke-primary'
+          class='preview-redirect my-1 stroke-muted-foreground group-hover:stroke-primary'
           ><line
             x1='5'
             y1='12'
             x2='19'
             y2='12'
-            class='translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover/link:translate-x-1 group-hover/link:scale-x-100'
+            class='translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:scale-x-100'
           ></line><polyline
             points='12 5 19 12 12 19'
-            class='translate-x-0 transition-all duration-300 ease-in-out group-hover/link:translate-x-1'
+            class='translate-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1'
           ></polyline></svg
         >
       </div>
@@ -111,9 +103,8 @@ const postDate = data.updatedDate ?? data.publishDate
           </>
         )
       }
-    </Tag>
+    </div>
   </a>
-  <!-- tags -->
   {
     detailed && data.tags && (
       <ul class='tag-list mt-1 flex flex-wrap gap-2'>
@@ -135,7 +126,7 @@ const postDate = data.updatedDate ?? data.publishDate
     );
   }
   .post-preview:hover {
-    &,
+    & > a,
     & .tag-list a {
       background-color: var(
         --preview-highlight-bg,
