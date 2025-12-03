@@ -137,11 +137,11 @@ export const integ: IntegrationUserConfig = {
     // target: `(data) => (data.hitokoto || 'Error')`
     // - Quoteable
     // https://github.com/lukePeavey/quotable
-    server: 'http://api.quotable.io/quotes/random?maxLength=60',
-    target: `(data) => data[0].content || 'Error'`
+    // server: 'http://api.quotable.io/quotes/random?maxLength=60',
+    // target: `(data) => data[0].content || 'Error'`
     // - DummyJSON
-    // server: 'https://dummyjson.com/quotes/random',
-    // target: `(data) => (data.quote.length > 80 ? \`\${data.quote.slice(0, 80)}...\` : data.quote || 'Error')`
+    server: 'https://dummyjson.com/quotes/random',
+    target: `(data) => (data.quote.length > 80 ? \`\${data.quote.slice(0, 80)}...\` : data.quote || 'Error')`
   },
   // [Typography]
   // https://unocss.dev/presets/typography
