@@ -13,6 +13,8 @@ import {
   addCopyButton,
   addLanguage,
   addTitle,
+  updateStyle
+} from './src/plugins/shiki-custom-transformers.ts'
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -88,8 +90,11 @@ export default defineConfig({
         dark: 'github-dark'
       },
       transformers: [
+        // Official transformers
         transformerNotationDiff(),
         transformerNotationHighlight(),
+        transformerRemoveNotationEscape(),
+        // Custom transformers
         updateStyle(),
         addTitle(),
         addLanguage(),

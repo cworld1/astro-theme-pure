@@ -1,11 +1,6 @@
 import { h } from 'hastscript'
 import type { ShikiTransformer } from 'shiki'
 
-export {
-  transformerNotationDiff,
-  transformerNotationHighlight
-} from './shiki-official-transformers'
-
 function parseMetaString(str = '') {
   return Object.fromEntries(
     str.split(' ').reduce((acc: [string, string | true][], cur) => {
@@ -57,7 +52,6 @@ export const addTitle = (): ShikiTransformer => {
       // if (this.options.meta) {
       //   Object.assign(this.options.meta, meta)
       // }
-
       if (!meta.title) return
 
       const div = h(
@@ -91,8 +85,7 @@ export const addLanguage = (): ShikiTransformer => {
 
 // Add a copy button to the code block
 export const addCopyButton = (timeout?: number): ShikiTransformer => {
-  const toggleMs = timeout || 3000
-
+  const toggleMs = timeout || 2000
   return {
     name: 'shiki-transformer-copy-button',
     pre(node) {
@@ -137,7 +130,6 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
           ])
         ]
       )
-
       node.children.push(button)
     }
   }
