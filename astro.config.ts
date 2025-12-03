@@ -13,10 +13,11 @@ import {
   addCopyButton,
   addLanguage,
   addTitle,
+import {
   transformerNotationDiff,
   transformerNotationHighlight,
-  updateStyle
-} from './src/plugins/shiki-transformers.ts'
+  transformerRemoveNotationEscape
+} from './src/plugins/shiki-offical/transformers.ts'
 import config from './src/site.config.ts'
 
 // https://astro.build/config
