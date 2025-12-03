@@ -84,7 +84,7 @@ const typographyConfig: TypographyOptions = {
       overflow: 'hidden',
       'border-width': '1px',
       'border-inline-start-color': 'inherit',
-      'border-radius': radius,
+      'border-radius': `calc(1.5 * ${radius})`,
       'padding-inline': '1.6rem',
       'box-shadow': '0 5px 0 ' + bgMuted,
       ...(typographyCustom.blockquoteStyle === 'normal' && { 'font-style': 'normal' })
@@ -118,47 +118,28 @@ const typographyConfig: TypographyOptions = {
     img: { 'border-radius': radius, margin: '0 auto' },
     kbd: {
       'border-color': border,
-      'box-shadow':
-        '0 0 0 1px hsl(var(--primary-foreground) / 1), 0 3px hsl(var(--primary-foreground) / 1)'
+      'box-shadow': '0 0 0 1px hsl(var(--card) / 1), 0 3px hsl(var(--primary-foreground) / 1)'
     },
     'sup>a': { 'scroll-margin-top': '4rem' }
   }
 }
 
 const themeColors = {
-  border: 'hsl(var(--border) / <alpha-value>)',
-  input: 'hsl(var(--input) / <alpha-value>)',
-  ring: 'hsl(var(--ring) / <alpha-value>)',
-  background: 'hsl(var(--background) / <alpha-value>)',
+  // Primary
+  primary: 'hsl(var(--primary) / <alpha-value>)',
+  // Foreground & background
   foreground: 'hsl(var(--foreground) / <alpha-value>)',
-  primary: {
-    DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-    foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
-  },
-  secondary: {
-    DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
-    foreground: 'hsl(var(--secondary-foreground) / <alpha-value>)'
-  },
-  destructive: {
-    DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
-    foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)'
-  },
+  background: 'hsl(var(--background) / <alpha-value>)',
   muted: {
     DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
     foreground: 'hsl(var(--muted-foreground) / <alpha-value>)'
   },
-  accent: {
-    DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
-    foreground: 'hsl(var(--accent-foreground) / <alpha-value>)'
-  },
-  popover: {
-    DEFAULT: 'hsl(var(--popover) / <alpha-value>)',
-    foreground: 'hsl(var(--popover-foreground) / <alpha-value>)'
-  },
-  card: {
-    DEFAULT: 'hsl(var(--card) / <alpha-value>)',
-    foreground: 'hsl(var(--card-foreground) / <alpha-value>)'
-  }
+  card: 'hsl(var(--card) / <alpha-value>)',
+
+  // Basic
+  border: 'hsl(var(--border) / <alpha-value>)',
+  input: 'hsl(var(--input) / <alpha-value>)',
+  ring: 'hsl(var(--ring) / <alpha-value>)'
 }
 
 const rules: Rule<object>[] = [

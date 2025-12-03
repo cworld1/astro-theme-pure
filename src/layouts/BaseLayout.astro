@@ -50,7 +50,12 @@ const {
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {
-        color: var(--highlightColor, hsl(var(--primary) / var(--un-text-opacity))) !important;
+        --highlight-fg: color-mix(
+          in srgb,
+          var(--highlightColor) 40%,
+          hsl(var(--foreground)/var(--un-text-opacity, 1))
+        );
+        color: var(--highlight-fg, hsl(var(--primary) / var(--un-text-opacity))) !important;
       }
       :global(.highlight-bg) {
         background-color: var(
