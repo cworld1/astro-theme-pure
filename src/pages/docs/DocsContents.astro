@@ -31,7 +31,7 @@ const { title = true, class: className, ...props } = Astro.props
 ---
 
 <docs-toc class={cn('not-prose', className)} {...props}>
-  {title && <h2 class='text-foreground font-semibold'>DOCS</h2>}
+  {title && <h2 class='text-foreground font-medium'>DOCS</h2>}
   <ul class='mt-4 flex flex-col gap-y-5'>
     {
       Object.entries(docCategories).map(([id, title]: [string, string]) => (

@@ -1,20 +1,3 @@
-/* Font */
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-Variable.ttf') format('truetype');
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-VariableItalic.ttf') format('truetype');
-  font-style: italic;
-  font-display: swap;
-}
-html {
-  font-family: 'Satoshi', sans-serif;
-}
-
 /* Theme */
 :root {
   --background: 210 33% 99%;
