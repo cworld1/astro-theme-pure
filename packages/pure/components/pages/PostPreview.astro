@@ -18,19 +18,21 @@ const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.updatedDate ?? data.publishDate
 ---
 
-<li class={cn('post-preview', className)}>
+<li
+  class={cn('post-preview', className)}
+  style={detailed &&
+    data.heroImage?.color &&
+    `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
+    --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
+>
   <a
     class={cn(
-      'group w-full relative flex flex-col rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted hover:text-primary',
-      detailed ? 'max-sm:px-4 sm:py-5' : 'sm:flex-row',
+      'block w-full relative group rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted hover:text-primary',
+      detailed && 'max-sm:px-4 sm:py-5',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
     href={`/blog/${id}`}
     data-astro-prefetch
-    style={detailed &&
-      data.heroImage?.color &&
-      `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
-    --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
   >
     {
       detailed && data.heroImage && (
@@ -42,12 +44,14 @@ const postDate = data.updatedDate ?? data.publishDate
         />
       )
     }
+    <div
+      class={cn('relative flex flex-col gap-1', !detailed && 'sm:flex-row sm:items-center')}
+      style='z-index:1'
+    >
+      <FormattedDate class='min-w-[95px] text-xs' date={postDate} />
 
-    <FormattedDate class='min-w-[95px] py-1 text-xs' date={postDate} />
-
-    <div class='z-10 flex-grow'>
       {/* title */}
-      <div class='flex justify-between'>
+      <div class='flex justify-between flex-grow'>
         <div class={detailed && 'font-medium'}>
           {data.draft && <span class='text-red-500'>(Draft) </span>}
           {data.title}
@@ -80,13 +84,13 @@ const postDate = data.updatedDate ?? data.publishDate
             {/* desc */}
             <p
               class={cn(
-                'line-clamp-2 pt-1 text-sm text-muted-foreground sm:line-clamp-3',
+                'line-clamp-2 text-sm text-muted-foreground sm:line-clamp-3',
                 data.heroImage && 'sm:me-24'
               )}
             >
               {data.description}
             </p>
-            <div class='flex items-center gap-2 py-1.5 text-sm italic leading-4 text-muted-foreground sm:py-3'>
+            <div class='py-2 flex items-center gap-2 text-sm italic leading-4 text-muted-foreground'>
               {/* reading time */}
               <span class='flex items-center gap-1'>
                 <Icon name='time' class='size-4' />
@@ -100,66 +104,66 @@ const postDate = data.updatedDate ?? data.publishDate
                 </span>
               )}
             </div>
+            {data.tags.length > 0 && (
+              <object>
+                <ul class='tag-list mt-1 flex gap-2'>
+                  {data.tags.map((tag: string) => (
+                    <li>
+                      <Button as='a' title={tag} href={`/tags/${tag}`} variant='pill' />
+                    </li>
+                  ))}
+                </ul>
+              </object>
+            )}
           </>
         )
       }
     </div>
   </a>
-  {
-    detailed && data.tags && (
-      <ul class='tag-list mt-1 flex flex-wrap gap-2'>
-        {data.tags.map((tag: string) => (
-          <li>
-            <Button title={tag} href={`/tags/${tag}`} variant='pill' />
-          </li>
-        ))}
-      </ul>
-    )
-  }
-</li>
 
-<style>
-  .post-preview {
-    --preview-highlight-final: var(
-      --preview-highlight,
-      hsl(var(--primary) / var(--un-text-opacity, 1))
-    );
-  }
-  .post-preview:hover {
-    & > a,
-    & .tag-list a {
-      background-color: var(
-        --preview-highlight-bg,
-        hsl(var(--muted) / var(--un-bg-opacity, 1))
-      ) !important;
+  <style>
+    .post-preview {
+      --preview-highlight-final: var(
+        --preview-highlight,
+        hsl(var(--primary) / var(--un-text-opacity, 1))
+      );
     }
-    & > a,
-    & .tag-list a:hover {
-      color: var(--preview-highlight-final) !important;
+    .post-preview:hover {
+      & > a,
+      & .tag-list a {
+        background-color: var(
+          --preview-highlight-bg,
+          hsl(var(--muted) / var(--un-bg-opacity, 1))
+        ) !important;
+      }
+      & > a,
+      & .tag-list a:hover {
+        color: var(--preview-highlight-final) !important;
+      }
+      & > a .preview-redirect {
+        stroke: var(--preview-highlight-final) !important;
+      }
     }
-    & > a .preview-redirect {
-      stroke: var(--preview-highlight-final) !important;
-    }
-  }
-  .cover-image {
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
-    -ms-mask-image: -ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
-    -webkit-mask-image: -webkit-linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 1) 100%
-    );
-  }
-
-  @media (max-width: 768px) {
     .cover-image {
-      mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
-      -ms-mask-image: -ms-linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+      mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+      -ms-mask-image: -ms-linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
       -webkit-mask-image: -webkit-linear-gradient(
-        to top,
+        to right,
         rgba(0, 0, 0, 0) 0%,
         rgba(0, 0, 0, 1) 100%
       );
     }
-  }
-</style>
+
+    @media (max-width: 768px) {
+      .cover-image {
+        mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+        -ms-mask-image: -ms-linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+        -webkit-mask-image: -webkit-linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+      }
+    }
+  </style>
+</li>
