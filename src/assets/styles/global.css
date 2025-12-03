@@ -1,4 +1,4 @@
-/* Animation */
+/* [Animation] */
 @keyframes fade-in-up {
   0% {
     transform: translateY(2rem);
@@ -31,7 +31,7 @@
   animation-delay: 150ms;
 }
 
-/* Katex */
+/* [Katex] */
 span.katex-display {
   overflow-y: scroll;
   padding: 0.5rem;
@@ -50,12 +50,14 @@ span.katex-display {
   padding-inline-start: 0.5rem;
 }
 
-/* Shiki */
+/* [Shiki basic] */
 .astro-code {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border-radius: 0.5rem;
   background-color: hsl(var(--muted) / var(--un-bg-opacity, 1)) !important;
+  display: flex;
+  flex-direction: column;
 
   /* Code container */
   & pre {
@@ -65,7 +67,6 @@ span.katex-display {
     padding-inline: 0;
     background: none;
     overflow-x: scroll;
-
     & code {
       display: block;
       width: fit-content;
@@ -107,8 +108,16 @@ span.katex-display {
       }
     }
   }
+}
+.dark {
+  .astro-code pre span {
+    color: var(--shiki-dark) !important;
+  }
+}
 
-  /* Shiki transformer */
+/* [Shiki transformer] */
+.astro-code {
+  /* Title */
   &:has(code) {
     position: relative;
   }
@@ -124,12 +133,16 @@ span.katex-display {
     left: 0;
     margin: 0.5rem;
   }
+
+  /* Language */
   & .language {
     transition: opacity 0.3s;
     position: absolute;
     top: 0.75rem;
     right: 0;
   }
+
+  /* Copy */
   & button.copy {
     transition: opacity 0.3s;
     opacity: 0;
@@ -137,7 +150,6 @@ span.katex-display {
     top: 0.75rem;
     right: 0.75rem;
     user-select: none;
-
     & .success::before {
       content: 'Copied!';
       position: absolute;
@@ -159,21 +171,22 @@ span.katex-display {
       & .success {
         display: block;
       }
-
       & .ready {
         display: none;
       }
     }
   }
-  &:hover {
-    button.copy {
+  &:hover,
+  &:focus-within {
+    & button.copy {
       opacity: 1;
     }
-    .language {
+    & .language {
       opacity: 0;
     }
   }
 
+  /* Highlighted & diffs */
   & .highlighted,
   & .diff {
     min-width: 100%;
@@ -183,7 +196,6 @@ span.katex-display {
   & .highlighted::before {
     background-color: rgba(149, 166, 183, 0.32) !important;
   }
-
   & .diff {
     &.remove {
       background-color: rgba(244, 63, 94, 0.16);
@@ -200,40 +212,56 @@ span.katex-display {
       }
     }
   }
-}
-.dark {
-  .astro-code pre span {
-    color: var(--shiki-dark) !important;
-  }
-}
 
-/* Scroll bar */
-:root {
-  --scrollbar-width: 6px;
-  --scrollbar-bg: #e0e0e0;
-  --scrollbar-thumb-bg: #c0c0c0;
-}
-html.dark {
-  --scrollbar-bg: #2e2e2e;
-  --scrollbar-thumb-bg: #4e4e4e;
-}
-body::-webkit-scrollbar {
-  height: 0;
-}
-::-webkit-scrollbar {
-  width: 6px !important;
-  height: 6px !important;
-  background: #0000;
-}
-::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb-bg);
-  border-radius: 999px;
-  border: 2px solid var(--scrollbar-thumb-bg);
-  opacity: 0.5;
-}
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
+  /* Collapse */
+  & .collapse-toggle {
+    z-index: 3;
+    padding: 0.25rem;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.3rem;
+    box-sizing: border-box;
+    margin: 0;
+    border-top: 1px solid hsl(var(--border) / var(--un-border-opacity, 1));
+    & .desc::before {
+      content: 'Collapse';
+    }
+    & svg {
+      transition: transform 0.2s ease;
+      transform: rotate(180deg);
+    }
+  }
+  &.collapsed {
+    & pre {
+      max-height: 15rem;
+      overflow: hidden;
+    }
+    & .collapse-toggle {
+      margin: 0.5rem;
+      border: 1px solid hsl(var(--border) / var(--un-border-opacity, 1));
+      & .desc::before {
+        content: 'Show all';
+      }
+      & svg {
+        transform: rotate(0deg);
+      }
+    }
+    & .collapse-fade {
+      z-index: 2;
+      user-select: none;
+      pointer-events: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8rem;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        hsl(var(--muted) / var(--un-bg-opacity, 1)) 65%
+      );
+    }
+  }
 }

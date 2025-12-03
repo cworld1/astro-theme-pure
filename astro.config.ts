@@ -9,6 +9,7 @@ import remarkMath from 'remark-math'
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
 import {
+  addCollapse,
   addCopyButton,
   addLanguage,
   addTitle,
@@ -78,7 +79,8 @@ export default defineConfig({
         updateStyle(),
         addTitle(),
         addLanguage(),
-        addCopyButton(2000)
+        addCopyButton(2000), // timeout in ms
+        addCollapse(15) // max lines that needs to collapse
       ]
     }
   },

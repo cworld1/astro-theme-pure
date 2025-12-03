@@ -134,3 +134,42 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
     }
   }
 }
+
+// Add a copy button to the code block
+export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
+  const line = displayLineCount || 15
+  return {
+    name: 'shiki-transformer-add-collapse',
+    pre(node) {
+      if (this.lines.length <= line) return
+      node.properties = {
+        ...node.properties,
+        class: ((node.properties?.class as string) || '') + ' collapsed'
+      }
+      const collapse = h(
+        'button',
+        {
+          class: 'collapse-toggle bg-primary-foreground text-muted-foreground rounded m-2',
+          'aria-label': 'Toggle collapse code block',
+          onclick: "this.parentElement.classList.toggle('collapsed')"
+        },
+        [
+          h(
+            'svg',
+            {
+              class: 'size-5'
+            },
+            [
+              h('use', {
+                href: '/icons/code.svg#mingcute-arrow-down-line'
+              })
+            ]
+          ),
+          h('span', { class: 'desc' }, ' code')
+        ]
+      )
+      node.children.push(collapse)
+      node.children.push(h('div', { class: 'collapse-fade' }))
+    }
+  }
+}
