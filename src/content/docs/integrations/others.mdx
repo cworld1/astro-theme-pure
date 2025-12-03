@@ -90,9 +90,9 @@ Rendering LaTeX in Astro.js enriches your markdown files with mathematical expre
 
 2. Configure Astro
 
-   Modify your Astro configuration to use these plugins. Add the plugins to the markdown configuration section in your astro.config.mjs:
+   Modify your Astro configuration to use these plugins. Add the plugins to the markdown configuration section in your `astro.config.ts`:
 
-   ```js title="astro.config.mjs"
+   ```js title="astro.config.ts"
    import { defineConfig } from 'astro/config';
    import remarkMath from 'remark-math';
    import rehypeKatex from 'rehype-katex';

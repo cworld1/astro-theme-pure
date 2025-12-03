@@ -12,7 +12,7 @@ pending update...
 
 ## Astro Configuration
 
-File: `astro.config.mjs`
+File: `astro.config.ts`
 
 You can configure it to change deployment methods, add rehype & remark plugins, and more.
 

@@ -126,7 +126,7 @@ The theme file structure is as follows:
   - `types`: Typescript type definitions
   - `utils`: Utilities
   - `site.config.ts`: Theme configuration file
-- `astro.config.mjs`: Astro configuration file
+- `astro.config.ts`: Astro configuration file
 - `eslint.config.mjs`: ESLint configuration file
 - `prettier.config.mjs`: Prettier configuration file
 - `uno.config.ts`: UnoCSS configuration file
@@ -171,7 +171,19 @@ The theme file structure is as follows:
    export const collections = { blog } // [!code ++]
    ```
 
-2. Remove `packages` directory (this will be imported by our NPM package)
+2. Remove `packages` directory (this will be imported by our NPM package).
+
+   And remember to change the `workspaces` field in `package.json`:
+
+   ```json title="package.json"
+   {
+     "name": "astro-theme-pure",
+     "workspaces": [ // [!code --]
+       "packages/*" // [!code --]
+     ], // [!code --]
+     // ...
+   }
+   ```
 
 3. Change the site favicon.
 
