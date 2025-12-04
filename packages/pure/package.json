@@ -2,7 +2,7 @@
   "name": "astro-pure",
   "type": "module",
   "description": "A simple, clean but powerful blog theme build by astro.",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "homepage": "https://astro-pure.js.org/",
   "author": "CWorld",
   "license": "Apache-2.0",
