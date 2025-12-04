@@ -260,7 +260,7 @@ span.katex-display {
       background: linear-gradient(
         to bottom,
         transparent 0%,
-        hsl(var(--muted) / var(--un-bg-opacity, 1)) 65%
+        hsl(var(--muted) / var(--un-bg-opacity, 1)) 60%
       );
     }
   }
