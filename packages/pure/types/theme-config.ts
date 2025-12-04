@@ -172,11 +172,7 @@ export const ThemeConfigSchema = () =>
     content: z.object({
       externalLinks: z.object({
         /** Content to show for external links */
-        content: z
-          .string()
-          .optional()
-          .default(' ↗')
-          .describe('Content to show for external links'),
+        content: z.string().optional().default(' ↗').describe('Content to show for external links'),
         /** Properties for the external links element */
         properties: z
           .record(z.string())
