@@ -3,7 +3,7 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, getUniqueTags, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
@@ -12,7 +12,7 @@ export const prerender = true
 
 export const getStaticPaths = (async ({ paginate }) => {
   const collections = sortMDByDate(await getBlogCollection())
-  const uniqueTags = getUniqueTags(collections)
+  const uniqueTags = getUniqueTagsWithCount(collections).map(([tag]) => tag)
   const collectionsCount = collections.length
   return paginate(collections, {
     pageSize: config.content.blogPageSize,
@@ -87,11 +87,14 @@ const paginationProps = {
                 Tags
               </h2>
               <ul class='text-bgColor flex flex-wrap gap-2'>
-                {uniqueTags.map((tag) => (
-                  <li>
-                    <Button title={tag} href={`/tags/${tag}`} variant='pill' />
-                  </li>
-                ))}
+                {
+                  // Only show top 50 tags in sidebar
+                  uniqueTags.slice(0, 50).map((tag) => (
+                    <li>
+                      <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+                    </li>
+                  ))
+                }
               </ul>
               <span class='mt-4 block sm:text-end'>
                 <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
