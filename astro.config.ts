@@ -26,11 +26,11 @@ import config from './src/site.config.ts'
 export default defineConfig({
   // [Basic]
   site: 'https://astro-pure.js.org',
-  // Deploy to a sub path; see https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
+  // Deploy to a sub path
+  // https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
   // base: '/astro-pure/',
   trailingSlash: 'never',
   // root: './my-project-directory',
-  prefetch: true,
   server: { host: true },
 
   // [Adapter]

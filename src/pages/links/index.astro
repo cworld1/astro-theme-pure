@@ -18,7 +18,7 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
 ---
 
 <PageLayout title='Links' {headings} comment>
-  <p>怎么可能有顺序呢，当然是随机的~ It's random</p>
+  <p>They're sorted randomly.</p>
   <h2 id='common-links'>Common Links</h2>
   <FriendList list={friends[0]} />
   <Collapse title='Links with Bad Status'>
@@ -49,14 +49,17 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
   </blockquote>
 
   <p>
-    可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。此外申请说明：<br
-    />
+    可通过下方留言或 <a href={linkEditPage} target='_blank'>提交 PR</a> 申请友链。申请说明：<br />
     Apply your link by leaving comment or <a href={linkEditPage} target='_blank'>Submitting a PR</a
     >. Additional info:
   </p>
   <ul>
-    <li>在你的友链上添加了本站. You've recommended this site on your website.</li>
-    <li>请确保你的站点活着. Make sure your site is alive.</li>
-    <li>博客内容不违反国家法律. Content does not violate common laws.</li>
+    <li>推荐了本站 You've recommended our link on your website</li>
+    <li>站点活着且有正式域名 Make sure your site is alive with a formal domain</li>
+    <li>
+      至少五篇原创文章且最近一年更新过 At least 5 original articles and exists articles released in
+      recent year
+    </li>
+    <li>内容不违反国家法律 Content does not violate laws</li>
   </ul>
 </PageLayout>
