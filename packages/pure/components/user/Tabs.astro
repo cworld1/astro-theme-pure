@@ -106,14 +106,10 @@ if (isSynced) {
   .tablist-wrapper {
     overflow-x: auto;
     scrollbar-width: none;
-    cursor: grab; 
     user-select: none;
   }
   .tablist-wrapper::-webkit-scrollbar {
     display: none;
-  }
-  .tablist-wrapper.active {
-    cursor: grabbing; 
   }
 
   [role='tablist'] {
@@ -182,7 +178,6 @@ if (isSynced) {
       let rafId: number | null = null; 
 
       if (slider) {
-        // 惯性动画逻辑
         const momentumLoop = () => {
           if (Math.abs(velX) > 0.5) {
             slider.scrollLeft += velX;
@@ -198,20 +193,18 @@ if (isSynced) {
           const x = e.pageX - slider.offsetLeft;
           const walk = x - startX;
           const newScrollLeft = scrollLeft - walk;
-          velX = newScrollLeft - slider.scrollLeft; // 计算瞬时速度
-          if (Math.abs(walk) > 5) isDragging = true; // 区分点击与拖拽
+          velX = newScrollLeft - slider.scrollLeft;
+          if (Math.abs(walk) > 5) isDragging = true;
           slider.scrollLeft = newScrollLeft;
         };
 
         const onMouseUp = () => {
-          slider.classList.remove('active');
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('mouseup', onMouseUp);
           setTimeout(() => { isDragging = false; }, 0);
-          momentumLoop(); // 开启惯性
+          momentumLoop();
         };
 
-        // 禁止原生拖拽
         slider.addEventListener('dragstart', (e) => e.preventDefault());
 
         slider.addEventListener('mousedown', (e) => {
@@ -220,7 +213,6 @@ if (isSynced) {
             rafId = null;
           }
           isDragging = false;
-          slider.classList.add('active');
           startX = e.pageX - slider.offsetLeft;
           scrollLeft = slider.scrollLeft;
           velX = 0; 
@@ -234,7 +226,7 @@ if (isSynced) {
         // Handle clicks for mouse users
         tab.addEventListener('click', (e) => {
           e.preventDefault()
-          if (isDragging) return; // 拖动时不触发Tab切换
+          if (isDragging) return;
           const currentTab = tablist.querySelector('[aria-selected="true"]')
           if (e.currentTarget !== currentTab) {
             this.switchTab(e.currentTarget as HTMLAnchorElement, i)
