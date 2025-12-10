@@ -7,10 +7,11 @@ const footerConf = config.footer
 let social = footerConf.social || {}
 
 // If the list does not contain rss, add it
-social.rss = {
-  label: 'RSS',
-  url: '/rss.xml'
-}
+if (!social.rss)
+  social.rss = {
+    label: 'RSS',
+    url: '/rss.xml'
+  }
 
 const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
 ---
@@ -18,20 +19,17 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
 <footer class='mx-auto mb-5 mt-16 w-full'>
   <div class='border-t pt-5'>
     <div class='flex items-center gap-y-3 max-sm:flex-col sm:justify-between sm:gap-y-0'>
-      <div
-        class='flex items-center gap-x-4 gap-y-2 text-muted-foreground max-sm:flex-col [&_a]:text-foreground'
-      >
+      <div class='flex items-center gap-x-4 gap-y-2 text-muted-foreground max-sm:flex-col'>
         {/* Position 1 */}
         {
           footerLink1.length > 0 && (
             <div>
               {footerLink1.map(({ title, link, style }, index) => (
-                <span>
-                  <a href={link} target='_blank' class={style}>
-                    {title}
-                  </a>
-                  {index < footerLink1.length - 1 && ' • '}
-                </span>
+                <>
+                  <!- prettier-ignore -->
+                  <a href={link} target='_blank' class={style}>{title}</a>
+                  {index < footerLink1.length - 1 && <span class='mx-1'>•</span>}
+                </>
               ))}
             </div>
           )
@@ -49,9 +47,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                     .filter(({ pos }) => pos === 2)
                     .map(({ title, link, style }) => (
                       <span>
-                        <a href={link} target='_blank' class={style}>
-                          {title}
-                        </a>
+                        <a href={link} target='_blank' class={style}>{title}</a>
                       </span>
                     ))}
                 </span>
@@ -62,13 +58,9 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         {
           footerConf.credits && (
             <span>
-              <a href='https://github.com/withastro/astro' target='_blank'>
-                Astro
-              </a>
+              <a href='https://github.com/withastro/astro' target='_blank'>Astro</a>
               &
-              <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>
-                Pure
-              </a>
+              <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>Pure</a>
               theme powered
             </span>
           )
@@ -80,11 +72,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         {
           footerConf.social &&
             Object.entries(footerConf.social).map(([platform, { label, url }]) => (
-              <a
-                class='inline-block text-muted-foreground transition-all hover:text-muted-foreground/75'
-                href={url}
-                aria-label={label}
-              >
+              <a href={url} aria-label={label}>
                 <Icon name={platform as keyof typeof footerConf.social} />
               </a>
             ))
@@ -93,3 +81,11 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
     </div>
   </div>
 </footer>
+
+<style>
+  footer a {
+    color: hsl(var(--foreground) / var(--un-text-opacity, 1));
+    text-decoration: underline;
+    font-weight: 500;
+  }
+</style>

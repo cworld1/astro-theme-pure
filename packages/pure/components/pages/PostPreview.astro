@@ -104,7 +104,7 @@ const postDate = data.updatedDate ?? data.publishDate
               )}
             </div>
             {data.tags.length > 0 && (
-              <object>
+              <object title='Tags' aria-label='Tags' aria-labelledby='Tags'>
                 <ul class='tag-list mt-1 flex gap-2'>
                   {data.tags.map((tag: string) => (
                     <li>
