@@ -81,6 +81,7 @@ if (isSynced) {
             <li role='presentation' class='tab'>
               <a
                 role='tab'
+                draggable="false"
                 href={'#' + panelId}
                 id={tabId}
                 aria-selected={idx === 0 ? 'true' : 'false'}
@@ -105,11 +106,6 @@ if (isSynced) {
 
   .tablist-wrapper {
     overflow-x: auto;
-    scrollbar-width: none;
-    user-select: none;
-  }
-  .tablist-wrapper::-webkit-scrollbar {
-    display: none;
   }
 
   [role='tablist'] {
@@ -169,64 +165,10 @@ if (isSynced) {
         StarlightTabs.#syncedTabs.set(this.#syncKey, syncedTabs)
       }
 
-      const slider = this.querySelector<HTMLElement>('.tablist-wrapper');
-      
-      let isDragging = false;
-      let startX = 0;
-      let scrollLeft = 0;
-      let velX = 0; 
-      let rafId: number | null = null; 
-
-      if (slider) {
-        const momentumLoop = () => {
-          if (Math.abs(velX) > 0.5) {
-            slider.scrollLeft += velX;
-            velX *= 0.95;
-            rafId = requestAnimationFrame(momentumLoop);
-          } else {
-            rafId = null; 
-          }
-        };
-
-        const onMouseMove = (e: MouseEvent) => {
-          e.preventDefault();
-          const x = e.pageX - slider.offsetLeft;
-          const walk = x - startX;
-          const newScrollLeft = scrollLeft - walk;
-          velX = newScrollLeft - slider.scrollLeft;
-          if (Math.abs(walk) > 5) isDragging = true;
-          slider.scrollLeft = newScrollLeft;
-        };
-
-        const onMouseUp = () => {
-          window.removeEventListener('mousemove', onMouseMove);
-          window.removeEventListener('mouseup', onMouseUp);
-          setTimeout(() => { isDragging = false; }, 0);
-          momentumLoop();
-        };
-
-        slider.addEventListener('dragstart', (e) => e.preventDefault());
-
-        slider.addEventListener('mousedown', (e) => {
-          if (rafId !== null) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
-          }
-          isDragging = false;
-          startX = e.pageX - slider.offsetLeft;
-          scrollLeft = slider.scrollLeft;
-          velX = 0; 
-
-          window.addEventListener('mousemove', onMouseMove);
-          window.addEventListener('mouseup', onMouseUp);
-        });
-      }
-
       this.tabs.forEach((tab, i) => {
         // Handle clicks for mouse users
         tab.addEventListener('click', (e) => {
           e.preventDefault()
-          if (isDragging) return;
           const currentTab = tablist.querySelector('[aria-selected="true"]')
           if (e.currentTarget !== currentTab) {
             this.switchTab(e.currentTarget as HTMLAnchorElement, i)
