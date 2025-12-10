@@ -265,3 +265,18 @@ span.katex-display {
     }
   }
 }
+
+/* Scroll bar */
+:root {
+  --scrollbar-thumb: hsl(var(--muted-foreground) / var(--un-bg-opacity, 0.3));
+}
+:not(html) {
+  & ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  & ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 999px;
+  }
+}
