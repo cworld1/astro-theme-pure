@@ -162,6 +162,8 @@ export const integ: IntegrationUserConfig = {
     enable: true,
     // Server service link
     server: 'https://astro-theme-pure-waline.arthals.ink/',
+    // Show meta info for comments
+    showMeta: false,
     // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
     // Refer https://waline.js.org/en/reference/client/props.html

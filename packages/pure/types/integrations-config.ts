@@ -52,6 +52,8 @@ export const IntegrationConfigSchema = () =>
       enable: z.boolean().default(false),
       /** The server to use for the Waline comment system. */
       server: z.string().optional(),
+      /** Show meta info for comments */
+      showMeta: z.boolean().default(true),
       /** The emoji to use for the Waline comment system. */
       emoji: z.array(z.string()).optional(),
       /** Additional configurations for the Waline comment system. */

@@ -55,6 +55,12 @@ const { class: className } = Astro.props
   if (walineConfig.enable) customElements.define('comment-component', Comment)
 </script>
 
+{
+  config.integ.waline.showMeta &&(
+    <style> #waline :global(.wl-meta) { display: none; } </style>
+  )
+}
+
 <style>
   /* Basic theme */
   #waline {
