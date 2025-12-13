@@ -1,3 +1,32 @@
+/* [Fonts] - 手动引入本地字体 */
+/* 核心：定义 Satoshi 字体 */
+@font-face {
+  font-family: 'Satoshi';
+  /* ⚠️ 请确认 public/fonts/ 下的文件名是否为 Satoshi-Variable.woff2 */
+  src: url('/fonts/Satoshi-Variable.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  /* ⚠️ 如果没有斜体文件，这块可以删掉，或者也指向 Variable.woff2 */
+  src: url('/fonts/Satoshi-VariableItalic.woff2') format('woff2-variations');
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* 全局变量：让全站默认使用 Satoshi */
+:root {
+  --font-satoshi: 'Satoshi', sans-serif;
+}
+
+/* --------------------------------------------------------- */
+/* 下面是您文件里原有的内容 (Animation, Katex, Shiki 等) */
+/* --------------------------------------------------------- */
+
 /* [Animation] */
 @keyframes fade-in-up {
   0% {
