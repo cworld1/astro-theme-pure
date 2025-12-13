@@ -37,10 +37,6 @@ interface Props {
 
 let { page, uniqueTags, collectionsCount } = Astro.props as Props
 
-if(!Astro.currentLocale) {
-  
-}
-
 const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
 const meta = {
   description: t('description'),
