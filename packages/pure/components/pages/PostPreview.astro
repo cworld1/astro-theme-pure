@@ -4,7 +4,6 @@ import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 
 import { cn, getLanguageDisplayName } from '../../utils'
-import { normalizeLocaleBlogId } from '../../utils/locale'
 import { Button, FormattedDate, Icon } from '../user'
 
 type Props<T extends CollectionKey> = {
