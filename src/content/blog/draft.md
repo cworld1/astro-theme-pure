@@ -1,27 +1,19 @@
 ---
-title: 'Test Page'
+title: 'Draft Page'
 publishDate: '2025-07-03'
 updatedDate: '2025-07-10'
-description: 'Test page for any purpose'
+description: 'Draft page for any purpose'
 tags:
-  - Test
+  - Draft
 language: 'English'
+# Remove or set false to turn draft page into normal ones
 draft: true
 ---
-
-import { GithubCard } from 'astro-pure/advanced';
-
-```
-test
-test
-```
 
 ```log title="hello.log"
 test
 test
 ```
-
-<GithubCard repo="cworld1/astro-theme-pure"/>
 
 > Test
 
