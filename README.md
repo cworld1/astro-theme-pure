@@ -68,20 +68,16 @@ cd astro-theme-pure
 Useful commands:
 
 ```shell
-# install dependencies
+# Install dependencies
 bun install
-
-# start the dev server
+# Start the dev server
 bun dev
-
-# build the project
+# Build the project
 bun run build
-
-# preview (after the build)
+# Preview (after the build)
 bun preview
-
-# create a new post
-bun new
+# Create a new post
+bun pure new
 ```
 
 ## Contributions
