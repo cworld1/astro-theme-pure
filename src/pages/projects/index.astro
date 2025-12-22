@@ -9,6 +9,7 @@ import Sponsorship from '@/components/projects/Sponsorship.astro'
 import alipay from '@/assets/alipay-qrcode.jpg'
 import KeyIcon from '@/assets/icons/key.svg'
 import wechat from '@/assets/wechat-qrcode.jpg'
+import ProjectCard from '@/components/home/ProjectCard.astro'
 
 const headings = [
   { depth: 2, slug: 'programs', text: 'Programs' },
@@ -20,70 +21,56 @@ const headings = [
 ---
 
 <PageLayout title='Projects' {headings} view>
-  <p>Github Activities:</p>
-  <p>
-    <Image
-      src='https://ghchart.rshah.org/659eb9/cworld1'
-      alt='github activities'
-      inferSize
-      loading='lazy'
-    />
-  </p>
-  <p>
+
+<!--   <p>
     If you think it would be useful or interesting to collaborate on a project, you can donate to
     support my work or contact me to discuss a project.
   </p>
   <Button title='Checkout sponsorship' class='w-fit' href='#sponsorship'>
     <Icon class='size-5' name='receive-money' slot='before' />
-  </Button>
+  </Button> -->
 
-  <h2 id='programs'>Programs</h2>
-  <ProjectSection
-    projects={[
-      {
-        name: '🎨 Astro Theme Pure',
-        description: 'A simple, fast and powerful blog & document theme built by Astro',
-        links: [
-          { type: 'github', href: 'https://github.com/cworld1/astro-theme-pure' },
-          { type: 'site', href: 'https://astro-pure.js.org/' },
-          { type: 'doc', href: 'https://astro-pure.js.org/docs/list' },
-          { type: 'release', href: 'https://www.npmjs.com/package/astro-pure' }
-        ]
-      },
-      {
-        name: '💄 PKU Art',
-        description: 'A script to beautify pku course website',
-        links: [
-          { type: 'github', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'site', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'doc', href: 'https://docs.arthals.ink/docs/pku-art' }
-        ]
-      }
-    ]}
-  />
-  <Collapse title='Some old projects'>
-    <ProjectSection
-      projects={[
-        {
-          name: '🧩 rehype-autolink-headings-simple',
-          description: 'A simple version of rehype-autolink-headings',
-          links: [
-            { type: 'github', href: 'https://github.com/cworld1/rehype-autolink-headings-simple' },
-            {
-              type: 'release',
-              href: 'https://www.npmjs.com/package/rehype-autolink-headings-simple'
-            }
-          ]
-        },
-        {
-          name: 'Gaussian NB',
-          description:
-            'Simulating the Parsimonious Bayesian Algorithm with Python and Finding the Probability Prediction of Breast Cancer ',
-          links: [{ type: 'github', href: 'https://github.com/cworld1/gaussian-nb' }]
-        }
-      ]}
-    />
+
+  <Collapse title='Project Gallery' class='shadow-sm'>
+    
+    <div class='flex flex-col gap-y-6'>
+      
+      {/* --- 第一部分：精选项目 (Project Cards) --- */}
+      <div>
+        {/* 可选：添加一个小标题区分 */}
+        <span class='mb-3 ml-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+          Featured
+        </span>
+        
+        <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+          <ProjectCard
+            href='https://type.bytecho.tech'
+            heading='英语打字练习'
+            subheading='一次敲击，一点进步；记忆不再盲目，学习更高效。'
+            imagePath='/src/assets/projects/1.jpg'
+            altText='English Typing Practice'
+          />
+          <ProjectCard
+            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            heading='Lorem ipsum'
+            subheading='Old age burn and rave at close of day'
+            imagePath='/src/assets/projects/2.jpg'
+            altText='Demo Project'
+          />
+        </div>
+      </div>
+
+      {/* --- 分割线 (可选) --- */}
+      <div class='flex items-center gap-x-2 text-muted-foreground/40'>
+        <span class='h-px flex-1 bg-border/50'></span>
+        <span class='text-xs uppercase'>持续关注，期待更多！</span>
+        <span class='h-px flex-1 bg-border/50'></span>
+      </div>
+    </div>
   </Collapse>
+
+  
+
 
   <h2 id='learnings'>Learnings</h2>
   <ProjectSection

@@ -36,47 +36,61 @@ if (!images[imagePath])
     `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
   )
 
-// --- 1. 定义彩虹颜色池 (Tailwind 类名) ---
-// 这些颜色比较柔和，适合作为标签背景
-const morandiColors = [
-  'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200 dark:bg-stone-800/50 dark:text-stone-300 dark:border-stone-700',
-  'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700',
-  'bg-zinc-100 text-zinc-600 border-zinc-200 hover:bg-zinc-200 dark:bg-zinc-800/50 dark:text-zinc-300 dark:border-zinc-700',
-  'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200 dark:bg-neutral-800/50 dark:text-neutral-300 dark:border-neutral-700',
-  'bg-orange-50 text-orange-700/70 border-orange-100 hover:bg-orange-100 dark:bg-orange-900/30 dark:text-orange-300/80 dark:border-orange-900',
-  'bg-blue-50 text-blue-700/70 border-blue-100 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300/80 dark:border-blue-900',
-]
+// --- 1. 自定义 Hex 彩虹配色 ---
+// 你提供的颜色数组
+const rainbowColors = [
+  "#428BCA", // 蓝色
+  "#AEDCAE", // 浅绿
+  "#ECA9A7", // 浅红
+  "#DA99FF", // 浅紫
+  "#FFB380", // 浅橙
+  "#D9B999"  // 浅棕
+];
 
-// --- 2. 默认颜色 (Default Style) ---
-// 如果你想修改"More"里标签的白色样式，请修改这里
-const defaultColor = 'bg-white text-stone-600 border-stone-200 hover:bg-stone-100 dark:bg-stone-800/50 dark:text-stone-300 dark:border-stone-700'
-
-// --- 3. 标签分类定义 ---
+// 辅助函数：根据标签名分配一个固定的颜色样式
+function getTagStyle(tagName: string) {
+  // 使用标签名长度取模，保证同一个标签永远是同一个颜色
+  const index = tagName.length % rainbowColors.length;
+  const bgColor = rainbowColors[index];
+  // 返回内联样式：设置背景色，强制文字为白色，去掉边框
+  return `background-color: ${bgColor}; color: #fff; border: none;`;
+}
+// --- 2. 标签分类定义 (添加 color 字段) ---
 const tagCategories = [
   {
     name: 'Technology',
-    tags: ['astro', 'javascript', 'css', 'typescript', 'vite']
+    tags: ['astro', 'javascript', 'css', 'typescript', 'vite'],
+    color: '#428BCA' // 蓝色：代表科技
   },
   {
     name: 'Investment',
-    tags: ['stocks', 'crypto', 'finance']
+    tags: ['stocks', 'crypto', 'finance'],
+    color: '#FFB380' // 橙色：代表金钱/活力
   },
   {
     name: 'Life',
-    tags: ['travel', 'reading', 'music']
+    tags: ['travel', 'reading', 'music'],
+    color: '#ECA9A7' // 粉色：代表生活/轻松
   }
 ]
+// 辅助函数：未分类标签的彩虹色生成逻辑
+function getRainbowStyle(tagName: string) {
+  const index = tagName.length % rainbowColors.length;
+  const bgColor = rainbowColors[index];
+  return `background-color: ${bgColor}; color: #fff; border: none;`;
+}
 
-// --- 4. 逻辑处理：找出剩余的标签 ---
-// 获取所有已分类的标签 (转为小写以避免大小写不匹配)
+// 辅助函数：分类标签的固定颜色生成逻辑
+function getCategoryStyle(color: string) {
+  return `background-color: ${color}; color: #fff; border: none;`;
+}
+
+// 逻辑处理：找出剩余的标签
 const categorizedTags = new Set(
   tagCategories.flatMap(category => category.tags.map(tag => tag.toLowerCase()))
 )
-
-// 过滤出未分类的标签
 const otherTags = allTags.filter(([tag]) => !categorizedTags.has(tag.toLowerCase()))
 
-// 辅助函数
 function getTagData(tagName: string) {
   const tagData = allTags.find(([tag]) => tag.toLowerCase() === tagName.toLowerCase())
   return tagData ? { name: tagData[0], count: tagData[1] } : null
@@ -98,16 +112,16 @@ function getTagData(tagName: string) {
       <div class='flex flex-col items-center gap-y-4'>
         <h1 class='text-3xl font-medium'>{config.author}</h1>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Label title='Somewhere'>
+          <Label title='中国·广州'>
             <Icon name='location' class='size-5' slot='icon' />
           </Label>
           <Label
-            title='Source code'
+            title='社交媒体'
             as='a'
-            href='https://github.com/cworld1/astro-theme-pure'
+            href='https://www.xiaohongshu.com/user/profile/6827e549000000000a03ce6b'
             target='_blank'
           >
-            <Icon name='github' class='size-5' slot='icon' />
+            <Icon name='earth' class='size-5' slot='icon' />
           </Label>
           
         </div>
@@ -116,7 +130,7 @@ function getTagData(tagName: string) {
 
       {/* Get template */}
       <a
-        href='https://github.com/cworld1/astro-theme-pure'
+        href='https://www.xiaohongshu.com/user/profile/6827e549000000000a03ce6b'
         target='_blank'
         class='flex flex-row items-center gap-x-3 rounded-full border px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
       >
@@ -131,18 +145,10 @@ function getTagData(tagName: string) {
     </section>
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-      <!-- <Section title='About'>
-        <p class='text-muted-foreground'>Developer / Designer</p>
-        <p class='text-muted-foreground'>
-          Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione
-          indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
-          at eum oratio possit voluptatum.
-        </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
-      </Section> -->
+
       {
         allPostsByDate.length > 0 && (
-          <Section title='Posts'>
+          <Section title='Blog'>
             <ul class='flex flex-col gap-y-4'>
               {allPostsByDate.map((p) => (
                 <PostPreview post={p} detailed />
@@ -154,65 +160,28 @@ function getTagData(tagName: string) {
       }
 
 
-
-  
-
-
-     <!--  <Section title='Education'>
-        <Card
-          as='a'
-          heading='Lorem ipsum'
-          subheading='Lorem ipsum dolor sit amet, vidit suscipit at mei.'
-          date='August 2021 - July 2025'
-          href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        >
-          {
-            <ul class='ms-4 list-disc text-muted-foreground'>
-          <li>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut
-            molestiae laboriosam pariatur!
-          </li>
-          <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>
-        </ul> 
-          }
-        </Card>
-      </Section> -->
-
       <Section title='Website List'>
         <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           
           <ProjectCard
             href='https://type.bytecho.tech'
             heading='英语打字练习'
-            subheading='一次敲击，一点进步；记忆不再盲目，学习更高效。'
+            subheading='一次敲击，一点进步，学习更高效。'
             imagePath='/src/assets/projects/1.jpg'
           />
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='Old age burn and rave at close of day'
+            href='https://post.bytecho.tech'
+            heading='最新科技新闻'
+            subheading='自建科技软件分享网站，面向英文用户。'
             imagePath='/src/assets/projects/2.jpg'
           />
-          <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='Rage, rage against the dying of the light'
-            imagePath='/src/assets/projects/3.jpg'
-          />
-          <ProjectCard
-            href='/projects'
-            heading='More projects'
-            subheading='Check out more projects'
-            imagePath='/src/assets/projects/4.jpg'
-          />
+
         </div>
       </Section>
 
     
-
- <Section title='Topics'>
+<Section title='Topics'>
         <div class='flex flex-col gap-y-4'>
-          
           {
             tagCategories.map((category) => (
               <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
@@ -221,54 +190,58 @@ function getTagData(tagName: string) {
                   {category.tags.map((tagName) => {
                     const data = getTagData(tagName)
                     if (!data) return null 
-                    const colorClass = morandiColors[tagName.length % morandiColors.length]
                     
                     return (
                       <Button
                         href={`/tags/${data.name}`}
                         variant='pill'
-                        class={`border transition-colors duration-300 ${defaultColor}`}
+                        class='transition-opacity duration-300 hover:opacity-80'
+                        style={getCategoryStyle(category.color)}
                       >
                         <span class='font-medium'>{data.name}</span>
-                        <span class='ml-1.5 text-xs opacity-60 bg-black/5 dark:bg-white/10 rounded-md px-1.5 py-0.5'>
+                        <span class='ml-1.5 text-xs opacity-80 bg-white/20 rounded-md px-1.5 py-0.5'>
                           {data.count}
                         </span>
                       </Button>
                     )
                   })}
                   {category.tags.every(t => !getTagData(t)) && (
-                     <span class='text-sm text-muted-foreground/50 italic '>No posts yet</span>
+                     <span class='text-sm text-muted-foreground/50 italic'>No posts yet</span>
                   )}
                 </div>
               </div>
             ))
           }
           
-          {/* --- More Section: 显示剩余的标签 --- */}
-          {otherTags.length > 0 && (
-            <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0 mt-2'>
-              <h3 class='w-1/5 font-medium'>More</h3>
-              <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
-                {otherTags.map(([tagName, count]) => (
-                  <Button
-                    href={`/tags/${tagName}`}
-                    variant='pill'
-                    class={`border transition-colors duration-300 ${defaultColor}`}
-                  >
-                    <span class='font-medium'>{tagName}</span>
-                    <span class='ml-1.5 text-xs opacity-60 bg-black/5 dark:bg-white/10 rounded-md px-1.5 py-0.5'>
-                      {count}
-                    </span>
-                  </Button>
-                ))}
-                
-                {/* 最后的查看全部按钮 */}
-                <Button title='Explore All Tags' href='/tags' variant='ahead' />
+          {
+            otherTags.length > 0 && (
+              <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0 mt-2'>
+                <h3 class='w-1/5 font-medium'>More</h3>
+                <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
+                  {otherTags.map(([tagName, count]) => (
+                    <Button
+                      href={`/tags/${tagName}`}
+                      variant='pill'
+                      class='transition-opacity duration-300 hover:opacity-80'
+                      style={getRainbowStyle(tagName)}
+                    >
+                      <span class='font-medium'>{tagName}</span>
+                      <span class='ml-1.5 text-xs opacity-80 bg-white/20 rounded-md px-1.5 py-0.5'>
+                        {count}
+                      </span>
+                    </Button>
+                  ))}
+                  
+                  <Button title='Explore All Tags' href='/tags' variant='ahead' />
+                </div>
               </div>
-            </div>
-          )}
+            )
+          }
         </div>
       </Section>
+
+      
+      
     </div>
     <Quote class='mt-12  bg-background' />
   </main>

@@ -20,30 +20,85 @@ const meta = {
       <h1 class='mb-6 text-3xl font-medium'>Tags</h1>
     </div>
 
-    <div id='content' class='animate'>
-      {
-        allTags.length > 0 ? (
-          <ul class='flex flex-wrap gap-4'>
-            {allTags.map(([tag, val]) => (
-              <li>
-                <Button
-                  href={`/tags/${tag}`}
-                  variant='pill'
-                  class={cn(
-                    'items-start gap-x-1',
-                    val > 2 ? 'rounded-xl px-3 py-1 text-xl' : val > 1 && 'text-lg'
-                  )}
-                >
+{/* 定义浮动动画和玻璃质感（去掉了固定的 background 属性） */}
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
+  .bubble-glass {
+    /* 核心修改：这里不要写死 background，改用 tailwind 控制 */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    
+    /* 优化阴影：让轮廓更清晰 */
+    box-shadow: 
+      inset 0 4px 8px rgba(255, 255, 255, 0.8), /* 顶部高光增强 */
+      inset 0 -4px 8px rgba(0, 0, 0, 0.1),      /* 底部阴影 */
+      0 4px 10px rgba(0, 0, 0, 0.15);           /* 外部投影，增加悬浮感 */
+  }
+</style>
+
+<div id='content' class='animate relative py-12'>
+  {
+    allTags.length > 0 ? (
+      <ul class='flex flex-wrap justify-center items-center gap-6'>
+        {allTags.map(([tag, val]) => {
+          // 尺寸计算逻辑保持不变
+          const sizePx = 60 + (val * 15); 
+          const size = `${Math.min(sizePx, 144)}px`;
+          const delay = `${Math.random() * 5}s`;
+          const fontSize = sizePx > 100 ? 'text-lg' : sizePx > 80 ? 'text-sm' : 'text-xs';
+          //const rotate = `${Math.random() * 20 - 10}deg`;
+
+          return (
+            <li 
+              class="animate-float flex items-center justify-center"
+              style={{ 
+                width: size, 
+                height: size, 
+                animationDelay: delay,
+                //transform: `rotate(${rotate})` 
+              }}
+            >
+              <a
+                href={`/tags/${tag}`}
+                class={cn(
+                  'bubble-glass w-full h-full rounded-full',
+                  'flex flex-col items-center justify-center text-center',
+                  'transition-transform duration-300 hover:scale-110 hover:z-10',
+                  
+                  // === 核心修改区：添加可见的背景色 ===
+                  // 亮色模式：淡灰色 + 深色边框（模拟实体泡泡）
+                  // 暗色模式：白色半透明 + 浅色边框
+                  'bg-gray-200/10 dark:bg-white/10', 
+                  'border-2 border-white dark:border-white/30',
+                  
+                  // 文字颜色
+                  'text-gray-600 dark:text-gray-100 font-bold'
+                )}
+              >
+                <span class="text-sm px-1 leading-tight break-words max-w-[90%]">
                   {tag}
-                  <span class={val > 2 ? 'text-base' : 'text-xs'}>{val}</span>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Any tag yet.</p>
-        )
-      }
-    </div>
+                </span>
+                
+                {val > 0 && (
+                  <span class='mt-1 text-[10px] bg-white dark:bg-black/40 px-2 py-0.5 rounded-full opacity-80'>
+                    {val}
+                  </span>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <p>No tags yet.</p>
+    )
+  }
+</div>
   </main>
 </PageLayout>

@@ -29,18 +29,7 @@ const {
 
   <body class='flex justify-center bg-background text-foreground' {...props}>
     
-    {/* --- 新增代码开始：背景图片 --- */}
-    <div
-      class='fixed inset-0 z-0 pointer-events-none'
-      style={{
-        backgroundImage: "url('/images/bg.jpg')", /* 请将此处替换为你的图片路径，如 /src/assets/bg.jpg 或 public 下的路径 */
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        opacity: 0.4 /* 调整透明度以避免干扰文字，0.05 - 0.2 之间通常比较合适 */
-      }}
-    />
-    {/* --- 新增代码结束 --- */}
+
     
     {
       highlightColor && (
