@@ -1,9 +1,10 @@
+import { defineConfig, fontProviders } from 'astro/config'
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import vercel from '@astrojs/vercel'
-import AstroPureIntegration from 'astro-pure'
-import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
+
+import AstroPureIntegration from 'astro-pure'
 
 // Local integrations
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
@@ -19,7 +20,7 @@ import {
   transformerNotationDiff,
   transformerNotationHighlight,
   transformerRemoveNotationEscape
-} from './src/plugins/shiki-offical/transformers.ts'
+} from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
 // https://astro.build/config

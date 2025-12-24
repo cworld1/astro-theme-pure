@@ -1,5 +1,5 @@
 ---
-import { socialLinks, type iconsType } from 'astro-pure/types'
+import { type iconsType, socialLinks } from 'astro-pure/types'
 import { Icon } from 'astro-pure/user'
 
 interface SubstatsItem {
@@ -29,7 +29,7 @@ async function fetchCount(item: SubstatsItem) {
       item.count = data.count
     }
   } catch (error) {
-    console.error('Error in Substats fetching: ' + error)
+    console.error(`Error in Substats fetching: ${error}`)
   }
 }
 

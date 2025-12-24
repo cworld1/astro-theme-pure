@@ -16,15 +16,14 @@ import { UserConfigSchema, type UserInputConfig } from './types/user-config'
 import { parseWithFriendlyErrors } from './utils/error-map'
 
 export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegration {
-  let integrations: AstroIntegration[] = []
-  let remarkPlugins: RemarkPlugins = []
-  let rehypePlugins: RehypePlugins = []
+  const integrations: AstroIntegration[] = []
+  const remarkPlugins: RemarkPlugins = []
+  const rehypePlugins: RehypePlugins = []
   return {
     name: 'astro-pure',
     hooks: {
       'astro:config:setup': async ({ config, updateConfig }) => {
-        let userConfig = parseWithFriendlyErrors(
-          // @ts-ignore
+        const userConfig = parseWithFriendlyErrors(
           UserConfigSchema,
           opts,
           'Invalid config passed to astro-pure integration'
@@ -72,7 +71,7 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
 
         updateConfig({
           vite: {
-            // @ts-ignore
+            // @ts-expect-error
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
           markdown: {

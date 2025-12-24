@@ -3,14 +3,17 @@ import type { ShikiTransformer } from 'shiki'
 
 function parseMetaString(str = '') {
   return Object.fromEntries(
-    str.split(' ').reduce((acc: [string, string | true][], cur) => {
-      const matched = cur.match(/(.+)?=("(.+)"|'(.+)')$/)
-      if (matched === null) return acc
-      const key = matched[1]
-      const value = matched[3] || matched[4] || true
-      acc = [...acc, [key, value]]
-      return acc
-    }, [])
+    str.split(' ').reduce(
+      (acc: [string, string | true][], cur) => {
+        const matched = cur.match(/(.+)?=("(.+)"|'(.+)')$/)
+        if (matched === null) return acc
+        const key = matched[1]
+        const value = matched[3] || matched[4] || true
+        acc.push([key, value])
+        return acc
+      },
+      [] as [string, string | true][]
+    )
   )
 }
 
@@ -73,9 +76,7 @@ export const addLanguage = (): ShikiTransformer => {
     pre(node) {
       const span = h(
         'span',
-        {
-          class: 'language ps-1 pe-3 text-sm bg-muted text-muted-foreground'
-        },
+        { class: 'language ps-1 pe-3 text-sm bg-muted text-muted-foreground' },
         this.options.lang
       )
       node.children.push(span)
@@ -103,30 +104,14 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
         },
         [
           h('div', { class: 'ready' }, [
-            h(
-              'svg',
-              {
-                class: 'size-5'
-              },
-              [
-                h('use', {
-                  href: '/icons/code.svg#mingcute-clipboard-line'
-                })
-              ]
-            )
+            h('svg', { class: 'size-5' }, [
+              h('use', { href: '/icons/code.svg#mingcute-clipboard-line' })
+            ])
           ]),
           h('div', { class: 'success hidden' }, [
-            h(
-              'svg',
-              {
-                class: 'size-5'
-              },
-              [
-                h('use', {
-                  href: '/icons/code.svg#mingcute-file-check-line'
-                })
-              ]
-            )
+            h('svg', { class: 'size-5' }, [
+              h('use', { href: '/icons/code.svg#mingcute-file-check-line' })
+            ])
           ])
         ]
       )
@@ -144,7 +129,7 @@ export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
       if (this.lines.length <= line) return
       node.properties = {
         ...node.properties,
-        class: ((node.properties?.class as string) || '') + ' collapsed'
+        class: `${(node.properties?.class as string) || ''} collapsed`
       }
       const collapse = h(
         'button',
@@ -154,17 +139,9 @@ export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
           onclick: "this.parentElement.classList.toggle('collapsed')"
         },
         [
-          h(
-            'svg',
-            {
-              class: 'size-5'
-            },
-            [
-              h('use', {
-                href: '/icons/code.svg#mingcute-arrow-down-line'
-              })
-            ]
-          ),
+          h('svg', { class: 'size-5' }, [
+            h('use', { href: '/icons/code.svg#mingcute-arrow-down-line' })
+          ]),
           h('span', { class: 'desc' }, ' code')
         ]
       )

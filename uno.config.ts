@@ -86,7 +86,7 @@ const typographyConfig: TypographyOptions = {
       'border-inline-start-color': 'inherit',
       'border-radius': `calc(1.5 * ${radius})`,
       'padding-inline': '1.6rem',
-      'box-shadow': '0 5px 0 ' + bgMuted,
+      'box-shadow': `0 5px 0 ${bgMuted}`,
       ...(typographyCustom.blockquoteStyle === 'normal' && { 'font-style': 'normal' })
     },
     'blockquote::after': {

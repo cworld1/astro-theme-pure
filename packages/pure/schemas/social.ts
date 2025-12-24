@@ -7,7 +7,9 @@ export const SocialLinksSchema = () =>
     .record(
       z.enum(socialLinks),
       // Link to the respective social profile for this site
-      z.string().url()
+      z
+        .string()
+        .url()
     )
     .transform((links) => {
       const labelledLinks: Partial<Record<keyof typeof links, { label: string; url: string }>> = {}

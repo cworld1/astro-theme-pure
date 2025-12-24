@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:content'
+import { type CollectionEntry, type CollectionKey, getCollection } from 'astro:content'
 
 type Collections = CollectionEntry<CollectionKey>[]
 
@@ -27,7 +27,7 @@ export function groupCollectionsByYear<T extends CollectionKey>(
       if (!acc.has(year)) {
         acc.set(year, [])
       }
-      acc.get(year)!.push(collection)
+      acc.get(year)?.push(collection)
     }
     return acc
   }, new Map<number, Collections>())

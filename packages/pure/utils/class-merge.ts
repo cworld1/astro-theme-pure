@@ -1,11 +1,13 @@
-import { clsx, type ClassValue } from './clsx'
+import { type ClassValue, clsx } from './clsx'
 
 export function simpleMerge(...classes: string[]): string {
   const uniqueClasses = new Set<string>()
 
   classes.forEach((cls) => {
     if (cls) {
-      cls.split(' ').forEach((c) => uniqueClasses.add(c))
+      cls.split(' ').forEach((c) => {
+        uniqueClasses.add(c)
+      })
     }
   })
 

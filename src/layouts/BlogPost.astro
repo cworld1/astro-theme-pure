@@ -5,10 +5,9 @@ import type { CollectionEntry } from 'astro:content'
 // Plugin styles
 import 'katex/dist/katex.min.css'
 
-import config from 'virtual:config'
-
 import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
+import config from 'virtual:config'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import { Comment, PageInfo } from '@/components/waline'
 
@@ -65,8 +64,8 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
     <Copyright {data} />
     {/* Article recommend */}
     <ArticleBottom collections={posts} {id} class='mt-3 sm:mt-6' />
-    {/* Comment */}
-    {!isDraft && enableComment && <Comment class='mt-3 sm:mt-6' />}
+    { /* Comment */
+    !isDraft && enableComment && <Comment class='mt-3 sm:mt-6' />}
   </Fragment>
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />

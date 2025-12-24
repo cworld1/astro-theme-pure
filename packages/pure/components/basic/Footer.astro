@@ -20,8 +20,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
   <div class='border-t pt-5'>
     <div class='flex items-center gap-y-3 max-sm:flex-col sm:justify-between sm:gap-y-0'>
       <div class='flex items-center gap-x-4 gap-y-2 text-muted-foreground max-sm:flex-col'>
-        {/* Position 1 */}
-        {
+        { /* Position 1 */
           footerLink1.length > 0 && (
             <div>
               {footerLink1.map(({ title, link, style }, index) => (

@@ -88,10 +88,10 @@ export function vitePluginUserConfig(
 
   return {
     name: 'vite-plugin-starlight-user-config',
-    resolveId(id): string | void {
+    resolveId(id): string | undefined {
       if (id in modules) return resolveVirtualModuleId(id)
     },
-    load(id): string | void {
+    load(id): string | undefined {
       const resolution = resolutionMap[id]
       if (resolution) return modules[resolution]
     }

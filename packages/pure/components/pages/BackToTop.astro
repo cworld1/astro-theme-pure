@@ -39,10 +39,6 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
     ticking = false
     needPercent = true
 
-    constructor() {
-      super()
-    }
-
     calculateScrollPercent() {
       const scrollTop = Math.max(0, window.scrollY || document.documentElement.scrollTop)
       // Before article

@@ -40,6 +40,7 @@ export function createCommentNotationTransformer(
       const lines = code.children.filter((i) => i.type === 'element')
       const linesToRemove: (Element | Text)[] = []
 
+      // biome-ignore lint: the original file used any
       code.data ??= {} as any
       const data = code.data as {
         _shiki_notation?: ParsedComments

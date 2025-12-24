@@ -40,7 +40,7 @@ const focusableElementSelectors = [
 let count = 0
 const getIDs = () => {
   const id = count++
-  return { panelId: 'tab-panel-' + id, tabId: 'tab-' + id }
+  return { panelId: `tab-panel-${id}`, tabId: `tab-${id}` }
 }
 
 /**

@@ -27,22 +27,19 @@ const { selector = config.integ.mediumZoom.selector, background = 'hsl(var(--bac
     will-change: opacity;
   }
   .medium-zoom--opened .medium-zoom-overlay {
-    cursor: pointer;
     cursor: zoom-out;
     opacity: 1;
     z-index: 999;
   }
   .medium-zoom-image {
-    cursor: pointer;
     cursor: zoom-in;
-    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
   }
   .medium-zoom-image--hidden {
     visibility: hidden;
   }
   .medium-zoom-image--opened {
     position: relative;
-    cursor: pointer;
     cursor: zoom-out;
     will-change: transform;
     z-index: 999;

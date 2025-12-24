@@ -16,6 +16,8 @@ type Options = {
  * @returns {string}
  *   Serialized `value`.
  */
+
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is the original package expression
 export default function toString(value: unknown, options?: Options): string {
   const { includeImageAlt = true, includeHtml = true } = options || {}
   return serialize(value, includeImageAlt, includeHtml)

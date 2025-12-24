@@ -45,6 +45,7 @@ span.katex-display {
   margin-inline: auto;
 }
 .katex-html .tag {
+  /* biome-ignore lint/complexity/noImportantStyles: this is to cover the declaimed style */
   position: relative !important;
   display: inline-block;
   padding-inline-start: 0.5rem;
@@ -55,6 +56,7 @@ span.katex-display {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border-radius: 0.75rem;
+  /* biome-ignore lint/complexity/noImportantStyles: this is to cover the declaimed style */
   background-color: hsl(var(--muted) / var(--un-bg-opacity, 1)) !important;
   display: flex;
   flex-direction: column;
@@ -111,6 +113,7 @@ span.katex-display {
 }
 .dark {
   .astro-code pre span {
+    /* biome-ignore lint/complexity/noImportantStyles: this is to cover the declaimed style */
     color: var(--shiki-dark) !important;
   }
 }
@@ -194,6 +197,7 @@ span.katex-display {
   }
   & .highlighted,
   & .highlighted::before {
+    /* biome-ignore lint/complexity/noImportantStyles: this is to cover the declaimed style */
     background-color: rgba(149, 166, 183, 0.32) !important;
   }
   & .diff {

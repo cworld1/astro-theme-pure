@@ -32,8 +32,9 @@ const isSynced = syncKey !== undefined
 const didRenderSyncedTabsRestoreScriptSymbol = Symbol.for(
   'starlight:did-render-synced-tabs-restore-script'
 )
-// @ts-expect-error - See bove
-const shouldRenderSyncedTabsRestoreScript = isSynced && Astro.locals[didRenderSyncedTabsRestoreScriptSymbol] !== true
+const shouldRenderSyncedTabsRestoreScript =
+  // @ts-expect-error - See above
+  isSynced && Astro.locals[didRenderSyncedTabsRestoreScriptSymbol] !== true
 
 if (isSynced) {
   // @ts-expect-error - See above
@@ -41,8 +42,8 @@ if (isSynced) {
 }
 ---
 
-{/* Inlined to avoid a flash of invalid active tab. */}
-{shouldRenderSyncedTabsRestoreScript && (
+{ /* Inlined to avoid a flash of invalid active tab. */
+shouldRenderSyncedTabsRestoreScript && (
   <script is:inline>
     class StarlightTabsRestore extends HTMLElement {
       connectedCallback() {

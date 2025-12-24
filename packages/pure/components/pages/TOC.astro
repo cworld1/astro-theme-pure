@@ -83,15 +83,15 @@ const toc = generateToc(headings)
           el.classList.toggle('highlight-bg-translucent', inView)
           el.classList.toggle(
             'rounded-t-2xl',
-            inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
+            inView && (i === 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
           )
           el.classList.toggle(
             'rounded-b-2xl',
             inView &&
-              (i == this.tocLinks.length - 1 ||
+              (i === this.tocLinks.length - 1 ||
                 !this.headingProgress[this.tocLinks[i + 1]?.slug].inView)
           )
-          bar.classList.toggle('is-read', !inView && progress == 1)
+          bar.classList.toggle('is-read', !inView && progress === 1)
           bar.classList.toggle('highlight-bg', inView)
           bar.style.setProperty('height', `${progress * 90}%`)
         }
