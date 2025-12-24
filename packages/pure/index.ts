@@ -71,7 +71,8 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
 
         updateConfig({
           vite: {
-            // @ts-expect-error
+            // biome-ignore lint/suspicious/noTsIgnore: expects error for local, but expects no error when build
+            // @ts-ignore
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
           markdown: {
