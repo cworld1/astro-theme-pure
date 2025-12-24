@@ -102,8 +102,6 @@ export default defineConfig({
     // sitemap(),
     // mdx(),
     AstroPureIntegration(config)
-    // Compress recommend
-    // https://docs.astro.build/en/guides/integrations-guide/partytown/
   ],
 
   // [Experimental]
