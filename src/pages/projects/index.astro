@@ -1,126 +1,53 @@
 ---
 import { Image } from 'astro:assets'
 
-import { Button, Collapse, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
-import ProjectSection from '@/components/projects/ProjectSection.astro'
+import ProjectCard from '@/components/home/ProjectCard.astro'
 import Sponsors from '@/components/projects/Sponsors.astro'
 import Sponsorship from '@/components/projects/Sponsorship.astro'
 import alipay from '@/assets/alipay-qrcode.jpg'
-import KeyIcon from '@/assets/icons/key.svg'
 import wechat from '@/assets/wechat-qrcode.jpg'
-import ProjectCard from '@/components/home/ProjectCard.astro'
 
 const headings = [
-  { depth: 2, slug: 'programs', text: 'Programs' },
-  { depth: 2, slug: 'learnings', text: 'Learnings' },
-  { depth: 2, slug: 'others', text: 'Others' },
-  { depth: 2, slug: 'gpg-signature', text: 'GPG Signature' },
+  { depth: 2, slug: 'project-gallery', text: 'Project Gallery' },
   { depth: 2, slug: 'sponsorship', text: 'Sponsorship' }
 ]
 ---
 
 <PageLayout title='Projects' {headings} view>
+  <h2 id='project-gallery'>Project Gallery</h2>
+  <div class='flex flex-col gap-y-6'>
+    <div>
+      <span
+        class='mb-3 ml-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground'
+      >
+        Featured
+      </span>
 
-<!--   <p>
-    If you think it would be useful or interesting to collaborate on a project, you can donate to
-    support my work or contact me to discuss a project.
-  </p>
-  <Button title='Checkout sponsorship' class='w-fit' href='#sponsorship'>
-    <Icon class='size-5' name='receive-money' slot='before' />
-  </Button> -->
-
-
-  <Collapse title='Project Gallery' class='shadow-sm'>
-    
-    <div class='flex flex-col gap-y-6'>
-      
-      {/* --- 第一部分：精选项目 (Project Cards) --- */}
-      <div>
-        {/* 可选：添加一个小标题区分 */}
-        <span class='mb-3 ml-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground'>
-          Featured
-        </span>
-        
-        <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <ProjectCard
-            href='https://type.bytecho.tech'
-            heading='英语打字练习'
-            subheading='一次敲击，一点进步；记忆不再盲目，学习更高效。'
-            imagePath='/src/assets/projects/1.jpg'
-            altText='English Typing Practice'
-          />
-          <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='Old age burn and rave at close of day'
-            imagePath='/src/assets/projects/2.jpg'
-            altText='Demo Project'
-          />
-        </div>
-      </div>
-
-      {/* --- 分割线 (可选) --- */}
-      <div class='flex items-center gap-x-2 text-muted-foreground/40'>
-        <span class='h-px flex-1 bg-border/50'></span>
-        <span class='text-xs uppercase'>持续关注，期待更多！</span>
-        <span class='h-px flex-1 bg-border/50'></span>
+      <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <ProjectCard
+          href='https://type.bytecho.tech'
+          heading='英语打字练习'
+          subheading='一次敲击，一点进步；记忆不再盲目，学习更高效。'
+          imagePath='/src/assets/projects/1.jpg'
+          altText='English Typing Practice'
+        />
+        <ProjectCard
+          href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+          heading='Lorem ipsum'
+          subheading='Old age burn and rave at close of day'
+          imagePath='/src/assets/projects/2.jpg'
+          altText='Demo Project'
+        />
       </div>
     </div>
-  </Collapse>
 
-  
-
-
-  <h2 id='learnings'>Learnings</h2>
-  <ProjectSection
-    class='my-2'
-    projects={[
-      {
-        name: 'R Learning',
-        description: 'Some notes and code about learning R language',
-        links: [
-          { type: 'github', href: 'https://github.com/cworld1/r-learning' },
-          { type: 'site', href: 'https://cworld1.github.io/r-learning' }
-        ]
-      },
-      {
-        name: 'CS 213 Learning',
-        description: 'Notes, code and experiences for Introduction to Computer Systems course',
-        links: [
-          {
-            type: 'github',
-            href: 'https://github.com/zhuozhiyongde/Introduction-To-Computer-System-2023Fall-PKU'
-          }
-        ]
-      }
-    ]}
-  />
-
-  <h2 id='others'>Others</h2>
-  <ProjectSection
-    projects={[
-      {
-        name: 'CWorld',
-        description: "CWorld's Github",
-        links: [{ type: 'github', href: 'https://github.com/cworld1' }]
-      },
-      {
-        name: 'Arthals',
-        description: 'Arthals Github',
-        links: [{ type: 'github', href: 'https://github.com/zhuozhiyongde' }]
-      }
-    ]}
-  />
-
-  <h2 id='gpg-signature'>GPG Signature</h2>
-  <p>
-    You can verify the authenticity of the files I signed by checking the GPG signature. My GPG key
-    is <code>114514</code>, and you can find it on the opengpg key servers or download from it.
-  </p>
-  <Button href='https://keys.openpgp.org/search?q=114514' title='Checkout my key' target='_blank'>
-    <KeyIcon class='size-5' slot='before' />
-  </Button>
+    <div class='flex items-center gap-x-2 text-muted-foreground/40'>
+      <span class='h-px flex-1 bg-border/50'></span>
+      <span class='text-xs uppercase'>持续关注，期待更多！</span>
+      <span class='h-px flex-1 bg-border/50'></span>
+    </div>
+  </div>
 
   <h2 id='sponsorship'>Sponsorship</h2>
   <p>Please leave a message or contact me proactively after sponsorship.</p>
