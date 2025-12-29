@@ -38,6 +38,7 @@ const {
       )
     }
     <div
+      id='main-container'
       class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'
     >
       <Header />
@@ -62,6 +63,23 @@ const {
           --highlightColor,
           hsl(var(--primary) / var(--un-text-opacity))
         ) !important;
+      }
+      #main-container {
+        padding-top: env(safe-area-inset-top);
+        padding-left: calc(1rem + env(safe-area-inset-left));
+        padding-right: calc(1rem + env(safe-area-inset-right));
+      }
+      @media (min-width: 640px) {
+        #main-container {
+          padding-left: calc(1.75rem + env(safe-area-inset-left));
+          padding-right: calc(1.75rem + env(safe-area-inset-right));
+        }
+      }
+      @media (min-width: 1024px) {
+        #main-container {
+          padding-left: calc(2.5rem + env(safe-area-inset-left));
+          padding-right: calc(2.5rem + env(safe-area-inset-right));
+        }
       }
     </style>
   </body>
