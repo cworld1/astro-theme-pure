@@ -65,7 +65,10 @@ const {
         ) !important;
       }
 
-      /* Extend safe area for some special screens */
+      /* Extend safe area for some special screens
+       * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/env
+       * https://webkit.org/blog/7929/designing-websites-for-iphone-x/
+       */
       #main-container {
         padding-top: env(safe-area-inset-top);
         padding-left: calc(1rem + env(safe-area-inset-left));
