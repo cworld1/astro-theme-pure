@@ -29,6 +29,7 @@ const toggleText = nextLang === 'zh' ? '切换至简体中文' : 'Switch to Engl
   class='group/lang box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
   aria-label={toggleText}
   title={toggleText}
+  onclick={`localStorage.setItem('toast_msg', '${nextLang === 'zh' ? '已切换至简体中文' : 'Switched to English'}')`}
 >
   <div class='relative size-5'>
     <div

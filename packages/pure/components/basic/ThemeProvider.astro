@@ -21,20 +21,137 @@
 
 <script>
   import { Icons } from '../../libs/icons'
-  import { listenThemeChange } from '../../utils'
+  import { listenThemeChange, showToast } from '../../utils'
 
   // Listen for theme change event
   listenThemeChange()
+
   // Listen for toast event
   document.addEventListener('toast', (e) => {
-    const { message, time } = (e as CustomEvent).detail
+    const { message, type, icon, time } = (e as CustomEvent).detail
+
+    // 1. Ensure container exists
+    let container = document.getElementById('toast-container')
+    if (!container) {
+      container = document.createElement('div')
+      container.id = 'toast-container'
+      container.className =
+        'fixed top-4 right-4 z-50 flex flex-col gap-2 w-full max-w-sm pointer-events-none'
+      document.body.appendChild(container)
+    }
+
+    // 2. Icon selection
+    const iconSvg = icon
+      ? (Icons as any)[icon] || Icons.info
+      : type === 'error'
+        ? Icons.alert
+        : type === 'warning'
+          ? Icons.octangon
+          : Icons.info
+
+    // 3. Theme styles
+    let themeClass = 'bg-background/80 text-foreground border-border' // Default
+    if (type === 'success')
+      themeClass =
+        'bg-green-100/90 dark:bg-green-900/40 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'
+    if (type === 'warning')
+      themeClass =
+        'bg-yellow-100/90 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800'
+    if (type === 'error')
+      themeClass =
+        'bg-red-100/90 dark:bg-red-900/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800'
+
+    // 4. Create Toast
     const toast = document.createElement('div')
-    toast.className =
-      'animate fixed bottom-8 z-20 px-4 py-2 bg-muted text-foreground rounded-lg border shadow-lg flex items-center gap-2'
-    toast.innerHTML = `<svg width='22' height='22' viewBox='0 0 24 24' fill='currentColor'>${Icons.info}</svg> <span>${message}</span>`
-    document.body.appendChild(toast)
+    // Initial state: translated to right (slide-in effect) and hidden
+    toast.className = `pointer-events-auto relative flex w-full translate-x-full items-center gap-3 overflow-hidden rounded-lg border p-3 shadow-lg shadow-black/5 backdrop-blur-[8px] transition-all duration-300 ease-out ${themeClass}`
+
+    // Close button
+    const closeBtn = `<button class="absolute top-2 right-2 p-1 opacity-50 hover:opacity-100 transition-opacity" onclick="this.parentElement.remove()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>`
+
+    toast.innerHTML = `${closeBtn}<div class="shrink-0"><svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'>${iconSvg}</svg></div><div class="flex-1 text-sm font-medium leading-relaxed">${message}</div>`
+
+    // Add to container (prepend for new on top)
+    container.prepend(toast)
+
+    // Trigger animation next frame
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-x-full')
+    })
+
+    // Auto dismiss
     setTimeout(() => {
-      toast.remove()
+      toast.classList.add('translate-x-full', 'opacity-0')
+      setTimeout(() => {
+        toast.remove()
+        // Remove container if empty
+        if (container && container.childNodes.length === 0) {
+          container.remove()
+        }
+      }, 300)
     }, time || 3000)
   })
+
+  // Listener for toast event already added above
+
+  // Init function
+  function init() {
+    // 1. Language Switch Confirmation
+    // If we just redirected from a language switch, show a toast
+    if (localStorage.getItem('toast_msg')) {
+      const msg = localStorage.getItem('toast_msg')
+      localStorage.removeItem('toast_msg')
+      showToast({ message: msg!, type: 'success', icon: 'earth' })
+    }
+
+    // 2. Browser Language Mismatch Reminder
+    const currentLang = document.documentElement.lang
+    const browserLang = navigator.language
+
+    if (browserLang && currentLang && !sessionStorage.getItem('lang-mismatch-shown')) {
+      // Check if the browser language matches the current page language
+      // Normalize: 'en-US' -> 'en', 'zh-CN' -> 'zh'
+      const normalizedBrowser = browserLang.toLowerCase()
+      const normalizedCurrent = currentLang.toLowerCase()
+
+      // Logic: if current is 'en' but browser is 'zh', or current is 'zh' but browser is 'en'
+      const mismatch =
+        (normalizedCurrent.startsWith('en') && normalizedBrowser.startsWith('zh')) ||
+        (normalizedCurrent.startsWith('zh') && !normalizedBrowser.startsWith('zh')) // If zh page, but browser NOT zh (e.g. en, fr)
+
+      /* 
+         Revised Logic:
+         User wants reminder if language does not match.
+         Simple check: !normalizedBrowser.startsWith(normalizedCurrent)
+         Example: 
+         - Page: en, Browser: zh-CN. 'zh-cn'.startsWith('en') -> false. Mismatch. Warn.
+         - Page: zh, Browser: en-US. 'en-us'.startsWith('zh') -> false. Mismatch. Warn.
+       */
+
+      if (!normalizedBrowser.startsWith(normalizedCurrent)) {
+        // Calculate target path
+        const targetLang = normalizedCurrent.startsWith('en') ? 'zh' : 'en'
+        let rawPath = window.location.pathname.replace(/^\/(en|zh)/, '')
+        if (!rawPath.startsWith('/')) rawPath = '/' + rawPath
+        const targetUrl = `/${targetLang}${rawPath === '/' ? '' : rawPath}`
+
+        const msg =
+          normalizedCurrent === 'zh'
+            ? `Detected browser language ${browserLang}. <a href="${targetUrl}" class="underline font-bold transition-colors hover:text-primary">Switch to English?</a>`
+            : `检测到浏览器语言为 ${browserLang}。<a href="${targetUrl}" class="underline font-bold transition-colors hover:text-primary">切换至简体中文？</a>`
+
+        showToast({
+          message: msg,
+          type: 'info',
+          icon: 'earth',
+          time: 8000 // Give user more time to click
+        })
+        sessionStorage.setItem('lang-mismatch-shown', 'true')
+      }
+    }
+  }
+
+  // Support both Astro View Transitions and Standard Load
+  document.addEventListener('astro:page-load', init)
+  document.addEventListener('DOMContentLoaded', init)
 </script>

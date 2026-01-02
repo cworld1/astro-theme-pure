@@ -45,7 +45,7 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
   <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
     {
       linksConf.applyTip.map(({ name, val }) => {
-        const script = `navigator.clipboard.writeText('${val}');document.dispatchEvent(new CustomEvent('toast',{detail:{message:'Copied "${val}" to clipboard!'}}))`
+        const script = `navigator.clipboard.writeText('${val}');document.dispatchEvent(new CustomEvent('toast',{detail:{message:'Copied "${val}" to clipboard!',type:'success',icon:'document'}}))`
         return (
           <>
             <span class='text-end'>{name}:</span>

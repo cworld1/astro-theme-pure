@@ -125,7 +125,10 @@ const menuItems = (config.header.menu || []).map((item) => ({
         // document.dispatchEvent(toggleDarkModeEvent)
         const newTheme = setTheme(undefined, true)
         darkModeBtn.dataset.theme = newTheme
-        showToast({ message: `Set theme to ${newTheme}` })
+        showToast({
+          message: `Set theme to ${newTheme}`,
+          icon: newTheme === 'system' ? 'computer' : newTheme === 'dark' ? 'moon' : 'sun'
+        })
       })
 
       // Menu

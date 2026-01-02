@@ -143,7 +143,7 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
   copyLink?.addEventListener('click', () => {
     navigator.clipboard.writeText(window.location.href)
     // Show toast
-    showToast({ message: 'Link copied!' })
+    showToast({ message: 'Link copied!', type: 'success', icon: 'link' })
   })
 
   // QRCode
