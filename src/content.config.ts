@@ -37,7 +37,7 @@ const blog = defineCollection({
       draft: z.boolean().default(false),
       // Special fields
       comment: z.boolean().default(true)
-    })
+    }).strict()
 })
 
 // Define docs collection

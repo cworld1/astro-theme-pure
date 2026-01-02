@@ -1,0 +1,244 @@
+---
+import { Image } from 'astro:assets'
+import { languages, useTranslations } from '@/i18n/ui'
+
+import { Quote } from 'astro-pure/advanced'
+import { PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
+import { Button, Card, Icon, Label } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import ProjectCard from '@/components/home/ProjectCard.astro'
+import Section from '@/components/home/Section.astro'
+import SkillLayout from '@/components/home/SkillLayout.astro'
+import config from '@/site-config'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }))
+}
+
+const { lang } = Astro.params
+const t = useTranslations(lang as any)
+
+// Unused lists removed
+
+const MAX_POSTS = 4
+const allPosts = await getBlogCollection()
+// Filter posts by language
+const langPosts = allPosts.filter((post) => {
+  const [postLang] = post.id.split('/')
+  return postLang === lang
+})
+
+const sortedPosts = sortMDByDate(langPosts)
+const allTags = getUniqueTagsWithCount(langPosts)
+const recommendPosts = sortedPosts.filter((post) => post.data.tags.includes('recommend'))
+const postsToShow = recommendPosts.length > 0 ? recommendPosts : sortedPosts
+const allPostsByDate = postsToShow.slice(0, MAX_POSTS)
+
+const imagePath = config.logo.src
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
+)
+if (!images[imagePath])
+  throw new Error(
+    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
+  )
+
+// --- 1. 自定义 Hex 彩虹配色 ---
+const rainbowColors = ['#428BCA', '#AEDCAE', '#ECA9A7', '#DA99FF', '#FFB380', '#D9B999']
+
+function getTagStyle(tagName: string) {
+  const index = tagName.length % rainbowColors.length
+  const bgColor = rainbowColors[index]
+  return `background-color: ${bgColor}; color: #fff; border: none;`
+}
+
+// --- 2. 标签分类定义 (添加 color 字段) ---
+const tagCategories = [
+  {
+    name: 'technology',
+    tags: ['astro', 'javascript', 'css', 'typescript', 'vite'],
+    color: '#428BCA'
+  },
+  {
+    name: 'investment',
+    tags: ['stocks', 'crypto', 'finance'],
+    color: '#FFB380'
+  },
+  {
+    name: 'life',
+    tags: ['travel', 'reading', 'music'],
+    color: '#ECA9A7'
+  }
+]
+
+function getRainbowStyle(tagName: string) {
+  const index = tagName.length % rainbowColors.length
+  const bgColor = rainbowColors[index]
+  return `background-color: ${bgColor}; color: #fff; border: none;`
+}
+
+function getCategoryStyle(color: string) {
+  return `background-color: ${color}; color: #fff; border: none;`
+}
+
+const categorizedTags = new Set(
+  tagCategories.flatMap((category) => category.tags.map((tag) => tag.toLowerCase()))
+)
+const otherTags = allTags.filter(([tag]) => !categorizedTags.has(tag.toLowerCase()))
+
+function getTagData(tagName: string) {
+  const tagData = allTags.find(([tag]) => tag.toLowerCase() === tagName.toLowerCase())
+  return tagData ? { name: tagData[0], count: tagData[1] } : null
+}
+---
+
+<PageLayout meta={{ title: t('nav.home') }} highlightColor='#659EB9'>
+  <main class='flex w-full flex-col items-center'>
+    <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
+      <Image
+        src={images[imagePath]()}
+        alt={config.logo.alt || 'Profile'}
+        class='h-28 w-auto rounded-full border p-1'
+        loading='eager'
+        fetchpriority='high'
+      />
+      <div class='flex flex-col items-center gap-y-4'>
+        <h1 class='text-3xl font-medium'>{config.author}</h1>
+        <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
+          <Label title='中国·广州'>
+            <Icon name='location' class='size-5' slot='icon' />
+          </Label>
+          <Label
+            title='社交媒体'
+            as='a'
+            href='https://www.xiaohongshu.com/user/profile/6827e549000000000a03ce6b'
+            target='_blank'
+          >
+            <Icon name='earth' class='size-5' slot='icon' />
+          </Label>
+        </div>
+      </div>
+
+      <a
+        href='https://www.xiaohongshu.com/user/profile/6827e549000000000a03ce6b'
+        target='_blank'
+        class='flex flex-row items-center gap-x-3 rounded-full border px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
+      >
+        <span class='relative flex items-center justify-center'>
+          <span
+            class='absolute size-2 animate-ping rounded-full border border-green-400 bg-green-400 opacity-75'
+          ></span>
+          <span class='size-2 rounded-full bg-green-400'></span>
+        </span>
+        <p class='font-medium text-muted-foreground'>{t('home.profile_desc')}</p>
+      </a>
+    </section>
+
+    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
+      {
+        allPostsByDate.length > 0 && (
+          <Section title={t('nav.blog')}>
+            <ul class='flex flex-col gap-y-4'>
+              {allPostsByDate.map((p) => (
+                <PostPreview post={p} detailed />
+              ))}
+            </ul>
+            <Button
+              title={t('home.more_posts')}
+              class='w-fit self-end'
+              href={`/${lang}/blog`}
+              variant='ahead'
+            />
+          </Section>
+        )
+      }
+
+      <Section title={t('home.website_list')}>
+        <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+          <ProjectCard
+            href='https://type.bytecho.tech'
+            heading={t('home.project.type.heading')}
+            subheading={t('home.project.type.subheading')}
+            imagePath='/src/assets/projects/1.jpg'
+          />
+          <ProjectCard
+            href='https://post.bytecho.tech'
+            heading={t('home.project.post.heading')}
+            subheading={t('home.project.post.subheading')}
+            imagePath='/src/assets/projects/2.jpg'
+          />
+        </div>
+      </Section>
+
+      <Section title={t('home.topics')}>
+        <div class='flex flex-col gap-y-4'>
+          {
+            tagCategories.map((category) => (
+              <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
+                <h3 class='w-1/5 font-medium'>{t(`home.category.${category.name}` as any)}</h3>
+                <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
+                  {category.tags.map((tagName) => {
+                    const data = getTagData(tagName)
+                    if (!data) return null
+
+                    return (
+                      <Button
+                        href={`/${lang}/tags/${data.name}`}
+                        variant='pill'
+                        class='transition-opacity duration-300 hover:opacity-80'
+                        style={getCategoryStyle(category.color)}
+                      >
+                        <span class='font-medium'>
+                          {t(`tag.${data.name.toLowerCase()}` as any) || data.name}
+                        </span>
+                        <span class='ml-1.5 text-xs opacity-80 bg-white/20 rounded-md px-1.5 py-0.5'>
+                          {data.count}
+                        </span>
+                      </Button>
+                    )
+                  })}
+                  {category.tags.every((t) => !getTagData(t)) && (
+                    <span class='text-sm text-muted-foreground/50 italic'>
+                      {t('home.no_posts')}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))
+          }
+
+          {
+            otherTags.length > 0 && (
+              <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0 mt-2'>
+                <h3 class='w-1/5 font-medium'>{t('common.more')}</h3>
+                <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
+                  {otherTags.map(([tagName, count]) => (
+                    <Button
+                      href={`/${lang}/tags/${tagName}`}
+                      variant='pill'
+                      class='transition-opacity duration-300 hover:opacity-80'
+                      style={getRainbowStyle(tagName)}
+                    >
+                      <span class='font-medium'>
+                        {t(`tag.${tagName.toLowerCase()}` as any) || tagName}
+                      </span>
+                      <span class='ml-1.5 text-xs opacity-80 bg-white/20 rounded-md px-1.5 py-0.5'>
+                        {count}
+                      </span>
+                    </Button>
+                  ))}
+
+                  <Button title={t('tags.view_all')} href={`/${lang}/tags`} variant='ahead' />
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </Section>
+    </div>
+    <Quote class='mt-12 bg-background' />
+  </main>
+</PageLayout>

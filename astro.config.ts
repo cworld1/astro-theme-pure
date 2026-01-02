@@ -95,7 +95,14 @@ export default defineConfig({
     // https://docs.astro.build/en/guides/integrations-guide/partytown/
   ],
 
-  // [Experimental]
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'zh'],
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false
+    }
+  },
   experimental: {
     // Allow compatible editors to support intellisense features for content collection entries
     // https://docs.astro.build/en/reference/experimental-flags/content-intellisense/

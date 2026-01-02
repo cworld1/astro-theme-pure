@@ -1,0 +1,34 @@
+---
+import { Icon } from 'astro-pure/user'
+
+import { getLangFromUrl, languages } from '../i18n/ui'
+
+const lang = getLangFromUrl(Astro.url)
+// Simple toggle logic for 2 languages
+const nextLang = lang === 'en' ? 'zh' : 'en'
+// Replace current lang in path with next lang
+// If current path doesn't start with lang (e.g. root matching), append it.
+// Assuming prefix strategy is active and strict.
+// Logic: /en/foo -> /zh/foo. /zh/bar -> /en/bar.
+
+// Remove current lang prefix
+let pathNoLang = Astro.url.pathname.replace(/^\/(en|zh)/, '')
+if (!pathNoLang.startsWith('/')) pathNoLang = '/' + pathNoLang
+// Clean double slashes just in case
+pathNoLang = pathNoLang.replace(/^\/+/, '/')
+
+const integrityCheck = pathNoLang === '/' ? '' : pathNoLang
+const nextUrl = `/${nextLang}${integrityCheck}`
+
+const label = languages[nextLang]
+---
+
+<a
+  href={nextUrl}
+  class='group box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+  aria-label={`Switch to ${label}`}
+  title={`Switch to ${label}`}
+>
+  <Icon name='earth' class='size-5 group-hover:text-primary transition-colors' />
+  <span class='sr-only'>{label}</span>
+</a>

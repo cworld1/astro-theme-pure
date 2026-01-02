@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets'
+import { languages, useTranslations } from '@/i18n/ui'
+
+import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectCard from '@/components/home/ProjectCard.astro'
+import Sponsors from '@/components/projects/Sponsors.astro'
+import Sponsorship from '@/components/projects/Sponsorship.astro'
+import alipay from '@/assets/alipay-qrcode.jpg'
+import wechat from '@/assets/wechat-qrcode.jpg'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }))
+}
+
+const { lang } = Astro.params
+const t = useTranslations(lang as any)
+
+const headings = [
+  { depth: 2, slug: 'project-gallery', text: t('projects.gallery') },
+  { depth: 2, slug: 'sponsorship', text: t('projects.sponsorship') }
+]
+---
+
+<PageLayout title={t('nav.projects') || 'Projects'} {headings} view>
+  <h2 id='project-gallery'>{t('projects.gallery')}</h2>
+  <div class='flex flex-col gap-y-6'>
+    <div>
+      <span
+        class='mb-3 ml-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground'
+      >
+        {t('home.featured')}
+      </span>
+
+      <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+        <ProjectCard
+          href='https://type.bytecho.tech'
+          heading='英语打字练习'
+          subheading='一次敲击，一点进步；记忆不再盲目，学习更高效。'
+          imagePath='/src/assets/projects/1.jpg'
+          altText='English Typing Practice'
+        />
+        <ProjectCard
+          href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+          heading='Lorem ipsum'
+          subheading='Old age burn and rave at close of day'
+          imagePath='/src/assets/projects/2.jpg'
+          altText='Demo Project'
+        />
+      </div>
+    </div>
+
+    <div class='flex items-center gap-x-2 text-muted-foreground/40'>
+      <span class='h-px flex-1 bg-border/50'></span>
+      <span class='text-xs uppercase'>{t('projects.continued_attention')}</span>
+      <span class='h-px flex-1 bg-border/50'></span>
+    </div>
+  </div>
+
+  <h2 id='sponsorship'>{t('projects.sponsorship')}</h2>
+  <p>{t('projects.leave_message')}</p>
+  <Sponsorship
+    methods={[
+      { name: 'WeChat', icon: 'wechat-pay', image: wechat },
+      { name: 'Alipay', icon: 'alipay', image: alipay }
+    ]}
+  />
+  <p>{t('projects.thanks')}</p>
+  <Sponsors
+    progressMax={25}
+    sponsors={[
+      { name: 'Arthals', platform: 'Wechat', amount: 50, date: '2025-11-06' },
+      { name: '顾**', platform: 'Wechat', amount: 28, date: '2025-06-23' },
+      { name: 'Anonymous', platform: 'Wechat', amount: 20, date: '2022-04-06' },
+      { name: '华雄 (1300****71)', platform: 'QQ', amount: 5, date: '2019-12-30' },
+      { name: '◌ (1934****45)', platform: 'QQ', amount: 3, date: '2019-12-30' },
+      { name: 'C*a (酷安@暴走の蜗牛)', amount: 2, date: '2019-07-02' }
+    ]}
+  />
+</PageLayout>
+
+<style>
+  .sponsorship-card {
+    & .sponsorship-card-img {
+      opacity: 0.3;
+      --un-blur: blur(4px);
+      filter: var(--un-blur);
+    }
+
+    &:hover {
+      & .sponsorship-card-icon {
+        opacity: 0;
+      }
+      & .sponsorship-card-img {
+        opacity: 1;
+        --un-blur: blur(0);
+      }
+    }
+  }
+</style>

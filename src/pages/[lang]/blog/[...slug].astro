@@ -1,0 +1,36 @@
+---
+import { render, type CollectionEntry } from 'astro:content'
+import { languages } from '@/i18n/ui'
+
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import PostLayout from '@/layouts/BlogPost.astro'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const posts = sortMDByDate(await getBlogCollection())
+
+  return posts.map((post) => {
+    // Split id "en/post-slug" -> lang="en", slug="post-slug"
+    const [lang, ...slugParts] = post.id.split('/')
+    const slug = slugParts.join('/')
+
+    return {
+      params: { lang, slug },
+      props: { post, posts }
+    }
+  })
+}
+
+type Props = {
+  post: CollectionEntry<'blog'>
+  posts: CollectionEntry<'blog'>[]
+}
+
+const { post, posts } = Astro.props
+const { Content, headings, remarkPluginFrontmatter } = await render(post)
+---
+
+<PostLayout {post} {posts} {headings} {remarkPluginFrontmatter}>
+  <Content />
+</PostLayout>

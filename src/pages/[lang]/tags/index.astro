@@ -1,0 +1,57 @@
+---
+import { languages, useTranslations } from '@/i18n/ui'
+
+import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
+import { Button } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import TagCloud from '@/components/TagCloud.astro'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }))
+}
+
+const { lang } = Astro.params
+const t = useTranslations(lang as any)
+
+const allPosts = await getBlogCollection()
+const langPosts = allPosts.filter((post) => {
+  const [postLang] = post.id.split('/')
+  return postLang === lang
+})
+const allTags = getUniqueTagsWithCount(langPosts)
+
+const meta = {
+  description: "A list of all the topics I've written about in my posts",
+  title: t('tags.title')
+}
+---
+
+<PageLayout {meta}>
+  <Button title={t('common.back')} href={`/${lang}/blog`} variant='back' />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-6 text-3xl font-medium'>{t('tags.title')}</h1>
+    </div>
+
+    <div id='content' class='animate relative py-12'>
+      {
+        allTags.length > 0 ? (
+          <TagCloud
+            tags={allTags.map(([tag, val]) => ({
+              name: t(`tag.${tag.toLowerCase()}` as any) || tag,
+              count: val,
+              link: `/${lang}/tags/${tag}`
+              // Optional: Assign colors based on logic if needed, or let component handle it
+            }))}
+            radius={200}
+          />
+        ) : (
+          <p>{t('home.no_posts')}</p>
+        )
+      }
+    </div>
+  </main>
+</PageLayout>

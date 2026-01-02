@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl, languages, useTranslations } from '@/i18n/ui'
+
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
@@ -12,11 +14,21 @@ interface Props {
   back?: string
 }
 
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
 const { meta, highlightColor, back = '/', ...props } = Astro.props
+
+const localizedBack =
+  back === '/'
+    ? `/${lang}`
+    : back.startsWith('/') && !back.startsWith(`/${lang}`)
+      ? `/${lang}${back}`
+      : back
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
-  <Button title='Back' href={back} variant='back' />
+  <Button title={t('common.back')} href={localizedBack} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     <aside

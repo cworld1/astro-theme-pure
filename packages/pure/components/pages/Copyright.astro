@@ -1,5 +1,6 @@
 ---
 import type { CollectionKey, InferEntrySchema } from 'astro:content'
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 import config from 'virtual:config'
 
 import { cn, getFormattedDate } from '../../utils'
@@ -29,6 +30,9 @@ const shares = {
     link: `https://bsky.app/intent/compose?text=${title}%0A${Astro.url}`
   }
 } as const
+
+const lang = Astro.url.pathname.split('/')[1] as keyof typeof ui
+const t = useTranslations(lang in ui ? lang : defaultLang)
 ---
 
 <div
@@ -48,13 +52,13 @@ const shares = {
   {/* common info */}
   <div class='flex flex-row flex-wrap justify-start gap-x-5 gap-y-1 sm:gap-x-8'>
     <div class='flex gap-x-2 sm:flex-col'>
-      <span>Author</span>
+      <span>{t('copyright.author')}</span>
       <span class='text-sm text-foreground max-sm:place-self-center'>{config.author}</span>
     </div>
     {
       publishDate && (
         <div class='flex gap-x-2 sm:min-w-16 sm:flex-col'>
-          <span>Published at</span>
+          <span>{t('copyright.publishedAt')}</span>
           <span class='text-sm text-foreground max-sm:place-self-center'>
             {getFormattedDate(publishDate, {
               month: 'long'
@@ -64,7 +68,7 @@ const shares = {
       )
     }
     <div class='flex gap-x-2 sm:flex-col'>
-      <span>Copyright</span>
+      <span>{t('copyright.license')}</span>
       <a
         class='text-sm text-foreground max-sm:place-self-center'
         href='https://creativecommons.org/licenses/by/4.0/'

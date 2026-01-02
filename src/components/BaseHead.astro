@@ -1,5 +1,5 @@
 ---
-
+import { languages } from '@/i18n/ui'
 import config from 'virtual:config'
 
 import { prod } from 'astro-pure/server'
@@ -36,6 +36,22 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 
 {/* Canonical URL */}
 <link rel='canonical' href={canonicalURL} />
+
+{/* Alternate URLs */}
+{
+  Object.keys(languages).map((lang) => {
+    // Replace current lang prefix with target lang
+    // Assumption: pathname always starts with /lang/ or is / (which redirects)
+    // Actually with prefixDefaultLocale, all paths start with /en/ or /zh/ except assets/unknown
+    // But strip existing lang logic:
+    const currentPath = Astro.url.pathname
+    const pathWithoutLang = currentPath.replace(/^\/(en|zh)/, '') || '/'
+
+    // Construct new path
+    const href = new URL(`/${lang}${pathWithoutLang === '/' ? '' : pathWithoutLang}`, Astro.site)
+    return <link rel='alternate' hreflang={lang} href={href} />
+  })
+}
 
 {/* Primary Meta Tags */}
 <meta content={siteTitle} name='title' />

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { InferEntrySchema } from 'astro:content'
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 
 import { FormattedDate, Icon } from '../user'
 
@@ -17,6 +18,9 @@ const {
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   month: 'short'
 }
+
+const lang = Astro.url.pathname.split('/')[1] as keyof typeof ui
+const t = useTranslations(lang in ui ? lang : defaultLang)
 ---
 
 {
@@ -54,7 +58,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
           <div class='flex items-center gap-1'>
             <span> / </span>
             <span>
-              Update
+              {t('hero.update')}
               <FormattedDate
                 class='font-sans'
                 date={updatedDate}

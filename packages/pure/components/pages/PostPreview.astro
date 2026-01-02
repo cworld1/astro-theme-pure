@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
@@ -30,7 +31,7 @@ const postDate = data.updatedDate ?? data.publishDate
       detailed && 'max-sm:px-4 sm:py-5',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
-    href={`/blog/${id}`}
+    href={`/${id.split('/')[0]}/blog/${id.split('/').slice(1).join('/')}`}
     data-astro-prefetch
   >
     {
@@ -106,11 +107,21 @@ const postDate = data.updatedDate ?? data.publishDate
             {data.tags.length > 0 && (
               <object>
                 <ul class='tag-list mt-1 flex gap-2'>
-                  {data.tags.map((tag: string) => (
-                    <li>
-                      <Button as='a' title={tag} href={`/tags/${tag}`} variant='pill' />
-                    </li>
-                  ))}
+                  {data.tags.map((tag: string) => {
+                    const postLang = id.split('/')[0]
+                    const safeLang = postLang in ui ? (postLang as keyof typeof ui) : defaultLang
+                    const t = useTranslations(safeLang)
+                    return (
+                      <li>
+                        <Button
+                          as='a'
+                          title={t(`tag.${tag.toLowerCase()}` as any) || tag}
+                          href={`/${postLang}/tags/${tag}`}
+                          variant='pill'
+                        />
+                      </li>
+                    )
+                  })}
                 </ul>
               </object>
             )}

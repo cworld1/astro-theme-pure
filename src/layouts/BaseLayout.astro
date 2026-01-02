@@ -1,13 +1,16 @@
 ---
-import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
+import { Footer, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
+import Header from '@/components/Header.astro'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
 import '@/assets/styles/global.css'
 import '@/assets/styles/app.css'
+
+import { getLangFromUrl } from '@/i18n/ui'
 
 interface Props {
   meta: SiteMeta
@@ -19,18 +22,17 @@ const {
   highlightColor,
   ...props
 } = Astro.props
+
+const lang = getLangFromUrl(Astro.url)
 ---
 
-<html lang={config.locale.lang}>
+<html lang={lang}>
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>
-    
-
-    
     {
       highlightColor && (
         <div

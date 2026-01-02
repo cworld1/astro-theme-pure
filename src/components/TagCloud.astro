@@ -1,0 +1,161 @@
+---
+export interface Props {
+  tags: {
+    name: string
+    count: number
+    link: string
+    color?: string
+  }[]
+  radius?: number
+}
+
+const { tags, radius = 200 } = Astro.props
+---
+
+<div
+  class='tag-cloud-container relative flex items-center justify-center'
+  style={`height: ${radius * 2}px`}
+>
+  <div class='tag-cloud relative' style={`width: ${radius * 2}px; height: ${radius * 2}px`}>
+    <ul>
+      {
+        tags.map((tag) => (
+          <li class='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 list-none'>
+            <a
+              href={tag.link}
+              class='block text-center text-muted-foreground transition-colors hover:text-primary'
+              style={{ color: tag.color }}
+            >
+              <span class='text-lg font-bold'>{tag.name}</span>
+              {tag.count > 0 && <span class='ml-1 text-xs opacity-60'>({tag.count})</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script>
+  class TagCloud {
+    container: HTMLElement
+    items: HTMLElement[]
+    radius: number
+    depth: number
+    size: number
+    mouseX: number
+    mouseY: number
+    tags: { x: number; y: number; z: number; element: HTMLElement }[]
+
+    constructor(container: HTMLElement, radius: number) {
+      this.container = container
+      this.items = Array.from(container.querySelectorAll('li'))
+      this.radius = radius
+      this.depth = radius
+      this.size = radius
+      this.mouseX = 0
+      this.mouseY = 0
+      this.tags = []
+
+      this.init()
+      this.animate()
+    }
+
+    init() {
+      const phi = Math.PI * (3 - Math.sqrt(5))
+      const len = this.items.length
+
+      this.items.forEach((item, i) => {
+        const y = 1 - (i / (len - 1)) * 2
+        const radius = Math.sqrt(1 - y * y)
+        const theta = phi * i
+
+        const x = Math.cos(theta) * radius
+        const z = Math.sin(theta) * radius
+
+        this.tags.push({
+          x: x * this.radius,
+          y: y * this.radius,
+          z: z * this.radius,
+          element: item
+        })
+
+        // Assign random color if not present, using a soft palette
+        if (!item.querySelector('a')?.style.color) {
+          const colors = [
+            '#428BCA',
+            '#AEDCAE',
+            '#ECA9A7',
+            '#DA99FF',
+            '#FFB380',
+            '#D9B999',
+            '#659EB966'
+          ]
+          const color = colors[i % colors.length]
+          const link = item.querySelector('a')
+          if (link) link.style.color = color
+        }
+      })
+
+      // Set initial rotation speed (approx 30s per rotation -> 0.0035 rad/frame)
+      this.mouseX = 0.0035
+      this.mouseY = 0.0035
+
+      document.addEventListener('mousemove', (e) => {
+        const rect = this.container.getBoundingClientRect()
+        // Check if mouse is within/near the cloud container
+        const isNear =
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+
+        if (isNear) {
+          const x = e.clientX - rect.left - rect.width / 2
+          const y = e.clientY - rect.top - rect.height / 2
+
+          // Reduced sensitivity for slower rotation
+          // 0.00003 * 100px = 0.003 rad/frame ~ 35s per circle
+          this.mouseX = x * 0.00003
+          this.mouseY = y * 0.00003
+        }
+        // Optional: Else maintain last speed or decay.
+        // Current implementation maintains speed set when mouse was last near/moving.
+      })
+    }
+
+    animate() {
+      const cx = Math.cos(this.mouseY)
+      const sx = Math.sin(this.mouseY)
+      const cy = Math.cos(this.mouseX)
+      const sy = Math.sin(this.mouseX)
+
+      this.tags.forEach((tag) => {
+        const x = tag.x
+        const y = tag.y * cx + tag.z * -sx
+        const z = tag.y * sx + tag.z * cx
+
+        tag.x = x * cy + z * sy
+        tag.y = y
+        tag.z = x * -sy + z * cy
+
+        const scale = this.depth / (this.depth - tag.z)
+        const alpha = (tag.z + this.radius) / (2 * this.radius)
+
+        tag.element.style.transform = `translate3d(${tag.x}px, ${tag.y}px, 0) scale(${scale})`
+        tag.element.style.opacity = `${Math.max(0.1, alpha + 0.5)}`
+        tag.element.style.zIndex = `${Math.floor(scale * 100)}`
+      })
+
+      requestAnimationFrame(() => this.animate())
+    }
+  }
+
+  // Initialize all tag clouds
+  const containers = document.querySelectorAll('.tag-cloud')
+  containers.forEach((container) => {
+    // Get radius from style or attribute, or default
+    const width = container.clientWidth
+    new TagCloud(container as HTMLElement, width / 2)
+  })
+</script>
