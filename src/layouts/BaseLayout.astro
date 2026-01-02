@@ -106,5 +106,25 @@ const lang = getLangFromUrl(Astro.url)
         ) !important;
       }
     </style>
+    <script
+      is:inline
+      type='module'
+      data-astro-rerun
+      define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
+    >
+      const loadPageview = async () => {
+        try {
+          const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
+          await pageview.pageviewCount({
+            serverURL: walineServer
+          })
+        } catch (e) {
+          console.error('Failed to load Waline pageview:', e)
+        }
+      }
+
+      loadPageview()
+      setTimeout(loadPageview, 1000)
+    </script>
   </body>
 </html>

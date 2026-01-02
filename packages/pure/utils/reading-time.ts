@@ -38,14 +38,16 @@ function isCJK(char: string): boolean {
  * @param {number} wordsPerMinute - The number of words read per minute, default is 200
  * @returns {ReadingTimeResult} - An object containing the reading time
  */
-export function getReadingTime(text: string, wordsPerMinute: number = 200): ReadingTimeResult {
-  let words = 0
+export function getReadingTime(text: string, options: { cjkSpeed?: number; enSpeed?: number } = {}): ReadingTimeResult {
+  const { cjkSpeed = 400, enSpeed = 200 } = options
+  let cjkCount = 0
+  let enWordCount = 0
   let inWord = false
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i]
     if (isCJK(char)) {
-      words++
+      cjkCount++
       // Skip following CJK punctuation
       while (i + 1 < text.length && CJK_PUNCTUATION.test(text[i + 1])) {
         i++
@@ -53,7 +55,7 @@ export function getReadingTime(text: string, wordsPerMinute: number = 200): Read
       inWord = false // reset inWord after counting a CJK character
     } else if (/\S/.test(char)) {
       if (!inWord) {
-        words++
+        enWordCount++
         inWord = true // mark that we are inside a word
       }
     } else {
@@ -62,15 +64,15 @@ export function getReadingTime(text: string, wordsPerMinute: number = 200): Read
   }
 
   // Calculate reading time
-  const minutes = words / wordsPerMinute
+  const minutes = cjkCount / cjkSpeed + enWordCount / enSpeed
   const time = Math.round(minutes * 60 * 1000) // Convert to milliseconds
-  const displayed = Math.ceil(minutes)
+  const displayed = Math.ceil(minutes) || 1 // Ensure at least 1 min
 
   return {
     text: displayed + ' min',
     minutes,
     time,
-    words
+    words: cjkCount + enWordCount
   }
 }
 

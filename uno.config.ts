@@ -187,6 +187,27 @@ export default defineConfig({
     'rounded-b-2xl',
     // Typography
     'text-base',
-    'prose'
+    'prose',
+    // Toast
+    'fixed',
+    'top-4',
+    'right-4',
+    'z-50',
+    'flex',
+    'flex-col',
+    'gap-3',
+    'toast-item',
+    'items-center',
+    'gap-2',
+    'px-4',
+    'py-3',
+    'rounded-xl',
+    'bg-background/80',
+    'backdrop-blur-md',
+    'shadow-lg',
+    'transition-all',
+    'duration-300',
+    'translate-x-full',
+    'opacity-0'
   ]
 })

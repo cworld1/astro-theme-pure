@@ -3,6 +3,8 @@ import { Image } from 'astro:assets'
 import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 
+import config from '@/site-config'
+
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
 
@@ -13,9 +15,16 @@ type Props<T extends CollectionKey> = {
 }
 
 const { post, detailed = false, class: className } = Astro.props
-const { id, data } = post
+const { id, data, slug } = post
 const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.updatedDate ?? data.publishDate
+
+// Clean up path logic
+const [lang, ...slugParts] = id.split('/')
+const rawSlug = slugParts.join('/')
+// Remove file extension and 'index' from the end
+const cleanSlug = rawSlug.replace(/(\/index)?\.(md|mdx)$/, '')
+const postPath = `/${lang}/blog/${cleanSlug}`
 ---
 
 <li
@@ -23,7 +32,7 @@ const postDate = data.updatedDate ?? data.publishDate
   style={detailed &&
     data.heroImage?.color &&
     `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
-    --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
+      --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
 >
   <a
     class={cn(
@@ -31,7 +40,7 @@ const postDate = data.updatedDate ?? data.publishDate
       detailed && 'max-sm:px-4 sm:py-5',
       detailed && data.heroImage && 'max-md:pt-24'
     )}
-    href={`/${id.split('/')[0]}/blog/${id.split('/').slice(1).join('/')}`}
+    href={postPath}
     data-astro-prefetch
   >
     {
@@ -96,13 +105,13 @@ const postDate = data.updatedDate ?? data.publishDate
                 <Icon name='time' class='size-4' />
                 {remarkPluginFrontmatter.minutesRead}
               </span>
-              {/* language */}
-              {data.language && (
-                <span class='flex items-center gap-1'>
-                  <Icon name='earth' class='size-4' />
-                  {data.language}
+              {/* view count */}
+              <span class='flex items-center gap-1'>
+                <Icon name='eye' class='size-4' />
+                <span class='waline-pageview-count' data-path={postPath}>
+                  ...
                 </span>
-              )}
+              </span>
             </div>
             {data.tags.length > 0 && (
               <object>

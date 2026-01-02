@@ -51,7 +51,7 @@ const { tags, radius = 200 } = Astro.props
       this.container = container
       this.items = Array.from(container.querySelectorAll('li'))
       this.radius = radius
-      this.depth = radius
+      this.depth = 2 * radius
       this.size = radius
       this.mouseX = 0
       this.mouseY = 0

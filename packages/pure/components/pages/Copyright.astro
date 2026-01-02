@@ -118,11 +118,11 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
 
 <div class='mx-6 rounded-b-xl border border-t-0 px-3 pb-1.5 pt-1 sm:mx-8 sm:px-4'>
   <a
-    href='/projects#sponsorship'
+    href={`/${lang}/projects#sponsorship`}
     class='flex items-center justify-between text-muted-foreground no-underline'
     target='_blank'
   >
-    <span>Buy me a cup of coffee ☕.</span>
+    <span>{t('copyright.buy_me_coffee')}</span>
     <Icon class='box-content size-5 p-1' name='receive-money' />
   </a>
 </div>
