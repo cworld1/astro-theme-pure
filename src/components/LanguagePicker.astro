@@ -21,14 +21,42 @@ const integrityCheck = pathNoLang === '/' ? '' : pathNoLang
 const nextUrl = `/${nextLang}${integrityCheck}`
 
 const label = languages[nextLang]
+const toggleText = nextLang === 'zh' ? '切换至简体中文' : 'Switch to English'
 ---
 
 <a
   href={nextUrl}
-  class='group box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
-  aria-label={`Switch to ${label}`}
-  title={`Switch to ${label}`}
+  class='group/lang box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+  aria-label={toggleText}
+  title={toggleText}
 >
-  <Icon name='earth' class='size-5 group-hover:text-primary transition-colors' />
+  <div class='relative size-5'>
+    <div
+      class='transition-colors group-hover/lang:text-primary'
+      style={{
+        maskImage: 'radial-gradient(circle at 75% 75%, transparent 25%, black 27%)',
+        WebkitMaskImage: 'radial-gradient(circle at 75% 75%, transparent 25%, black 27%)'
+      }}
+    >
+      <Icon name='earth' class='size-5' />
+    </div>
+    <svg
+      viewBox='0 0 24 24'
+      fill='none'
+      class='absolute inset-0 size-5 transition-colors group-hover/lang:text-primary'
+    >
+      <text
+        x='18'
+        y='21'
+        font-size={lang === 'zh' ? '9' : '7'}
+        text-anchor='middle'
+        fill='currentColor'
+        font-weight='bold'
+        font-family='sans-serif'
+      >
+        {lang === 'zh' ? '简' : 'EN'}
+      </text>
+    </svg>
+  </div>
   <span class='sr-only'>{label}</span>
 </a>
