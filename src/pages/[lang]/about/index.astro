@@ -15,69 +15,77 @@ export async function getStaticPaths() {
 const { lang } = Astro.params
 const t = useTranslations(lang as any)
 
+// 更新目录索引以符合你的博文逻辑
 const headings = [
-  { depth: 2, slug: 'hobbies', text: t('about.hobbies') },
-  { depth: 2, slug: 'tools', text: t('about.tools') },
-  { depth: 2, slug: 'social-networks', text: t('about.social') },
-  { depth: 2, slug: 'gossips', text: t('about.gossips') },
-  { depth: 2, slug: 'about-blog', text: t('about.blog') }
+  { depth: 2, slug: 'identity-audit', text: '01. 身份审计 (Identity Audit)' },
+  { depth: 2, slug: 'philosophy', text: '02. 核心哲学 (Core Philosophy)' },
+  { depth: 2, slug: 'research-pillars', text: '03. 研发架构 (Research Pillars)' },
+  { depth: 2, slug: 'tools', text: '04. 工具栈 (Toolbox)' },
+  { depth: 2, slug: 'social-networks', text: '05. 社交网络 (Social)' },
+  { depth: 2, slug: 'about-blog', text: '06. 关于本站 (About Blog)' }
 ]
 ---
 
 <PageLayout title={t('nav.about')} {headings} comment>
-  <p>Developer / Designer</p>
+  <p>R&D Engineer / Life Architect / Rationalist</p>
   <p>
-    Motto: Stay hungry, Stay foolish. <Spoiler>这里可以夹私货，比如为什么要演奏春日影！</Spoiler>
+    Motto: Life is a system; debug it with logic.
+    <Spoiler>拒绝“提前吃屎”，把握此时此刻。</Spoiler>
   </p>
-  <Button
-    title={t('about.sponsor_me')}
-    class='w-fit'
-    href='/projects#sponsorship'
-    variant='ahead'
-  />
 
-  {/* general-talk */}
-  <h2 id='hobbies'>{t('about.hobbies')}</h2>
+  <Button title='我的研发宣言' class='w-fit' href='/posts/manifesto' variant='ahead' />
+
+  {/* 01. 身份审计 */}
+  <h2 id='identity-audit'>01. 身份审计 (Identity Audit)</h2>
+  <p>我是一名身处硬科技行业的研发工程师，目前在广州从事 OLED 材料研发。</p>
+  <p>
+    作为一名 985
+    院校培养的“理性流亡者”，我习惯于用工程思维拆解世界。我建立这个站点的初衷，是试图解决人生这个最大的非线性系统：<b
+      >如何在充满不确定性的时代，获得真正的自由与内心的平静？</b
+    >
+  </p>
+
+  {/* 02. 核心哲学 */}
+  <h2 id='philosophy'>02. 核心哲学 (Core Philosophy)</h2>
+  <Collapse title='关于“提前吃屎”的逻辑风险控制'>
+    未来可能发生不可预知的变故，但提前焦虑并不能降低风险发生的概率，它只是让你在灾难未至时，就提前进入了灾难的运行状态。
+    我将这种行为定义为<b>“提前吃屎”</b
+    >。本实验室的首要任务，就是通过逻辑审计，将有限的带宽从无谓的焦虑中撤回，重新分配给此时此刻的成长与爱。
+  </Collapse>
+
+  {/* 03. 研发架构 */}
+  <h2 id='research-pillars'>03. 研发架构 (Research Pillars)</h2>
+  <p>本站的内容生态运行在以下三个维度的交叉点上：</p>
   <ul>
-    <li>Lorem ipsum dolor sit amet, vidit suscipit at mei.</li>
-    <li>
-      Quem denique mea id. Usu ei regione indoctum dissentiunt, cu meliore fuisset mei, vel quod
-      voluptua ne.
-    </li>
-    <li>Ex dicat impedit mel, at eum oratio possit voluptatum.</li>
-    <li>Impetus fuisset ullamcorper pri cu, his posse iisque ad, aliquam honestatis usu id.</li>
+    <li><strong>科技与效率：</strong> 探索 AI 与自动化工具，实现“时间解耦”。</li>
+    <li><strong>投资逻辑：</strong> 审计商业本质，构建不焦虑的“资产底座”。</li>
+    <li><strong>内心探索：</strong> 调试心理机制，寻找复杂世界中的“理性平静”。</li>
   </ul>
 
-  {/* tools */}
-  <h2 id='tools'>{t('about.tools')}</h2>
-  <p>Current support tools as follow:</p>
+  {/* 04. 工具栈 */}
+  <h2 id='tools'>04. 工具栈 (Toolbox)</h2>
+  <p>实验室目前运行所依赖的生产力工具：</p>
   <ToolSection
     class='mb-5'
-    title='Design'
+    title='Development'
     tools={[
       {
-        name: 'Photoshop',
-        description: 'Picture Editing',
-        href: 'https://www.adobe.com/products/photoshop',
-        icon: import('@/assets/tools/photoshop.svg?raw')
+        name: 'VS Code',
+        description: 'Primary IDE',
+        href: 'https://code.visualstudio.com/',
+        icon: import('@/assets/tools/vscode.svg?raw')
       },
       {
-        name: 'Illustrator',
-        description: 'Vector Drawing',
-        href: 'https://www.adobe.com/products/illustrator',
-        icon: import('@/assets/tools/illustrator.svg?raw')
+        name: 'Astro',
+        description: 'Static Site Framework',
+        href: 'https://astro.build/',
+        icon: import('@/assets/tools/astro.svg?raw')
       },
       {
-        name: 'After Effects',
-        description: 'Motion Graphics',
-        href: 'https://www.adobe.com/products/aftereffects',
-        icon: import('@/assets/tools/aftereffects.svg?raw')
-      },
-      {
-        name: 'Premiere Pro',
-        description: 'Video Editing',
-        href: 'https://www.adobe.com/products/premiere',
-        icon: import('@/assets/tools/premiere.svg?raw')
+        name: 'Next.js',
+        description: 'SaaS Development',
+        href: 'https://nextjs.org/',
+        icon: import('@/assets/tools/nextjs.svg?raw')
       }
     ]}
   />
@@ -86,176 +94,70 @@ const headings = [
     title='Productivity'
     tools={[
       {
-        name: 'Chrome',
-        description: 'Browser',
-        href: 'https://www.google.com/chrome/',
-        icon: import('@/assets/tools/chrome.svg?raw')
-      },
-      {
-        name: 'Firefox',
-        description: 'Browser',
-        href: 'https://www.mozilla.org/en-US/firefox',
-        icon: import('@/assets/tools/firefox.svg?raw')
-      },
-      {
         name: 'Notion',
-        description: 'Note Taking',
+        description: 'System Management',
         href: 'https://www.notion.so/',
         icon: import('@/assets/tools/notion.svg?raw')
       },
       {
-        name: 'Typora',
-        description: 'Markdown Editor',
-        href: 'https://typora.io/',
-        icon: import('@/assets/tools/typora.svg?raw')
-      }
-    ]}
-  />
-  <ToolSection
-    class='mb-5'
-    title='Development'
-    tools={[
-      {
-        name: 'VS Code',
-        description: 'IDE',
-        href: 'https://code.visualstudio.com/',
-        icon: import('@/assets/tools/vscode.svg?raw')
-      },
-      {
-        name: 'Neovim',
-        description: 'IDE',
-        href: 'https://neovim.io/',
-        icon: import('@/assets/tools/neovim.svg?raw')
-      },
-      {
-        name: 'Sublime Text',
-        description: 'IDE',
-        href: 'https://www.sublimetext.com/',
-        icon: import('@/assets/tools/sublime.svg?raw')
-      }
-    ]}
-  />
-  <ToolSection
-    class='mb-5'
-    title='Environment'
-    tools={[
-      {
-        name: 'Arch Linux',
-        description: 'Linux Distribution',
-        href: 'https://archlinux.org/',
-        icon: import('@/assets/tools/archlinux.svg?raw')
-      },
-      {
-        name: 'Ubuntu 24.04 LTS',
-        description: 'Linux Distribution',
-        href: 'https://ubuntu.com/',
-        icon: import('@/assets/tools/ubuntu.svg?raw')
-      },
-      {
-        name: 'MacOS Tahoe',
-        description: 'MacBook Air',
-        href: 'https://www.apple.com/macos/',
-        icon: import('@/assets/tools/apple.svg?raw')
-      },
-      {
-        name: 'Windows 11',
-        description: 'Framework Laptop 16',
-        href: 'https://news.microsoft.com/windows11-general-availability/',
-        icon: import('@/assets/tools/windows11.svg?raw')
+        name: 'Cursor',
+        description: 'AI Coding Partner',
+        href: 'https://cursor.sh/',
+        icon: import('@/assets/tools/cursor.svg?raw')
       }
     ]}
   />
 
-  {/* social-networks */}
-  <h2 id='social-networks'>{t('about.social')}</h2>
-  <p>
-    Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione indoctum
-    dissentiunt, cu meliore fuisset mei, vel quod voluptua ne.
-  </p>
-  <Substats
+  {/* 05. 社交网络 */}
+  <h2 id='social-networks'>05. 社交网络 (Social)</h2>
+  <p>如果你也对“理性的突围”感兴趣，欢迎通过以下渠道连接：</p>
+  {
+    /* <Substats
     stats={[
       {
         platform: 'GitHub',
         icon: 'github',
-        link: 'https://github.com/cworld1',
-        text: 'followers',
-        api: 'github/cworld1'
+        link: 'https://github.com/你的ID',
+        text: 'Projects',
+        api: 'github/你的ID'
       },
       {
-        platform: 'Telegram',
-        icon: 'telegram',
-        color: '#2ca5e0',
-        link: 'https://t.me/cworld0_cn',
-        text: 'subscribers',
-        api: 'telegram/cworld0_cn'
-      },
-      {
-        platform: 'Steam',
-        icon: 'steam',
-        color: '#50769d',
-        link: 'https://steamcommunity.com/id/cworld',
-        text: 'games',
-        api: 'steamgames/76561199021278120'
+        platform: 'X / Twitter',
+        icon: 'twitter',
+        color: '#1DA1F2',
+        link: 'https://x.com/你的ID',
+        text: 'Thoughts'
       }
     ]}
-  />
+  /> */
+  }
 
-  {/* gossips */}
-  <h2 id='gossips'>{t('about.gossips')}</h2>
-  <Collapse title='Lorem ipsum'>
-    Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione indoctum
-    dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel, at eum oratio
-    possit voluptatum.
-  </Collapse>
-
-  {/* about-blog */}
-  <h2 id='about-blog'>{t('about.blog')}</h2>
-  <p>Website history:</p>
+  {/* 06. 关于本站 */}
+  <h2 id='about-blog'>06. 关于本站 (About Blog)</h2>
+  <p>网站迭代日志：</p>
   <Timeline
     events={[
       {
-        date: '2024-04-29',
-        content:
-          'Website refactored using <a href="https://astro.build/" target="_blank">Astro</a> and <a href="https://github.com/srleom/astro-theme-resume" target="_blank">Astro Theme Resume</a>'
+        date: '2025-01-26',
+        content: '<b>项目启动：</b> 在腊月二十七，建立了这个网站，以图记录自己的生活乃至一生。'
       },
       {
-        date: '2024-07-26',
-        content:
-          'Website abstracted as a theme and published on <a href="https://github.com/cworld1/astro-theme-pure"target="_blank">Github</a>'
-      },
-      {
-        date: '2024-07-27',
-        content: 'Began writing website docs'
+        date: '2026-01-02',
+        content: '<b>架构重构：</b> 确立“人生研发实验室”三位一体架构，从随笔转向系统化输出。'
       }
     ]}
   />
-  <p>
-    The smooth operation and personalized customization of website also rely on the resources and
-    technical support provided by the following excellent projects/service providers:
-  </p>
+
+  <p>技术栈支持：</p>
   <ul>
-    <li>Domain: <a href='#' target='_blank'>Vercel</a></li>
     <li>
-      Framework & Theme: <a href='https://astro.build/' target='_blank'>Astro</a> + <a
+      Framework: <a href='https://astro.build/' target='_blank'>Astro</a> + <a
         href='https://github.com/cworld1/astro-theme-pure'
         target='_blank'>Astro Theme Pure</a
       >
     </li>
-    <li>
-      Site hosting: <a href='https://vercel.com/' target='_blank'>Vercel</a>
-    </li>
-    <li>
-      CI/CD: <a href='https://vercel.com/workflow' target='_blank'>Vercel Workflow</a>
-    </li>
-    <li>Comment system: <a href='https://waline.js.org' target='_blank'>Waline</a></li>
-    <li>
-      Visits: <a href='https://supabase.com/' target='_blank'>Supabase</a> +
-      <a href='https://waline.js.org/' target='_blank'>Waline</a>
-    </li>
-    <li>
-      Other statistics: <a href='https://github.com/spencerwooo/substats' target='_blank'
-        >Substats</a
-      >
-    </li>
+    <li>Hosting: <a href='https://vercel.com/' target='_blank'>Vercel</a></li>
+    <li>Database: <a href='https://supabase.com/' target='_blank'>Supabase</a></li>
+    <li>Comment: <a href='#' target='_blank'>Waline / Giscus</a></li>
   </ul>
 </PageLayout>

@@ -1,5 +1,6 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import vercel from '@astrojs/vercel'
+import mermaid from 'astro-mermaid'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
@@ -90,7 +91,8 @@ export default defineConfig({
     // astro-pure will automatically add sitemap, mdx & unocss
     // sitemap(),
     // mdx(),
-    AstroPureIntegration(config)
+    AstroPureIntegration(config),
+    mermaid()
     // Compress recommend
     // https://docs.astro.build/en/guides/integrations-guide/partytown/
   ],
