@@ -47,7 +47,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
           menuItems.map((item) => (
             <a
               href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
+              class='w-full flex-none grow py-2 text-right font-medium transition-transform hover:-translate-y-1 hover:text-primary sm:w-fit sm:px-3'
               aria-label='Nav menu item'
             >
               {item.title}
@@ -56,7 +56,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
         }
         <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
           <a
-            class='px-1 py-2 transition-none sm:px-2'
+            class='px-1 py-2 transition-transform hover:-translate-y-1 sm:px-2'
             href={getLocalizedPath('/search')}
             title={t('search.title')}
           >
@@ -72,7 +72,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
       <LanguagePicker />
       <button
         id='toggleDarkMode'
-        class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+        class='group/dark box-content size-5 rounded-md border p-1.5 transition-all hover:-translate-y-1 hover:bg-border sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Dark Theme</span>
         <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
@@ -81,7 +81,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
       </button>
       <button
         id='toggleMenu'
-        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+        class='rounded-md border p-1.5 transition-all hover:-translate-y-1 hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Menu</span>
         <Icon class='size-5' name='menu' />
@@ -113,6 +113,13 @@ const menuItems = (config.header.menu || []).map((item) => ({
         this.classList.toggle('not-top', window.scrollY > 20)
         this.dataset.show = (window.scrollY < 350 || window.scrollY < preScrollY).toString()
         preScrollY = window.scrollY
+      })
+
+      // Show header when mouse near top
+      document.addEventListener('mousemove', (e) => {
+        if (e.clientY < 100) {
+          this.dataset.show = 'true'
+        }
       })
 
       // Dark Mode
@@ -153,8 +160,10 @@ const menuItems = (config.header.menu || []).map((item) => ({
     &.not-top {
       --un-border-opacity: 1;
       border-color: hsl(var(--border) / var(--un-border-opacity));
-      --un-bg-opacity: 1;
+      --un-bg-opacity: 0.8;
       background-color: hsl(var(--background) / var(--un-bg-opacity));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       padding-left: 0.375rem;
       padding-right: 0.375rem;
       box-shadow:
@@ -173,7 +182,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
     }
   }
   :global(.dark) header-component.not-top {
-    background-color: hsl(var(--muted) / var(--un-bg-opacity));
+    background-color: hsl(var(--muted) / 0.6);
   }
 
   /* header menu */

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { InferEntrySchema } from 'astro:content'
-import { defaultLang, ui, useTranslations } from '@/i18n/ui'
+import { defaultLang, languages, ui, useTranslations } from '@/i18n/ui'
 
 import { FormattedDate, Icon } from '../user'
 
@@ -72,16 +72,18 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
     {/* Times read */}
     <div class='flex items-center gap-1'>
       <Icon name='time' class='size-5' />
-      {remarkPluginFrontmatter.minutesRead}
+      {parseInt(remarkPluginFrontmatter.minutesRead as string)}
+      {' '}
+      {t('hero.minRead')}
     </div>
     {
       // Language
-      language && (
-        <span class='flex items-center gap-1'>
-          <Icon name='earth' class='size-5' />
-          {language}
-        </span>
-      )
+      // language && (
+      //   <span class='flex items-center gap-1'>
+      //     <Icon name='earth' class='size-5' />
+      //     {languages[language as keyof typeof languages] || language}
+      //   </span>
+      // )
     }
     {
       // Tags
@@ -96,7 +98,7 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
                 data-pagefind-filter='tag'
                 href={`/tags/${tag}`}
               >
-                {tag}
+                {t(`tag.${tag.toLowerCase()}` as any) || tag}
               </a>
               {i < tags.length - 1 && '/'}
             </div>

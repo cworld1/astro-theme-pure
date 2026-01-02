@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from 'astro'
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 
 import { generateToc } from '../../plugins/toc'
 import TOCHeading from './TOCHeading.astro'
@@ -13,10 +14,13 @@ interface Props {
 const { headings, class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
+
+const lang = Astro.url.pathname.split('/')[1] as keyof typeof ui
+const t = useTranslations(lang in ui ? lang : defaultLang)
 ---
 
 <toc-heading class={className} {...props}>
-  <h2 class='font-medium'>TABLE OF CONTENTS</h2>
+  <h2 class='font-medium'>{t('toc.title')}</h2>
   <ul class='mt-4'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ul>

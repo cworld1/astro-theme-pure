@@ -87,6 +87,11 @@ export const ui = {
         'tag.mind': 'Mind',
         'tag.mood': 'Mood',
         'tag.markdown': 'Markdown',
+        'toc.title': 'Table of Contents',
+        'hero.minRead': 'min read',
+        'post.views': 'views',
+        'post.comments': 'comments',
+        'comment.stuck': 'Comment seems to stuck. Try to refresh?✨',
     },
     zh: {
         'nav.home': '首页',
@@ -131,6 +136,7 @@ export const ui = {
         'copyright.publishedAt': '发布于',
         'copyright.license': '版权声明',
         'hero.update': '更新于',
+        'hero.minRead': '分钟',
         'home.category.technology': '技术',
         'home.category.investment': '投资',
         'home.category.life': '生活',
@@ -140,6 +146,9 @@ export const ui = {
         'search.desc': '',
         'search.placeholder': '输入搜索词',
         'search.disabled': 'Pagefind 已禁用',
+        'post.views': '次阅读',
+        'post.comments': '条评论',
+        'comment.stuck': '评论区在开小差。刷新看看？✨',
         'home.project.type.heading': '英语打字练习',
         'home.project.type.subheading': '一次敲击，一点进步，学习更高效。',
         'home.project.post.heading': '最新科技新闻',
@@ -169,6 +178,7 @@ export const ui = {
         'tag.mind': '心理',
         'tag.mood': '情绪',
         'tag.markdown': 'Markdown',
+        'toc.title': '目录',
     },
 } as const;
 

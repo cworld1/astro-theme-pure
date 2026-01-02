@@ -3,16 +3,21 @@ import config from '@/site-config'
 
 import '@waline/client/style'
 
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
+
 import { cn } from 'astro-pure/utils'
 
 const { class: className } = Astro.props
+
+const lang = Astro.url.pathname.split('/')[1] as keyof typeof ui
+const t = useTranslations(lang in ui ? lang : defaultLang)
 ---
 
 {
   config.integ.waline.enable && (
-    <comment-component>
+    <comment-component data-lang={lang}>
       <div id='waline' class={cn('not-prose', className)}>
-        Comment seems to stuck. Try to refresh?✨
+        {t('comment.stuck')}
       </div>
     </comment-component>
   )
@@ -26,6 +31,8 @@ const { class: className } = Astro.props
   const walineConfig = config.integ.waline
 
   class Comment extends HTMLElement {
+    walineInstance: any
+
     constructor() {
       super()
     }
@@ -42,13 +49,33 @@ const { class: className } = Astro.props
         (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
       )
 
-      walineInit({
-        el: '#waline',
+      const lang = this.dataset.lang === 'zh' ? 'zh-CN' : 'en'
+
+      const { imageUploader, ...additionalConfigs } = walineConfig.additionalConfigs || {}
+      const _config = { ...additionalConfigs }
+      if (typeof imageUploader === 'function') {
+        // @ts-ignore
+        _config.imageUploader = imageUploader
+      }
+
+      this.walineInstance = walineInit({
+        el: this.querySelector('#waline') as HTMLElement,
         serverURL: walineConfig.server || '',
+        lang,
         emoji,
         reaction: ['/icons/heart-item.svg'],
-        ...walineConfig.additionalConfigs
+        ..._config
       })
+    }
+
+    disconnectedCallback() {
+      if (this.walineInstance) {
+        if (typeof this.walineInstance.destroy === 'function') {
+          this.walineInstance.destroy()
+        } else if (typeof this.walineInstance.unmount === 'function') {
+          this.walineInstance.unmount()
+        }
+      }
     }
   }
 

@@ -1,4 +1,6 @@
 ---
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
+
 import { cn } from 'astro-pure/utils'
 import Pageview from '@/components/waline/Pageview.astro'
 
@@ -11,16 +13,20 @@ interface Props {
 const { view, comment, class: className, ...props } = Astro.props
 
 const path = Astro.url.pathname
+const lang = Astro.url.pathname.split('/')[1] as keyof typeof ui
+const t = useTranslations(lang in ui ? lang : defaultLang)
 ---
 
 <div class={cn('text-base text-sm text-muted-foreground', className)} {...props}>
-  <span class='waline-pageview-count' data-path={path}></span> views
+  <span class='waline-pageview-count' data-path={path}></span>
+  {' ' + t('post.views')}
   {
     comment && (
       <>
         {' | '}
         <a href='#waline'>
-          <span class='waline-comment-count' data-path={path} /> comments
+          <span class='waline-comment-count' data-path={path} />
+          {' ' + t('post.comments')}
         </a>
       </>
     )

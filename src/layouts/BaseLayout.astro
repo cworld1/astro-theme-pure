@@ -29,6 +29,43 @@ const lang = getLangFromUrl(Astro.url)
 <html lang={lang}>
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
+    <script is:inline>
+      /* Filter out noisy browser extension logs */
+      ;(function () {
+        const originalLog = console.log
+        const originalInfo = console.info
+        const originalDebug = console.debug
+        // const originalWarn = console.warn
+
+        const filterArgs = (args) => {
+          // Convert args to string check
+          const str = args.map((a) => String(a)).join(' ')
+          const keywords = [
+            'ios-webRequest',
+            'debug-metadata',
+            'PlayerHookManager',
+            'KISS-Translator',
+            'siteDubbingRules',
+            'HlsJsHook',
+            'ShakaPlayerHook',
+            'VideoJsHook',
+            'JwPlayerHook',
+            'DashJsHook'
+          ]
+          return keywords.some((k) => str.includes(k))
+        }
+
+        console.log = function (...args) {
+          if (!filterArgs(args)) originalLog.apply(console, args)
+        }
+        console.info = function (...args) {
+          if (!filterArgs(args)) originalInfo.apply(console, args)
+        }
+        console.debug = function (...args) {
+          if (!filterArgs(args)) originalDebug.apply(console, args)
+        }
+      })()
+    </script>
     <ThemeProvider />
   </head>
 
