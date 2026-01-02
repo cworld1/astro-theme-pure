@@ -101,12 +101,13 @@ function getTagData(tagName: string) {
       <Image
         src={images[imagePath]()}
         alt={config.logo.alt || 'Profile'}
-        class='h-28 w-auto rounded-full border p-1'
+        class='h-28 w-auto rounded-full border p-1 cursor-pointer'
+        id='hero-avatar'
         loading='eager'
         fetchpriority='high'
       />
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-medium'>{config.author}</h1>
+        <h1 id='hero-author-name' class='text-3xl font-medium cursor-pointer'>{config.author}</h1>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
           <Label title='中国·广州'>
             <Icon name='location' class='size-5' slot='icon' />
@@ -242,3 +243,57 @@ function getTagData(tagName: string) {
     <Quote class='mt-12 bg-background' />
   </main>
 </PageLayout>
+
+<script>
+  import { showToast } from 'astro-pure/utils'
+
+  // Easter Egg Script
+  const messages = [
+    'Hello! 👋',
+    'Coding is fun! 💻',
+    'Have a nice day! ☀️',
+    'Stop poking me! 😠',
+    'You found a secret! 🥚',
+    'Bytecho Tech rules! 🚀',
+    'Do you like this theme? 🎨',
+    'Keep learning! 📚',
+    'Coffee time? ☕',
+    'Bug free code! 🐛🚫'
+  ]
+  const types = ['info', 'success', 'warning', 'error']
+  const icons = [
+    'github',
+    'twitter',
+    'mastodon',
+    'ufo',
+    'alien',
+    'brain',
+    'robot',
+    'rocket',
+    'fire',
+    'heart'
+  ]
+
+  function triggerEasterEgg() {
+    const randomMsg = messages[Math.floor(Math.random() * messages.length)]
+    const randomType = types[Math.floor(Math.random() * types.length)] as
+      | 'info'
+      | 'success'
+      | 'warning'
+      | 'error'
+    const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+
+    showToast({
+      message: randomMsg,
+      type: randomType,
+      icon: randomIcon as any,
+      time: 2000
+    })
+  }
+
+  const avatar = document.getElementById('hero-avatar')
+  const author = document.getElementById('hero-author-name')
+
+  avatar?.addEventListener('click', triggerEasterEgg)
+  author?.addEventListener('click', triggerEasterEgg)
+</script>
