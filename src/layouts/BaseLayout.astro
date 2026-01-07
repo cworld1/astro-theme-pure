@@ -3,6 +3,7 @@ import { Footer, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import Header from '@/components/Header.astro'
+import MermaidCopy from '@/components/scripts/MermaidCopy.astro'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -88,6 +89,7 @@ const lang = getLangFromUrl(Astro.url)
       </div>
       <Footer />
     </div>
+    <MermaidCopy />
 
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
