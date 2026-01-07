@@ -5,7 +5,7 @@ export const theme: ThemeUserConfig = {
   /** Title for your website. Will be used in metadata and as browser tab title. */
   title: 'Bytecho Tech',
   /** Will be used in index page & copyright declaration */
-  author: 'RickyZ',
+  author: 'Alan.Z',
   /** Description metadata for your website. Can be used in page metadata. */
   description: '分享科技，享受生活。',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
@@ -26,7 +26,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: '/src/assets/avatar.png',
+    src: '/src/assets/avatar.jpg',
     alt: 'Avatar'
   },
 
@@ -50,9 +50,9 @@ export const theme: ThemeUserConfig = {
     menu: [
       { title: 'Home', link: '/' },
       { title: 'Blog', link: '/blog' },
+      { title: 'Reflection', link: 'tags/reflection' },
       { title: 'Projects', link: '/projects' },
       { title: 'Tags', link: '/tags' },
-      { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
     ]
   },
@@ -120,8 +120,8 @@ export const integ: IntegrationUserConfig = {
     applyTip: [
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://astro-pure.js.org/' },
-      { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
+      { name: 'Link', val: 'https://bytecho.tech/' },
+      { name: 'Avatar', val: 'https://bytecho.tech/favicon/icon.png' }
     ],
     // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false

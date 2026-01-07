@@ -98,6 +98,7 @@ export const ui = {
         'nav.home': '首页',
         'nav.about': '关于',
         'nav.blog': '博客',
+        'nav.reflection': '反思',
         'nav.projects': '项目',
         'nav.tags': '标签',
         'nav.links': '友链',

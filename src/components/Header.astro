@@ -47,7 +47,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
           menuItems.map((item) => (
             <a
               href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium transition-transform hover:-translate-y-1 hover:text-primary sm:w-fit sm:px-3'
+              class='w-full flex-none grow py-2 text-right font-medium animate-jump hover:text-primary sm:w-fit sm:px-3'
               aria-label='Nav menu item'
             >
               {item.title}
@@ -56,7 +56,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
         }
         <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
           <a
-            class='px-1 py-2 transition-transform hover:-translate-y-1 sm:px-2'
+            class='px-1 py-2 animate-jump sm:px-2'
             href={getLocalizedPath('/search')}
             title={t('search.title')}
           >
@@ -72,7 +72,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
       <LanguagePicker />
       <button
         id='toggleDarkMode'
-        class='group/dark box-content size-5 rounded-md border p-1.5 transition-all hover:-translate-y-1 hover:bg-border sm:group-[.not-top]:rounded-xl'
+        class='group/dark box-content size-5 rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Dark Theme</span>
         <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
@@ -81,7 +81,7 @@ const menuItems = (config.header.menu || []).map((item) => ({
       </button>
       <button
         id='toggleMenu'
-        class='rounded-md border p-1.5 transition-all hover:-translate-y-1 hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+        class='rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Menu</span>
         <Icon class='size-5' name='menu' />

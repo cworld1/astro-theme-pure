@@ -26,7 +26,7 @@ const toggleText = nextLang === 'zh' ? '切换至简体中文' : 'Switch to Engl
 
 <a
   href={nextUrl}
-  class='group/lang box-content size-5 rounded-md border p-1.5 transition-all hover:-translate-y-1 hover:bg-border sm:group-[.not-top]:rounded-xl'
+  class='group/lang box-content size-5 rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:group-[.not-top]:rounded-xl'
   aria-label={toggleText}
   title={toggleText}
   onclick={`localStorage.setItem('toast_msg', '${nextLang === 'zh' ? '已切换至简体中文' : 'Switched to English'}')`}

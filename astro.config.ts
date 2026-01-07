@@ -116,4 +116,5 @@ export default defineConfig({
     // https://docs.astro.build/en/reference/experimental-flags/fonts/
 
   }
+  // Trigger restart for new routes
 })

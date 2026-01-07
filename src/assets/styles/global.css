@@ -40,9 +40,43 @@
   }
 }
 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .animate {
   opacity: 0;
   animation: 300ms fade-in-up;
+  animation-fill-mode: forwards;
+}
+
+@keyframes jump-once {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-0.25rem);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-jump:hover {
+  animation: jump-once 0.3s ease-in-out;
+}
+
+.animate-fade {
+  opacity: 0;
+  animation: 300ms fade-in;
   animation-fill-mode: forwards;
 }
 

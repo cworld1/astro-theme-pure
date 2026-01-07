@@ -32,7 +32,7 @@ const localizedBack =
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     <aside
-      class='animate top-20 min-w-48 basis-60 overflow-y-scroll max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
+      class='animate-fade top-20 min-w-48 basis-60 overflow-y-scroll max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
       style='height:calc(100vh - 7rem);'
       id='sidebar'
     >
@@ -48,7 +48,7 @@ const localizedBack =
 
     <article class='min-w-0 grow'>
       {/* Content header */}
-      <div id='content-header' class='animate'>
+      <div id='content-header' class='animate-fade'>
         <slot name='header' />
       </div>
 
@@ -56,7 +56,7 @@ const localizedBack =
       <div
         id='content'
         class={cn(
-          'max-w-none animate mt-8 md:min-w-[45ch] overflow-x-hidden',
+          'max-w-none animate-fade mt-8 md:min-w-[45ch] overflow-x-hidden',
           integ.typography.class
         )}
       >

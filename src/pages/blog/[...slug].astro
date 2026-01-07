@@ -1,0 +1,6 @@
+---
+import { defaultLang } from '@/i18n/ui'
+
+const { slug } = Astro.params
+return Astro.redirect(`/${defaultLang}/blog/${slug}`)
+---
