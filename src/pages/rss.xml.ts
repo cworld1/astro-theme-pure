@@ -57,6 +57,23 @@ const GET = async (context: AstroGlobal) => {
   const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
   const siteUrl = context.site ?? new URL(import.meta.env.SITE)
 
+  // --- 新增：处理头图逻辑 ---
+  let heroImageUrl = '';
+  if (post.data.heroImage) {
+  // 如果是字符串直接用，如果是 Astro 优化后的对象则取 .src
+  heroImageUrl = typeof post.data.heroImage.src === 'string' 
+    ? post.data.heroImage.src 
+    : post.data.heroImage.src.src;
+  // 如果是相对路径，拼上完整的 site 域名
+    if (heroImageUrl.startsWith('/')) {
+      heroImageUrl = `${siteUrl.origin}${heroImageUrl}`;
+    }
+  }
+  // --- 只有当图片存在时才生成相关的 XML 标签 ---
+  const imageTags = heroImageUrl
+    ? `<h:img src="${heroImageUrl}" /><enclosure url="${heroImageUrl}" length="0" type="image/jpeg" />` 
+    : '';
+  
   return rss({
     // Basic configs
     trailingSlash: false,
@@ -71,8 +88,7 @@ const GET = async (context: AstroGlobal) => {
       allPostsByDate.map(async (post) => ({
         pubDate: post.data.publishDate,
         link: `/blog/${post.id}`,
-        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
-          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
+        customData: imageTags,
         content: await renderContent(post, siteUrl),
         ...post.data
       }))
