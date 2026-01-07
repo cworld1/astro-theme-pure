@@ -4,14 +4,21 @@ import { cn } from '../../utils'
 interface Props {
   class?: string
   title: string
+  mode?: 'default' | 'preview'
 }
 
-const { class: className, title, ...props } = Astro.props
+const { class: className, title, mode = 'default', ...props } = Astro.props
+
+const isPreview = mode === 'preview'
 ---
 
-<collapse-component class='group/expand'>
+<collapse-component class='group/expand' data-mode={mode}>
   <div
-    class={cn('rounded-xl border px-3 my-4 sm:px-4 group-[.expanded]/expand:bg-muted', className)}
+    class={cn(
+      'rounded-xl border px-3 my-4 sm:px-4',
+      isPreview ? 'group-[.expanded]/expand:bg-muted' : 'group-[.expanded]/expand:bg-muted',
+      className
+    )}
     {...props}
   >
     <slot name='before' />
@@ -46,7 +53,11 @@ const { class: className, title, ...props } = Astro.props
       </div>
     </div>
     <div
-      class='expand-content grid opacity-0 transition-all duration-300 ease-in-out group-[.expanded]/expand:mb-3 group-[.expanded]/expand:opacity-100 sm:group-[.expanded]/expand:mb-4'
+      class={cn(
+        'expand-content transition-all duration-300 ease-in-out',
+        !isPreview && 'grid opacity-0 group-[.expanded]/expand:opacity-100',
+        'group-[.expanded]/expand:mb-3 sm:group-[.expanded]/expand:mb-4'
+      )}
     >
       <div class='overflow-hidden'>
         <slot />
@@ -63,9 +74,15 @@ const { class: className, title, ...props } = Astro.props
 
     connectedCallback() {
       const expandTitle = this.querySelector('.expand-title')
-      // const expandable = this.querySelector('.expandable')
       expandTitle?.addEventListener('click', () => {
         this.classList.toggle('expanded')
+      })
+
+      const expandContent = this.querySelector('.expand-content')
+      expandContent?.addEventListener('click', () => {
+        if (this.dataset.mode === 'preview' && !this.classList.contains('expanded')) {
+          this.classList.add('expanded')
+        }
       })
     }
   }
@@ -73,10 +90,25 @@ const { class: className, title, ...props } = Astro.props
 </script>
 
 <style>
-  .expand-content {
+  /* Default Mode */
+  :not([data-mode='preview']) .expand-content {
     grid-template-rows: 0fr;
   }
-  .expanded .expand-content {
+  :not([data-mode='preview']).expanded .expand-content {
     grid-template-rows: 1fr;
+  }
+
+  /* Preview Mode */
+  [data-mode='preview'] .expand-content {
+    display: block;
+    cursor: pointer;
+    max-height: 12rem; /* Increased slightly */
+    mask-image: linear-gradient(to bottom, black 18%, transparent);
+    overflow: hidden;
+  }
+  [data-mode='preview'].expanded .expand-content {
+    max-height: 200rem;
+    mask-image: none;
+    cursor: auto;
   }
 </style>

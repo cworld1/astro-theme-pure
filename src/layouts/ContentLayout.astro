@@ -37,6 +37,7 @@ const localizedBack =
       id='sidebar'
     >
       <slot name='sidebar' />
+      <slot name='bottom-sidebar' />
     </aside>
     <div
       id='sidebar-shade'
@@ -61,147 +62,142 @@ const localizedBack =
       >
         <slot />
       </div>
+
+      {/* Bottom */}
+      <div class='mt-6 text-muted-foreground'>
+        <slot name='bottom' />
+      </div>
     </article>
   </main>
-
-  <div class='bottom mt-6 items-start gap-x-10 md:flex'>
-    {/* Bottom */}
-    <div class='flex-1 text-muted-foreground md:min-w-[50ch]'>
-      <slot name='bottom' />
-    </div>
-    <div class='min-w-48 basis-60'>
-      <slot name='bottom-sidebar' />
-    </div>
-  </div>
-
-  <BackToTop header='content-header' content='content'>
-    <button
-      slot='other-icons'
-      aria-label='Toggle sidebar'
-      class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
-      id='sidebar-btn'
-    >
-    </button>
-  </BackToTop>
-
-  <script is:inline>
-    // Reading Progress Script
-    // Debug flag
-    const DEBUG = false
-    function log(...args) {
-      if (DEBUG) console.log('[ReadingProgress]', ...args)
-    }
-
-    log('Script loaded from ContentLayout')
-
-    function showToast(detail) {
-      document.dispatchEvent(new CustomEvent('toast', { detail }))
-    }
-
-    function getPostKey() {
-      let path = window.location.pathname
-      // Remove language prefix /en or /zh
-      path = path.replace(/^\/(en|zh)(\/|$)/, '/')
-
-      // Normalize: Remove trailing slash if present
-      if (path.length > 1 && path.endsWith('/')) {
-        path = path.slice(0, -1)
-      }
-      // Remove multiple slashes
-      path = path.replace(/\/\/+/g, '/')
-
-      return 'article-progress:' + path
-    }
-
-    function saveProgress() {
-      // Check if we can scroll
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-
-      if (docHeight <= 0) return
-
-      const percent = Math.min(100, Math.max(0, (scrollTop / docHeight) * 100))
-      const key = getPostKey()
-
-      localStorage.setItem(key, percent.toFixed(2))
-    }
-
-    // Debounce
-    let timeout
-    function onScroll() {
-      if (timeout) clearTimeout(timeout)
-      timeout = setTimeout(saveProgress, 200)
-    }
-
-    function restoreProgress() {
-      const key = getPostKey()
-      const saved = localStorage.getItem(key)
-
-      log('Checking key:', key, 'Saved:', saved)
-
-      if (saved) {
-        const percent = parseFloat(saved)
-        if (!isNaN(percent) && percent >= 1 && percent <= 99) {
-          log('Restoring to', percent, '%')
-
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight
-          const targetScroll = (percent / 100) * docHeight
-
-          window.scrollTo({ top: targetScroll, behavior: 'auto' })
-
-          // Show toast
-          const isZh = document.documentElement.lang === 'zh'
-          showToast({
-            message: isZh
-              ? `已恢复至上次阅读进度 ${Math.round(percent)}%`
-              : `Resumed reading from ${Math.round(percent)}%`,
-            type: 'info',
-            icon: 'book',
-            time: 3000
-          })
-        }
-      }
-    }
-
-    let isInit = false
-    function init() {
-      log('Init triggered')
-      // Clean up previous listener just in case
-      window.removeEventListener('scroll', onScroll)
-
-      if (history.scrollRestoration) {
-        history.scrollRestoration = 'manual'
-      }
-
-      // Delay restore slightly to wait for layout
-      requestAnimationFrame(() => {
-        setTimeout(restoreProgress, 150)
-      })
-
-      window.addEventListener('scroll', onScroll)
-    }
-
-    // Trigger init
-    document.addEventListener('astro:page-load', init)
-
-    // Fallback for initial load if event already fired or using standard navigation
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      // If we are strictly inline, this might run before 'astro:page-load' on first visit?
-      // But 'astro:page-load' is reliable for ViewTransitions.
-      // Let's run init() call immediately too, but debounced/checked?
-      // Actually standard 'DOMContentLoaded' is safer for non-Astro-router navigations.
-      // But we can just rely on the fact that inline script runs.
-      log('Immediate init check')
-      init()
-    } else {
-      document.addEventListener('DOMContentLoaded', init)
-    }
-
-    document.addEventListener('astro:before-swap', () => {
-      window.removeEventListener('scroll', onScroll)
-    })
-  </script>
 </PageLayout>
+
+<BackToTop header='content-header' content='content'>
+  <button
+    slot='other-icons'
+    aria-label='Toggle sidebar'
+    class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
+    id='sidebar-btn'
+  >
+  </button>
+</BackToTop>
+
+<script is:inline>
+  // Reading Progress Script
+  // Debug flag
+  const DEBUG = false
+  function log(...args) {
+    if (DEBUG) console.log('[ReadingProgress]', ...args)
+  }
+
+  log('Script loaded from ContentLayout')
+
+  function showToast(detail) {
+    document.dispatchEvent(new CustomEvent('toast', { detail }))
+  }
+
+  function getPostKey() {
+    let path = window.location.pathname
+    // Remove language prefix /en or /zh
+    path = path.replace(/^\/(en|zh)(\/|$)/, '/')
+
+    // Normalize: Remove trailing slash if present
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.slice(0, -1)
+    }
+    // Remove multiple slashes
+    path = path.replace(/\/\/+/g, '/')
+
+    return 'article-progress:' + path
+  }
+
+  function saveProgress() {
+    // Check if we can scroll
+    const scrollTop = window.scrollY
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+
+    if (docHeight <= 0) return
+
+    const percent = Math.min(100, Math.max(0, (scrollTop / docHeight) * 100))
+    const key = getPostKey()
+
+    localStorage.setItem(key, percent.toFixed(2))
+  }
+
+  // Debounce
+  let timeout
+  function onScroll() {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(saveProgress, 200)
+  }
+
+  function restoreProgress() {
+    const key = getPostKey()
+    const saved = localStorage.getItem(key)
+
+    log('Checking key:', key, 'Saved:', saved)
+
+    if (saved) {
+      const percent = parseFloat(saved)
+      if (!isNaN(percent) && percent >= 1 && percent <= 99) {
+        log('Restoring to', percent, '%')
+
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight
+        const targetScroll = (percent / 100) * docHeight
+
+        window.scrollTo({ top: targetScroll, behavior: 'auto' })
+
+        // Show toast
+        const isZh = document.documentElement.lang === 'zh'
+        showToast({
+          message: isZh
+            ? `已恢复至上次阅读进度 ${Math.round(percent)}%`
+            : `Resumed reading from ${Math.round(percent)}%`,
+          type: 'info',
+          icon: 'book',
+          time: 3000
+        })
+      }
+    }
+  }
+
+  let isInit = false
+  function init() {
+    log('Init triggered')
+    // Clean up previous listener just in case
+    window.removeEventListener('scroll', onScroll)
+
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual'
+    }
+
+    // Delay restore slightly to wait for layout
+    requestAnimationFrame(() => {
+      setTimeout(restoreProgress, 150)
+    })
+
+    window.addEventListener('scroll', onScroll)
+  }
+
+  // Trigger init
+  document.addEventListener('astro:page-load', init)
+
+  // Fallback for initial load if event already fired or using standard navigation
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // If we are strictly inline, this might run before 'astro:page-load' on first visit?
+    // But 'astro:page-load' is reliable for ViewTransitions.
+    // Let's run init() call immediately too, but debounced/checked?
+    // Actually standard 'DOMContentLoaded' is safer for non-Astro-router navigations.
+    // But we can just rely on the fact that inline script runs.
+    log('Immediate init check')
+    init()
+  } else {
+    document.addEventListener('DOMContentLoaded', init)
+  }
+
+  document.addEventListener('astro:before-swap', () => {
+    window.removeEventListener('scroll', onScroll)
+  })
+</script>
 
 <script>
   // Toggle sidebar visibility on button click

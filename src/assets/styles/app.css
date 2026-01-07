@@ -16,6 +16,7 @@
   --ring: 240 5.9% 10%;
   --radius: 0.5rem;
 }
+
 .dark {
   /* Primary */
   --primary: 195 95% 85%;
@@ -32,9 +33,11 @@
   --input: 240 3.7% 17.9%;
   --ring: 240 4.9% 83.9%;
 }
+
 :root {
   --un-default-border-color: hsl(var(--border) / 1);
 }
+
 html.dark {
   color-scheme: dark;
 }
@@ -42,6 +45,7 @@ html.dark {
 /* Global */
 a {
   transition: color 0.2s ease;
+
   &:hover {
     color: hsl(var(--primary) / var(--un-text-opacity, 1));
   }

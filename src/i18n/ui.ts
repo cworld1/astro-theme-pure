@@ -176,6 +176,7 @@ export const ui = {
         'tag.travel': '旅行',
         'tag.reading': '阅读',
         'tag.recommend': '推荐',
+        'tag.reflection': '反思',
         'tag.example': '示例',
         'tag.mind': '心理',
         'tag.mood': '情绪',

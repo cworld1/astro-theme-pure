@@ -14,6 +14,7 @@ dist/
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+!.vscode/settings.json
 
 # Code workspace files
 *.code-workspace

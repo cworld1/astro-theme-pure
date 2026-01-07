@@ -9,22 +9,33 @@ import config from '@/site-config'
   data-astro-rerun
   define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
 >
-  async function loadPageview() {
-    try {
-      const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
-      const el = document.querySelector('.waline-pageview-count')
-      if (el) {
-        pageview.pageviewCount({
-          serverURL: walineServer,
-          path: window.location.pathname
-        })
-      }
-    } catch (e) {
-      console.error('Failed to load Waline pageview:', e)
-    }
-  }
+  const currentPath = window.location.pathname
+  // Prevent duplicate counting for the same path
+  if (window.__WALINE_PAGEVIEW_PATH__ !== currentPath) {
+    window.__WALINE_PAGEVIEW_PATH__ = currentPath
 
-  const abort = await loadPageview()
-  // After 500ms, if the network request has not been completed, cancel this operation
-  setTimeout(() => abort(), 500)
+    async function loadPageview() {
+      try {
+        const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
+        // Update all elements with the class
+        const elements = document.querySelectorAll('.waline-pageview-count')
+        if (elements.length > 0) {
+          return pageview.pageviewCount({
+            serverURL: walineServer,
+            path: currentPath,
+            update: true // Provide a way to update content
+          })
+        }
+      } catch (e) {
+        console.error('Failed to load Waline pageview:', e)
+      }
+    }
+
+    const abort = await loadPageview()
+    // After 2000ms, if the network request has not been completed, cancel this operation
+    // Note: pageviewCount returns a cancel function
+    setTimeout(() => {
+      if (typeof abort === 'function') abort()
+    }, 2000)
+  }
 </script>
