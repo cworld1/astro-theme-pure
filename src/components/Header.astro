@@ -32,7 +32,7 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
 ---
 
 <header-component
-  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between gap-x-5 rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
+  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between gap-x-3.5 rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <a
     class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3 mr-auto'
@@ -111,7 +111,7 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
 
       {/* Right Navigation Column */}
       <div
-        class='flex flex-col w-fit h-full sm:flex-row sm:h-auto sm:w-fit sm:items-center gap-y-1 sm:gap-x-5'
+        class='flex flex-col w-fit h-full sm:flex-row sm:h-auto sm:w-fit sm:items-center gap-y-1 sm:gap-x-3.5'
       >
         {
           menuItems.map((item) => {
@@ -129,7 +129,7 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
                   {item.title}
                   {hasDropdown && (
                     <svg
-                      class='absolute -right-4 top-1/2 -translate-y-1/2 size-3 text-muted-foreground transition-transform duration-300 group-hover/item:rotate-180 group-hover/item:text-primary'
+                      class='absolute -right-3 top-1/2 -translate-y-1/2 size-3 text-muted-foreground transition-transform duration-300 group-hover/item:rotate-180 group-hover/item:text-primary'
                       xmlns='http://www.w3.org/2000/svg'
                       width='24'
                       height='24'
@@ -205,7 +205,7 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
   </div>
 
   {/* buttons */}
-  <div class='z-30 flex gap-x-5 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
+  <div class='z-30 flex gap-x-3.5 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
     <a
       class='px-1 py-2 animate-jump sm:px-2'
       href={getLocalizedPath('/search')}

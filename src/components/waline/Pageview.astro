@@ -9,7 +9,7 @@ import config from '@/site-config'
   data-astro-rerun
   define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
 >
-  const currentPath = window.location.pathname
+  const currentPath = window.location.pathname.replace(/^\/(en|zh)(\/|$)/, '/')
   // Prevent duplicate counting for the same path
   if (window.__WALINE_PAGEVIEW_PATH__ !== currentPath) {
     window.__WALINE_PAGEVIEW_PATH__ = currentPath

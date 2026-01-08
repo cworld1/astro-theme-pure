@@ -108,7 +108,7 @@ const postPath = `/${lang}/blog/${cleanSlug}`
               {/* view count */}
               <span class='flex items-center gap-1'>
                 <Icon name='eye' class='size-4' />
-                <span class='waline-pageview-count' data-path={postPath}>
+                <span class='waline-pageview-count' data-path={`/blog/${cleanSlug}`}>
                   ...
                 </span>
               </span>

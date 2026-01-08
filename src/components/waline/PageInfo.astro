@@ -12,7 +12,7 @@ interface Props {
 
 const { view, comment, class: className, ...props } = Astro.props
 
-const path = Astro.url.pathname
+const path = Astro.url.pathname.replace(/^\/(en|zh)(\/|$)/, '/')
 const lang = Astro.url.pathname.split('/')[1] as keyof typeof ui
 const t = useTranslations(lang in ui ? lang : defaultLang)
 ---

@@ -64,6 +64,7 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
         lang,
         emoji,
         reaction: ['/icons/heart-item.svg'],
+        path: window.location.pathname.replace(/^\/(en|zh)(\/|$)/, '/'),
         ..._config
       })
     }
