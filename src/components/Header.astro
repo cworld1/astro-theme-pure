@@ -1,4 +1,6 @@
 ---
+import { getCollection } from 'astro:content'
+import { projects } from '@/data/projects'
 import { getLangFromUrl, useTranslations } from '@/i18n/ui'
 
 import { Icon } from 'astro-pure/user'
@@ -24,6 +26,9 @@ const menuItems = (config.header.menu || []).map((item) => ({
   title: t(`nav.${item.title.toLowerCase()}` as any) || item.title,
   link: getLocalizedPath(item.link)
 }))
+
+const allPosts = await getCollection('blog')
+const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0, 10)
 ---
 
 <header-component
@@ -42,17 +47,85 @@ const menuItems = (config.header.menu || []).map((item) => ({
       id='headerExpandContent'
       class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1'
     >
-      <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
+      <div
+        class='flex flex-col items-center justify-center overflow-hidden sm:overflow-visible sm:flex-row sm:gap-x-1'
+      >
         {
-          menuItems.map((item) => (
-            <a
-              href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium animate-jump hover:text-primary sm:w-fit sm:px-3'
-              aria-label='Nav menu item'
-            >
-              {item.title}
-            </a>
-          ))
+          menuItems.map((item) => {
+            const isBlog = item.link.includes('/blog')
+            const isProjects = item.link.includes('/projects')
+            const hasDropdown = isBlog || isProjects
+
+            return (
+              <div class='group/item relative w-full flex-none sm:w-fit sm:grow-0'>
+                <a
+                  href={item.link}
+                  class='relative flex items-center justify-end w-full py-2 font-medium animate-jump hover:text-primary sm:justify-center sm:px-4'
+                  aria-label='Nav menu item'
+                >
+                  {item.title}
+                  {hasDropdown && (
+                    <Icon
+                      name='down'
+                      class='hidden sm:block absolute right-1 top-1/2 -translate-y-1/2 size-3 opacity-50 transition-transform group-hover/item:rotate-180'
+                    />
+                  )}
+                </a>
+
+                {/* Dropdown Menu - Desktop Only */}
+                {hasDropdown && (
+                  <div class='absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-all duration-300 z-50 hidden sm:block w-max max-w-xs'>
+                    <div class='rounded-xl border border-border bg-background/80 p-3 shadow-xl backdrop-blur-md overflow-hidden'>
+                      {isBlog && (
+                        <div class='grid grid-cols-2 gap-2'>
+                          {allTags.map((tag) => (
+                            <a
+                              href={getLocalizedPath(`/tags/${tag}`)}
+                              class='block rounded-lg px-3 py-2 text-sm text-foreground/80 hover:bg-muted hover:text-primary transition-colors whitespace-nowrap'
+                            >
+                              <span class='opacity-50 mr-1'>#</span>
+                              {t(('tag.' + tag.toLowerCase()) as any) || tag}
+                            </a>
+                          ))}
+                          <a
+                            href={getLocalizedPath('/tags')}
+                            class='col-span-2 mt-2 block rounded-lg px-3 py-2 text-center text-xs text-muted-foreground bg-muted/50 hover:bg-muted hover:text-primary transition-colors'
+                          >
+                            {t('common.more')}...
+                          </a>
+                        </div>
+                      )}
+
+                      {isProjects && (
+                        <div class='flex flex-col gap-1'>
+                          {projects.map((project) => (
+                            <a
+                              href={project.link}
+                              class='flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-foreground/80 hover:bg-muted hover:text-primary transition-colors'
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              <img
+                                src={project.image}
+                                alt={project.title}
+                                class='size-8 rounded-md object-cover bg-muted'
+                              />
+                              <div class='flex flex-col'>
+                                <span class='font-medium line-clamp-1'>{project.title}</span>
+                                <span class='text-xs text-muted-foreground line-clamp-1 opacity-70'>
+                                  {project.description}
+                                </span>
+                              </div>
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })
         }
         <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
           <a

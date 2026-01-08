@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+import { projects } from '@/data/projects'
 import { languages, useTranslations } from '@/i18n/ui'
 
 import PageLayout from '@/layouts/CommonPage.astro'
@@ -35,20 +36,17 @@ const headings = [
       </span>
 
       <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-        <ProjectCard
-          href='https://type.bytecho.tech'
-          heading='英语打字练习'
-          subheading='一次敲击，一点进步；记忆不再盲目，学习更高效。'
-          imagePath='/src/assets/projects/1.jpg'
-          altText='English Typing Practice'
-        />
-        <ProjectCard
-          href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-          heading='Lorem ipsum'
-          subheading='Old age burn and rave at close of day'
-          imagePath='/src/assets/projects/2.jpg'
-          altText='Demo Project'
-        />
+        {
+          projects.map((project) => (
+            <ProjectCard
+              href={project.link}
+              heading={project.title}
+              subheading={project.description}
+              imagePath={project.image}
+              altText={project.alt}
+            />
+          ))
+        }
       </div>
     </div>
 
