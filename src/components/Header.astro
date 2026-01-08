@@ -32,23 +32,86 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
 ---
 
 <header-component
-  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
+  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between gap-x-5 rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <a
-    class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
+    class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3 mr-auto'
     style='transition:margin-inline 0.3s'
     href={`/${lang}`}
     aria-label='Brand'>{config.title}</a
   >
 
-  <div class='flex items-center gap-x-2'>
-    {/* Menu links */}
+  {/* Menu links */}
+  <div
+    id='headerExpandContent'
+    class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1 sm:static sm:flex sm:items-center sm:justify-center'
+  >
     <div
-      id='headerExpandContent'
-      class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1'
+      class='flex flex-row gap-4 h-full sm:flex-row sm:items-center sm:justify-center sm:gap-x-1 sm:h-auto'
     >
+      {/* Mobile: Left Discovery Column */}
+      <div class='flex-1 overflow-y-auto pr-2 sm:hidden flex flex-col gap-6 py-2 mask-linear-b'>
+        {/* Tags Section */}
+        <div class='flex flex-col gap-2'>
+          <span class='text-xs font-medium text-muted-foreground uppercase tracking-wider'
+            >{t('nav.tags')}</span
+          >
+          <div class='flex flex-wrap gap-2'>
+            {
+              allTags.map((tag) => (
+                <a
+                  href={getLocalizedPath(`/tags/${tag}`)}
+                  class='rounded-md bg-muted/50 px-2 py-1 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors border border-transparent hover:border-border'
+                >
+                  <span class='opacity-50 mr-0.5 text-[0.6rem]'>#</span>
+                  {t(('tag.' + tag.toLowerCase()) as any) || tag}
+                </a>
+              ))
+            }
+            <a
+              href={getLocalizedPath('/tags')}
+              class='rounded-md bg-muted/30 px-2 py-1 text-xs text-muted-foreground hover:text-primary transition-colors'
+            >
+              {t('common.more')} &rarr;
+            </a>
+          </div>
+        </div>
+
+        {/* Projects Section */}
+        <div class='flex flex-col gap-2'>
+          <span class='text-xs font-medium text-muted-foreground uppercase tracking-wider'
+            >{t('nav.projects')}</span
+          >
+          <div class='flex flex-col gap-2'>
+            {
+              projects.map((project) => (
+                <a
+                  href={project.link}
+                  class='flex items-center gap-2 rounded-lg border border-border bg-muted/30 p-2 hover:bg-muted transition-colors'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    class='size-8 rounded-md object-cover bg-muted'
+                  />
+                  <div class='flex flex-col min-w-0'>
+                    <span class='font-medium text-xs truncate'>{project.title}</span>
+                    <span class='text-[0.65rem] text-muted-foreground line-clamp-1 opacity-70'>
+                      {project.description}
+                    </span>
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      {/* Right Navigation Column */}
       <div
-        class='flex flex-col items-center justify-center overflow-hidden sm:overflow-visible sm:flex-row sm:gap-x-1'
+        class='flex flex-col w-fit h-full sm:flex-row sm:h-auto sm:w-fit sm:items-center gap-y-1 sm:gap-x-5'
       >
         {
           menuItems.map((item) => {
@@ -57,18 +120,28 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
             const hasDropdown = isBlog || isProjects
 
             return (
-              <div class='group/item relative w-full flex-none sm:w-fit sm:grow-0'>
+              <div class='group/item relative flex-none sm:w-fit sm:grow-0 flex items-center justify-end sm:justify-center'>
                 <a
                   href={item.link}
-                  class='relative flex items-center justify-end w-full py-2 font-medium animate-jump hover:text-primary sm:justify-center sm:px-4'
+                  class='relative flex items-center justify-center w-full py-2 font-medium animate-jump hover:text-primary sm:px-2'
                   aria-label='Nav menu item'
                 >
                   {item.title}
                   {hasDropdown && (
-                    <Icon
-                      name='down'
-                      class='hidden sm:block absolute right-1 top-1/2 -translate-y-1/2 size-3 opacity-50 transition-transform group-hover/item:rotate-180'
-                    />
+                    <svg
+                      class='absolute -right-4 top-1/2 -translate-y-1/2 size-3 text-muted-foreground transition-transform duration-300 group-hover/item:rotate-180 group-hover/item:text-primary'
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='24'
+                      height='24'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      stroke-width='2'
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                    >
+                      <path d='m6 9 6 6 6-6' />
+                    </svg>
                   )}
                 </a>
 
@@ -127,39 +200,37 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
             )
           })
         }
-        <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
-          <a
-            class='px-1 py-2 animate-jump sm:px-2'
-            href={getLocalizedPath('/search')}
-            title={t('search.title')}
-          >
-            <span class='sr-only'>{t('search.title')}</span>
-            <Icon name='search' class='size-5' />
-          </a>
-        </div>
       </div>
     </div>
+  </div>
 
-    {/* buttons */}
-    <div class='z-30 flex gap-x-4 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
-      <LanguagePicker />
-      <button
-        id='toggleDarkMode'
-        class='group/dark box-content size-5 rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:group-[.not-top]:rounded-xl'
-      >
-        <span class='sr-only'>Dark Theme</span>
-        <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
-        <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
-        <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
-      </button>
-      <button
-        id='toggleMenu'
-        class='rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
-      >
-        <span class='sr-only'>Menu</span>
-        <Icon class='size-5' name='menu' />
-      </button>
-    </div>
+  {/* buttons */}
+  <div class='z-30 flex gap-x-5 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
+    <a
+      class='px-1 py-2 animate-jump sm:px-2'
+      href={getLocalizedPath('/search')}
+      title={t('search.title')}
+    >
+      <span class='sr-only'>{t('search.title')}</span>
+      <Icon name='search' class='size-5' />
+    </a>
+    <LanguagePicker />
+    <button
+      id='toggleDarkMode'
+      class='group/dark box-content size-5 rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:group-[.not-top]:rounded-xl'
+    >
+      <span class='sr-only'>Dark Theme</span>
+      <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
+      <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
+      <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
+    </button>
+    <button
+      id='toggleMenu'
+      class='rounded-md border p-1.5 transition-all animate-jump hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+    >
+      <span class='sr-only'>Menu</span>
+      <Icon class='size-5' name='menu' />
+    </button>
   </div>
 </header-component>
 
@@ -214,6 +285,29 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
       // Menu
       this.querySelector('#toggleMenu')?.addEventListener('click', () => {
         this.classList.toggle('expanded')
+      })
+
+      // Mobile Dropdowns
+      const toggleButtons = this.querySelectorAll('[data-toggle-dropdown]')
+      toggleButtons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          const container = btn.closest('.group\\/item')
+          const dropdown = container?.querySelector('.mobile-dropdown')
+          const icon = btn.querySelector('svg')
+
+          if (dropdown && icon) {
+            const isHidden = dropdown.classList.contains('hidden')
+            if (isHidden) {
+              dropdown.classList.remove('hidden')
+              icon.style.transform = 'rotate(180deg)'
+            } else {
+              dropdown.classList.add('hidden')
+              icon.style.transform = 'rotate(0deg)'
+            }
+          }
+        })
       })
     }
   }
