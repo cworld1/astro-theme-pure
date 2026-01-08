@@ -44,13 +44,13 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
   {/* Menu links */}
   <div
     id='headerExpandContent'
-    class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1 sm:static sm:flex sm:items-center sm:justify-center'
+    class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 sm:grid-rows-1 sm:static sm:flex sm:items-center sm:justify-center max-sm:pointer-events-none max-sm:overflow-hidden max-sm:group-[.expanded]:pointer-events-auto max-sm:group-[.expanded]:bg-background/80 max-sm:group-[.expanded]:backdrop-blur-xl max-sm:group-[.expanded]:border-b max-sm:group-[.expanded]:border-border max-sm:group-[.expanded]:px-6 max-sm:group-[.expanded]:py-4 max-sm:group-[.expanded]:shadow-2xl max-sm:group-[.not-top]:border max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2'
   >
     <div
       class='flex flex-row gap-4 h-full sm:flex-row sm:items-center sm:justify-center sm:gap-x-1 sm:h-auto'
     >
       {/* Mobile: Left Discovery Column */}
-      <div class='flex-1 overflow-y-auto pr-2 sm:hidden flex flex-col gap-6 py-2 mask-linear-b'>
+      <div class='no-scrollbar flex-1 overflow-y-auto pr-2 sm:hidden flex flex-col gap-6 py-2 pb-6'>
         {/* Tags Section */}
         <div class='flex flex-col gap-2'>
           <span class='text-xs font-medium text-muted-foreground uppercase tracking-wider'
@@ -87,17 +87,19 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
               projects.map((project) => (
                 <a
                   href={project.link}
-                  class='flex items-center gap-2 rounded-lg border border-border bg-muted/30 p-2 hover:bg-muted transition-colors'
+                  class='flex items-center gap-2 rounded-lg border border-transparent bg-muted/40 p-2 hover:bg-muted hover:border-border transition-colors group/project'
                   target='_blank'
                   rel='noopener noreferrer'
                 >
                   <img
                     src={project.image}
                     alt={project.title}
-                    class='size-8 rounded-md object-cover bg-muted'
+                    class='size-8 rounded-md object-cover bg-muted transition-transform group-hover/project:scale-105'
                   />
                   <div class='flex flex-col min-w-0'>
-                    <span class='font-medium text-xs truncate'>{project.title}</span>
+                    <span class='font-medium text-xs truncate text-foreground/90 group-hover/project:text-primary transition-colors'>
+                      {project.title}
+                    </span>
                     <span class='text-[0.65rem] text-muted-foreground line-clamp-1 opacity-70'>
                       {project.description}
                     </span>
@@ -414,5 +416,13 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
         display: block;
       }
     }
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 </style>
