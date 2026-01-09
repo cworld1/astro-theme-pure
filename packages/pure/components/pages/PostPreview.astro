@@ -3,7 +3,7 @@ import { Image } from 'astro:assets'
 import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 
-import { cn, getLanguageDisplayName } from '../../utils'
+import { cn, getLanguageDisplayName, normalizeLocaleBlogId } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
 
 type Props<T extends CollectionKey> = {

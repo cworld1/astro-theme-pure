@@ -25,7 +25,7 @@ import config from './src/site.config.ts'
 
 // Others
 // import { visualizer } from 'rollup-plugin-visualizer'
-const DEFAULT_LOCALE = 'en'
+
 
 // https://astro.build/config
 export default defineConfig({
