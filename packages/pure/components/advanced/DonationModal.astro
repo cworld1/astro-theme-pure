@@ -1,0 +1,195 @@
+---
+import { type ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
+
+import { Icon } from '../user'
+
+interface Props {
+  lang?: keyof typeof ui
+  alipayImage?: ImageMetadata
+  wechatImage?: ImageMetadata
+  buyMeCoffeeUrl?: string
+  kofiUrl?: string
+}
+
+const {
+  lang = defaultLang,
+  alipayImage,
+  wechatImage,
+  buyMeCoffeeUrl = 'https://buymeacoffee.com/bytecho',
+  kofiUrl = 'https://ko-fi.com/YOUR_USERNAME'
+} = Astro.props
+
+const t = useTranslations(lang)
+const isChinese = lang === 'zh'
+---
+
+<div
+  id='donation-modal'
+  class='fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300'
+  aria-hidden='true'
+  role='dialog'
+  aria-modal='true'
+  aria-labelledby='donation-modal-title'
+>
+  <!-- Backdrop -->
+  <div id='donation-modal-backdrop' class='absolute inset-0 bg-black/60 backdrop-blur-sm'></div>
+
+  <!-- Modal Content -->
+  <div
+    class='relative z-10 w-full max-w-lg mx-4 rounded-2xl border bg-card/95 backdrop-blur-md shadow-2xl transform scale-95 transition-transform duration-300'
+  >
+    <!-- Header -->
+    <div class='flex items-center justify-between px-6 py-4 border-b'>
+      <h2 id='donation-modal-title' class='text-xl font-semibold text-foreground'>
+        {t('donation.modal.title')}
+      </h2>
+      <button
+        id='donation-modal-close'
+        aria-label={t('donation.modal.close')}
+        class='rounded-full p-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
+      >
+        <Icon class='size-5' name='x' />
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class='px-6 py-6'>
+      {
+        isChinese ? (
+          /* Chinese Payment Methods */
+          <div class='space-y-4'>
+            <p class='text-center text-muted-foreground mb-4'>
+              {t('donation.modal.chinese_methods')}
+            </p>
+            <div class='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              {/* Alipay */}
+              {alipayImage && (
+                <div class='flex flex-col items-center gap-3 rounded-xl border bg-muted/30 p-4 hover:bg-muted/50 transition-colors'>
+                  <div class='flex items-center gap-2 text-foreground font-medium'>
+                    <Icon class='size-6' name='alipay' />
+                    <span>{t('donation.modal.alipay')}</span>
+                  </div>
+                  <Image
+                    src={alipayImage}
+                    alt={t('donation.modal.alipay')}
+                    class='w-full max-w-48 rounded-lg'
+                    loading='lazy'
+                  />
+                </div>
+              )}
+
+              {/* WeChat */}
+              {wechatImage && (
+                <div class='flex flex-col items-center gap-3 rounded-xl border bg-muted/30 p-4 hover:bg-muted/50 transition-colors'>
+                  <div class='flex items-center gap-2 text-foreground font-medium'>
+                    <Icon class='size-6' name='wechat-pay' />
+                    <span>{t('donation.modal.wechat')}</span>
+                  </div>
+                  <Image
+                    src={wechatImage}
+                    alt={t('donation.modal.wechat')}
+                    class='w-full max-w-48 rounded-lg'
+                    loading='lazy'
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* Western Payment Methods */
+          <div class='space-y-4'>
+            <p class='text-center text-muted-foreground mb-4'>
+              {t('donation.modal.western_methods')}
+            </p>
+            <div class='flex flex-col gap-3'>
+              {/* Buy Me a Coffee */}
+              <a
+                href={buyMeCoffeeUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                class='flex items-center justify-center gap-3 rounded-xl border bg-gradient-to-r from-yellow-500/10 to-orange-500/10 hover:from-yellow-500/20 hover:to-orange-500/20 px-6 py-4 transition-all group'
+              >
+                <Icon class='size-6 text-yellow-600 dark:text-yellow-400' name='coffee' />
+                <span class='text-lg font-medium text-foreground group-hover:text-primary transition-colors'>
+                  {t('donation.modal.buymeacoffee')}
+                </span>
+              </a>
+
+              {/* Ko-fi */}
+              <a
+                href={kofiUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                class='flex items-center justify-center gap-3 rounded-xl border bg-gradient-to-r from-blue-500/10 to-cyan-500/10 hover:from-blue-500/20 hover:to-cyan-500/20 px-6 py-4 transition-all group'
+              >
+                <Icon class='size-6 text-blue-600 dark:text-blue-400' name='github' />
+                <span class='text-lg font-medium text-foreground group-hover:text-primary transition-colors'>
+                  {t('donation.modal.kofi')}
+                </span>
+              </a>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  #donation-modal.modal-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #donation-modal.modal-open > div:last-child {
+    transform: scale(1);
+  }
+</style>
+
+<script>
+  function setupDonationModal() {
+    const modal = document.getElementById('donation-modal')
+    const backdrop = document.getElementById('donation-modal-backdrop')
+    const closeBtn = document.getElementById('donation-modal-close')
+
+    if (!modal || !backdrop || !closeBtn) return
+
+    // Close modal function
+    const closeModal = () => {
+      modal.classList.remove('modal-open')
+      modal.setAttribute('aria-hidden', 'true')
+      document.body.style.overflow = ''
+    }
+
+    // Open modal function (called from external trigger)
+    const openModal = () => {
+      modal.classList.add('modal-open')
+      modal.setAttribute('aria-hidden', 'false')
+      document.body.style.overflow = 'hidden'
+    }
+
+    // Close button click
+    closeBtn.addEventListener('click', closeModal)
+
+    // Backdrop click
+    backdrop.addEventListener('click', closeModal)
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('modal-open')) {
+        closeModal()
+      }
+    })
+
+    // Expose openModal globally for external triggers
+    ;(window as any).openDonationModal = openModal
+  }
+
+  // Setup on page load
+  setupDonationModal()
+
+  // Re-setup after Astro view transitions (if enabled)
+  document.addEventListener('astro:after-swap', setupDonationModal)
+</script>

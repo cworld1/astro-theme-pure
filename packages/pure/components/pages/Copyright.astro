@@ -3,8 +3,11 @@ import type { CollectionKey, InferEntrySchema } from 'astro:content'
 import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 import config from 'virtual:config'
 
+import alipay from '@/assets/alipay-qrcode.jpg'
+import wechat from '@/assets/wechat-qrcode.jpg'
+
 import { cn, getFormattedDate } from '../../utils'
-import { QRCode } from '../advanced'
+import { DonationModal, QRCode } from '../advanced'
 import { Icon } from '../user'
 
 interface Props<T extends CollectionKey> {
@@ -117,15 +120,17 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
 </div>
 
 <div class='mx-6 rounded-b-xl border border-t-0 px-3 pb-1.5 pt-1 sm:mx-8 sm:px-4'>
-  <a
-    href={`/${lang}/projects#sponsorship`}
-    class='flex items-center justify-between text-muted-foreground no-underline'
-    target='_blank'
+  <button
+    id='open-donation-modal'
+    class='flex w-full items-center justify-between text-muted-foreground no-underline hover:text-foreground transition-colors cursor-pointer bg-transparent border-none p-0'
   >
     <span>{t('copyright.buy_me_coffee')}</span>
     <Icon class='box-content size-5 p-1' name='receive-money' />
-  </a>
+  </button>
 </div>
+
+<!-- Donation Modal -->
+<DonationModal lang={lang} alipayImage={alipay} wechatImage={wechat} />
 
 <style>
   #qrcode-container.expanded {
@@ -150,4 +155,12 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
   const getQRCode = document.getElementById('get-qrcode')
   const qrcodeContainer = document.getElementById('qrcode-container')
   getQRCode?.addEventListener('click', () => qrcodeContainer?.classList.toggle('expanded'))
+
+  // Open donation modal
+  const openDonationBtn = document.getElementById('open-donation-modal')
+  openDonationBtn?.addEventListener('click', () => {
+    if (typeof (window as any).openDonationModal === 'function') {
+      ;(window as any).openDonationModal()
+    }
+  })
 </script>
