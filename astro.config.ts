@@ -5,6 +5,7 @@ import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
+const DEFAULT_LOCALE = 'en'
 // Local integrations
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
@@ -22,6 +23,10 @@ import {
 } from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
+// Others
+// import { visualizer } from 'rollup-plugin-visualizer'
+
+
 // https://astro.build/config
 export default defineConfig({
   // [Basic]
@@ -35,9 +40,12 @@ export default defineConfig({
 
   // [Adapter]
   // https://docs.astro.build/en/guides/deploy/
-  adapter: vercel(),
-  output: 'server',
-  // Local (standalone)
+  // 1. Vercel (serverless)
+  // adapter: vercel(),
+  output: 'static',
+  // 2. Vercel (static)
+  // adapter: vercelStatic(),
+  // 3. Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',
 
@@ -71,26 +79,12 @@ export default defineConfig({
         dark: 'github-dark'
       },
       transformers: [
-        // Two copies of @shikijs/types (one under node_modules
-        // and another nested under @astrojs/markdown-remark → shiki).
-        // Official transformers
-        // @ts-ignore this happens due to multiple versions of shiki types
         transformerNotationDiff(),
-        // @ts-ignore this happens due to multiple versions of shiki types
         transformerNotationHighlight(),
-        // @ts-ignore this happens due to multiple versions of shiki types
-        transformerRemoveNotationEscape(),
-        // Custom transformers
-        // @ts-ignore this happens due to multiple versions of shiki types
         updateStyle(),
-        // @ts-ignore this happens due to multiple versions of shiki types
         addTitle(),
-        // @ts-ignore this happens due to multiple versions of shiki types
         addLanguage(),
-        // @ts-ignore this happens due to multiple versions of shiki types
-        addCopyButton(2000), // timeout in ms
-        // @ts-ignore this happens due to multiple versions of shiki types
-        addCollapse(15) // max lines that needs to collapse
+        addCopyButton(2000)
       ]
     }
   },
@@ -128,5 +122,28 @@ export default defineConfig({
         subsets: ['latin']
       }
     ]
+  },
+  i18n: {
+    locales: [DEFAULT_LOCALE, 'zh', 'es'],
+    defaultLocale: DEFAULT_LOCALE,
+    fallback: {
+      // es: DEFAULT_LOCALE,
+      // zh: DEFAULT_LOCALE
+    },
+    routing: {
+      fallbackType: 'rewrite'
+    }
+  },
+  vite: {
+    plugins: [
+      //   visualizer({
+      //     emitFile: true,
+      //     filename: 'stats.html'
+      //   })
+    ],
+    optimizeDeps: {
+      // Prebundle CommonJS-only browser build to fix default export error
+      include: ['picocolors']
+    }
   }
 })

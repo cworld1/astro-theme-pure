@@ -1,15 +1,17 @@
 ---
 import { type CollectionEntry, render } from 'astro:content'
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollectionByLocale, sortMDByDate } from 'astro-pure/server'
+import { normalizeLocaleBlogId } from 'astro-pure/utils'
 import PostLayout from '@/layouts/BlogPost.astro'
+import { i18n } from 'astro:config/client'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const posts = sortMDByDate(await getBlogCollection())
+  const posts = sortMDByDate(await getBlogCollectionByLocale(i18n!.defaultLocale))
   return posts.map((post) => ({
-    params: { id: post.id },
+    params: { id: normalizeLocaleBlogId(post.id) },
     props: { post, posts }
   }))
 }
