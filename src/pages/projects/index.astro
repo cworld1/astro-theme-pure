@@ -20,6 +20,16 @@ const headings = [
 ---
 
 <PageLayout title='Projects' {headings} view>
+  {/* About astro-pure */}
+  <div class='not-prose flex justify-center'>
+    <a
+      href='/docs/advanced/about' target='_blank'
+      class='flex items-center gap-x-3 rounded-full border bg-background px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
+    >
+      <span class='size-2 rounded-full bg-green-400'></span>
+      <p class='font-medium text-muted-foreground'>About Astro-Theme-Pure Project</p>
+    </a>
+  </div>
   <p>Github Activities:</p>
   <p>
     <Image
@@ -136,23 +146,36 @@ const headings = [
   </Button>
 
   <h2 id='sponsorship'>Sponsorship</h2>
-  <p>Please leave a message or contact me proactively after sponsorship.</p>
   <Sponsorship
     methods={[
       { name: 'WeChat', icon: 'wechat-pay', image: wechat },
       { name: 'Alipay', icon: 'alipay', image: alipay }
     ]}
   />
+  <p>Please leave a message or contact me proactively after sponsorship. My email is:
+    <code style='cursor: pointer'
+      onclick='const m=atob(this.textContent);alert(m);window.open(`mailto:${m}`,"_blank")'
+    >Y3dvcmxkMEBxcS5jb20=</code>
+    (click code to transform base64).
+  </p>
   <p>Thanks to the following sponsors:</p>
   <Sponsors
-    progressMax={25}
+    progressMax={50}
     sponsors={[
+      { name: 'hoochanlon', platform: 'Wechat', amount: 5, date: '2025-11-09' },
       { name: 'Arthals', platform: 'Wechat', amount: 50, date: '2025-11-06' },
+      { name: '边缘星2020 (byx2020.com)', platform: 'Alipay', amount: 50, date: '2025-11-01' },
+      { name: '小哲', platform: 'Wechat', amount: 50, date: '2025-08-19' },
+      { name: 'Open1V', platform: 'Wechat', amount: 2, date: '2025-08-14' },
+      { name: 'Luis Xu (不赌不毒不烟不酒)', platform: 'Alipay', amount: 30, date: '2025-08-03' },
       { name: '顾**', platform: 'Wechat', amount: 28, date: '2025-06-23' },
+      { name: 'Hans J.Han', platform: 'Wechat', amount: 10, date: '2025-04-04' },
+      { name: '**青', platform: 'Alipay', amount: 12, date: '2024-05-21' },
       { name: 'Anonymous', platform: 'Wechat', amount: 20, date: '2022-04-06' },
-      { name: '华雄 (1300****71)', platform: 'QQ', amount: 5, date: '2019-12-30' },
-      { name: '◌ (1934****45)', platform: 'QQ', amount: 3, date: '2019-12-30' },
-      { name: 'C*a (酷安@暴走の蜗牛)', amount: 2, date: '2019-07-02' }
+      { name: '华雄', platform: 'QQ', amount: 5, date: '2019-12-30' },
+      { name: '◌', platform: 'QQ', amount: 3, date: '2019-12-30' },
+      // 酷安@暴走の蜗牛
+      { name: 'C*a', amount: 2, date: '2019-07-02' }
     ]}
   />
 </PageLayout>

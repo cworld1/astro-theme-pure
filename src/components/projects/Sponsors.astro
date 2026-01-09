@@ -18,11 +18,11 @@ const { class: className, progressMax = 25, sponsors, ...props } = Astro.props
   {
     sponsors.map((sponsor) => (
       <div class='sponsor-card relative h-full overflow-hidden rounded-xl border px-4 py-3'>
-        <div class='font-medium mb-2'>{sponsor.name}</div>
+        <div class='font-medium mb-2 line-clamp-1'>{sponsor.name}</div>
         <div class='text-xs text-muted-foreground'>
           {sponsor.date} {sponsor.platform && `by ${sponsor.platform}`}
         </div>
-        <span class='absolute bottom-3 right-4 font-medium max-sm:text-lg'>¥{sponsor.amount}</span>
+        <span class='absolute bottom-2 right-4 font-medium max-sm:text-lg'>¥{sponsor.amount}</span>
         <div
           class='progress absolute h-full top-0 left-0 -z-10 bg-muted'
           style={{ width: `${Math.min(sponsor.amount / progressMax, 1) * 100}%` }}
