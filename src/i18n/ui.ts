@@ -13,6 +13,7 @@ export const ui = {
         'nav.projects': 'Projects',
         'nav.tags': 'Tags',
         'nav.links': 'Links',
+        'nav.changelog': 'Changelog',
         'footer.copyright': 'Copyright',
         'blog.pagination.prev': '← Previous Posts',
         'blog.pagination.next': 'Next Posts →',
@@ -101,6 +102,10 @@ export const ui = {
         'donation.modal.buymeacoffee': 'Buy Me a Coffee',
         'donation.modal.kofi': 'Ko-fi',
         'donation.modal.close': 'Close',
+        'changelog.title': 'Changelog',
+        'changelog.desc': 'Track all updates and improvements to this website',
+        'changelog.intro': 'This page records all major updates, new features, bug fixes, and improvements to the website. Updates are listed from newest to oldest.',
+        'changelog.all_updates': 'All Updates',
     },
     zh: {
         'nav.home': '首页',
@@ -110,6 +115,7 @@ export const ui = {
         'nav.projects': '项目',
         'nav.tags': '标签',
         'nav.links': '友链',
+        'nav.changelog': '更新日志',
         'footer.copyright': '版权所有',
         'blog.pagination.prev': '← 上一页',
         'blog.pagination.next': '下一页 →',
@@ -199,6 +205,10 @@ export const ui = {
         'donation.modal.buymeacoffee': 'Buy Me a Coffee',
         'donation.modal.kofi': 'Ko-fi',
         'donation.modal.close': '关闭',
+        'changelog.title': '更新日志',
+        'changelog.desc': '记录网站的所有更新和改进',
+        'changelog.intro': '本页面记录了网站的所有重要更新、新功能、修复和改进。更新记录按时间从新到旧排列。',
+        'changelog.all_updates': '全部更新',
     },
 } as const;
 
