@@ -12,14 +12,18 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import config from '@/site-config'
 
-export const prerender = true
+export const prerender = false
 
-export async function getStaticPaths() {
-  return Object.keys(languages).map((lang) => ({ params: { lang } }))
-}
+// export const prerender = false // Keep this as is from previous step (implicit)
+
+// export async function getStaticPaths() {
+//   return Object.keys(languages).map((lang) => ({ params: { lang } }))
+// }
 
 const { lang } = Astro.params
 const t = useTranslations(lang as any)
+
+// ... (rest of the file until script)
 
 // Unused lists removed
 
@@ -33,9 +37,8 @@ const langPosts = allPosts.filter((post) => {
 
 const sortedPosts = sortMDByDate(langPosts)
 const allTags = getUniqueTagsWithCount(langPosts)
-const recommendPosts = sortedPosts.filter((post) => post.data.tags.includes('recommend'))
-const postsToShow = recommendPosts.length > 0 ? recommendPosts : sortedPosts
-const allPostsByDate = postsToShow.slice(0, MAX_POSTS)
+// Show all posts for filtering, not just recommended
+const allPostsByDate = sortedPosts.slice(0, MAX_POSTS)
 
 const imagePath = config.logo.src
 const images = import.meta.glob<{ default: ImageMetadata }>(
@@ -46,52 +49,12 @@ if (!images[imagePath])
     `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
   )
 
-// --- 1. 自定义 Hex 彩虹配色 ---
+// --- Rainbow color scheme for tags ---
 const rainbowColors = ['#428BCA', '#AEDCAE', '#ECA9A7', '#DA99FF', '#FFB380', '#D9B999']
 
-function getTagStyle(tagName: string) {
+function getTagColor(tagName: string) {
   const index = tagName.length % rainbowColors.length
-  const bgColor = rainbowColors[index]
-  return `background-color: ${bgColor}; color: #fff; border: none;`
-}
-
-// --- 2. 标签分类定义 (添加 color 字段) ---
-const tagCategories = [
-  {
-    name: 'technology',
-    tags: ['astro', 'javascript', 'css', 'typescript', 'vite'],
-    color: '#428BCA'
-  },
-  {
-    name: 'investment',
-    tags: ['stocks', 'crypto', 'finance'],
-    color: '#FFB380'
-  },
-  {
-    name: 'life',
-    tags: ['travel', 'reading', 'music'],
-    color: '#ECA9A7'
-  }
-]
-
-function getRainbowStyle(tagName: string) {
-  const index = tagName.length % rainbowColors.length
-  const bgColor = rainbowColors[index]
-  return `background-color: ${bgColor}; color: #fff; border: none;`
-}
-
-function getCategoryStyle(color: string) {
-  return `background-color: ${color}; color: #fff; border: none;`
-}
-
-const categorizedTags = new Set(
-  tagCategories.flatMap((category) => category.tags.map((tag) => tag.toLowerCase()))
-)
-const otherTags = allTags.filter(([tag]) => !categorizedTags.has(tag.toLowerCase()))
-
-function getTagData(tagName: string) {
-  const tagData = allTags.find(([tag]) => tag.toLowerCase() === tagName.toLowerCase())
-  return tagData ? { name: tagData[0], count: tagData[1] } : null
+  return rainbowColors[index]
 }
 ---
 
@@ -139,20 +102,90 @@ function getTagData(tagName: string) {
     </section>
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
+      {/* Unified Blog Section with Topic Filters */}
       {
         allPostsByDate.length > 0 && (
           <Section title={t('nav.blog')}>
-            <ul class='flex flex-col gap-y-4'>
+            {/* Horizontal Topic Filter Bar */}
+            <div class='mb-4 flex flex-col gap-y-2.5'>
+              <p class='text-xs font-medium uppercase tracking-wide text-muted-foreground/60'>
+                {lang === 'zh' ? '筛选' : 'Filter'}
+              </p>
+              <div class='flex flex-wrap gap-1.5'>
+                {/* All Button */}
+                <button
+                  data-tag='all'
+                  class='topic-filter active rounded-lg border border-border/50 bg-gradient-to-br from-primary/90 to-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] active:scale-95'
+                >
+                  <span>{lang === 'zh' ? '全部' : 'All'}</span>
+                  <span class='ml-1.5 rounded bg-white/25 px-1.5 py-0.5 text-[10px] font-bold'>
+                    {allPostsByDate.length}
+                  </span>
+                </button>
+
+                {/* Auto-generated Tag Filters */}
+                {allTags.map(([tagName, count]) => (
+                  <button
+                    data-tag={tagName}
+                    class='topic-filter rounded-lg border border-border/40 bg-muted/50 px-3 py-1.5 text-xs font-medium text-foreground/80 backdrop-blur-sm transition-all duration-200 hover:border-border hover:bg-muted hover:text-foreground hover:shadow-sm hover:scale-[1.02] active:scale-95'
+                  >
+                    <span>{t(`tag.${tagName.toLowerCase()}` as any) || tagName}</span>
+                    <span class='ml-1.5 rounded bg-foreground/10 px-1.5 py-0.5 text-[10px] font-semibold'>
+                      {count}
+                    </span>
+                  </button>
+                ))}
+
+                {/* View All Tags Link */}
+                <a
+                  href={`/${lang}/tags`}
+                  class='flex items-center gap-1 rounded-lg border border-dashed border-border/50 bg-transparent px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-solid hover:border-border hover:bg-muted/30 hover:text-foreground'
+                >
+                  {t('tags.view_all')}
+                  <svg class='size-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M9 5l7 7-7 7'
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Blog Posts List */}
+            <ul id='blog-list' class='flex flex-col gap-y-3'>
               {allPostsByDate.map((p) => (
-                <PostPreview post={p} detailed />
+                <li
+                  class='blog-post opacity-100 transition-all duration-300'
+                  data-tags={p.data.tags.join(',')}
+                >
+                  <PostPreview post={p} detailed />
+                </li>
               ))}
             </ul>
-            <Button
-              title={t('home.more_posts')}
-              class='w-fit self-end'
-              href={`/${lang}/blog`}
-              variant='ahead'
-            />
+
+            {/* No Posts Message */}
+            <div id='no-posts-message' class='hidden py-12 text-center text-muted-foreground'>
+              <div class='mx-auto max-w-sm'>
+                <p class='mb-2 text-4xl'>😅</p>
+                <p class='mb-1 text-base font-medium'>
+                  {lang === 'zh' ? '暂无匹配的文章' : 'No matching posts'}
+                </p>
+                <p class='text-sm'>{lang === 'zh' ? '试试其他话题吧' : 'Try another topic'}</p>
+              </div>
+            </div>
+
+            {/* More Posts Button */}
+            <div class='mt-6 flex justify-end'>
+              <Button
+                title={t('home.more_posts')}
+                class='w-fit'
+                href={`/${lang}/blog`}
+                variant='ahead'
+              />
+            </div>
           </Section>
         )
       }
@@ -173,72 +206,6 @@ function getTagData(tagName: string) {
           />
         </div>
       </Section>
-
-      <Section title={t('home.topics')}>
-        <div class='flex flex-col gap-y-4'>
-          {
-            tagCategories.map((category) => (
-              <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
-                <h3 class='w-1/5 font-medium'>{t(`home.category.${category.name}` as any)}</h3>
-                <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
-                  {category.tags.map((tagName) => {
-                    const data = getTagData(tagName)
-                    if (!data) return null
-
-                    return (
-                      <Button
-                        href={`/${lang}/tags/${data.name}`}
-                        variant='pill'
-                        class='transition-opacity duration-300 hover:opacity-80'
-                        style={getCategoryStyle(category.color)}
-                      >
-                        <span class='font-medium'>
-                          {t(`tag.${data.name.toLowerCase()}` as any) || data.name}
-                        </span>
-                        <span class='ml-1.5 text-xs opacity-80 bg-white/20 rounded-md px-1.5 py-0.5'>
-                          {data.count}
-                        </span>
-                      </Button>
-                    )
-                  })}
-                  {category.tags.every((t) => !getTagData(t)) && (
-                    <span class='text-sm text-muted-foreground/50 italic'>
-                      {t('home.no_posts')}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))
-          }
-
-          {
-            otherTags.length > 0 && (
-              <div class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0 mt-2'>
-                <h3 class='w-1/5 font-medium'>{t('common.more')}</h3>
-                <div class='flex flex-row flex-wrap gap-x-4 gap-y-2 md:w-4/5'>
-                  {otherTags.map(([tagName, count]) => (
-                    <Button
-                      href={`/${lang}/tags/${tagName}`}
-                      variant='pill'
-                      class='transition-opacity duration-300 hover:opacity-80'
-                      style={getRainbowStyle(tagName)}
-                    >
-                      <span class='font-medium'>
-                        {t(`tag.${tagName.toLowerCase()}` as any) || tagName}
-                      </span>
-                      <span class='ml-1.5 text-xs opacity-80 bg-white/20 rounded-md px-1.5 py-0.5'>
-                        {count}
-                      </span>
-                    </Button>
-                  ))}
-
-                  <Button title={t('tags.view_all')} href={`/${lang}/tags`} variant='ahead' />
-                </div>
-              </div>
-            )
-          }
-        </div>
-      </Section>
     </div>
     <Quote class='mt-12 bg-background' />
   </main>
@@ -246,6 +213,111 @@ function getTagData(tagName: string) {
 
 <script>
   import { showToast } from 'astro-pure/utils'
+
+  // Topic Filtering Functionality
+  function initTopicFilters() {
+    const filterButtons = document.querySelectorAll('.topic-filter')
+    const blogPosts = document.querySelectorAll('.blog-post')
+    const noPostsMessage = document.getElementById('no-posts-message')
+    const blogList = document.getElementById('blog-list')
+
+    if (!filterButtons.length || !blogPosts.length) return
+
+    function filterPosts(selectedTag: string) {
+      let visibleCount = 0
+
+      blogPosts.forEach((post) => {
+        const postTagsStr = post.getAttribute('data-tags') || ''
+        const postTags = postTagsStr.split(',').map((tag) => tag.trim().toLowerCase())
+        const shouldShow = selectedTag === 'all' || postTags.includes(selectedTag.toLowerCase())
+
+        const htmlPost = post as HTMLElement
+
+        if (shouldShow) {
+          visibleCount++
+          post.classList.remove('hidden')
+          // Reset inline styles that might have been added by previous hides
+          htmlPost.style.display = ''
+
+          // Simple fade-in effect
+          htmlPost.style.opacity = '0'
+          htmlPost.style.transform = 'translateY(10px)'
+          requestAnimationFrame(() => {
+            htmlPost.style.opacity = '1'
+            htmlPost.style.transform = 'translateY(0)'
+          })
+        } else {
+          post.classList.add('hidden')
+          htmlPost.style.display = 'none' // Explicitly set none to ensure it overrides everything
+        }
+      })
+
+      // Show/hide no posts message
+      if (visibleCount === 0) {
+        noPostsMessage?.classList.remove('hidden')
+        blogList?.classList.add('hidden')
+      } else {
+        noPostsMessage?.classList.add('hidden')
+        blogList?.classList.remove('hidden')
+      }
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault()
+        const target = e.currentTarget as HTMLElement
+        const selectedTag = target.getAttribute('data-tag')
+        if (!selectedTag) return
+
+        // Update active state
+        filterButtons.forEach((btn) => {
+          btn.classList.remove('active')
+          if (btn.getAttribute('data-tag') !== 'all') {
+            btn.classList.remove('shadow-md', 'border-border')
+            btn.classList.add('border-border/40')
+          } else {
+            btn.classList.remove(
+              'bg-gradient-to-br',
+              'from-primary/90',
+              'to-primary',
+              'text-primary-foreground',
+              'border-border/50'
+            )
+            btn.classList.add('bg-muted/50', 'text-foreground/80', 'border-border/40')
+          }
+        })
+
+        // Set active state for clicked button
+        target.classList.add('active')
+        if (selectedTag === 'all') {
+          target.classList.remove('bg-muted/50', 'text-foreground/80', 'border-border/40')
+          target.classList.add(
+            'bg-gradient-to-br',
+            'from-primary/90',
+            'to-primary',
+            'text-primary-foreground',
+            'border-border/50',
+            'shadow-md'
+          )
+        } else {
+          target.classList.remove('border-border/40')
+          target.classList.add('border-border', 'shadow-md')
+        }
+
+        filterPosts(selectedTag)
+
+        // Show toast for feedback
+        if (selectedTag !== 'all') {
+          const tagText = target.querySelector('span:first-child')?.textContent || selectedTag
+          showToast({
+            message: `${tagText}`,
+            icon: 'filter',
+            time: 1500
+          })
+        }
+      })
+    })
+  }
 
   // Easter Egg Script
   const messages = [
@@ -274,26 +346,41 @@ function getTagData(tagName: string) {
     'heart'
   ]
 
-  function triggerEasterEgg() {
-    const randomMsg = messages[Math.floor(Math.random() * messages.length)]
-    const randomType = types[Math.floor(Math.random() * types.length)] as
-      | 'info'
-      | 'success'
-      | 'warning'
-      | 'error'
-    const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+  function setupEasterEgg() {
+    const avatar = document.getElementById('hero-avatar')
+    const author = document.getElementById('hero-author-name')
 
-    showToast({
-      message: randomMsg,
-      type: randomType,
-      icon: randomIcon as any,
-      time: 2000
-    })
+    function triggerEasterEgg() {
+      const randomMsg = messages[Math.floor(Math.random() * messages.length)]
+      const randomType = types[Math.floor(Math.random() * types.length)]
+      const randomIcon = icons[Math.floor(Math.random() * icons.length)]
+
+      showToast({
+        message: randomMsg,
+        type: randomType as any,
+        icon: randomIcon as any,
+        time: 2000
+      })
+    }
+
+    avatar?.addEventListener('click', triggerEasterEgg)
+    author?.addEventListener('click', triggerEasterEgg)
   }
 
-  const avatar = document.getElementById('hero-avatar')
-  const author = document.getElementById('hero-author-name')
+  // Initialize on page load (support for View Transitions)
+  document.addEventListener('astro:page-load', () => {
+    initTopicFilters()
+    setupEasterEgg()
+  })
 
-  avatar?.addEventListener('click', triggerEasterEgg)
-  author?.addEventListener('click', triggerEasterEgg)
+  // Fallback for initial load if not using View Transitions or if script runs after event
+  if (document.readyState === 'complete') {
+    initTopicFilters()
+    setupEasterEgg()
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      initTopicFilters()
+      setupEasterEgg()
+    })
+  }
 </script>
