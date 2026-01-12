@@ -32,7 +32,7 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
 ---
 
 <header-component
-  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between gap-x-3.5 rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
+  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between gap-x-2 rounded-xl border border-transparent py-2 sm:py-2.5 sm:rounded-2xl'
 >
   <a
     class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3 mr-auto'
@@ -113,7 +113,7 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
 
       {/* Right Navigation Column */}
       <div
-        class='flex flex-col w-fit h-full sm:flex-row sm:h-auto sm:w-fit sm:items-center gap-y-1 sm:gap-x-3.5'
+        class='flex flex-col w-fit h-full sm:flex-row sm:h-auto sm:w-fit sm:items-center gap-y-1 sm:gap-x-2'
       >
         {
           menuItems.map((item) => {
@@ -207,9 +207,9 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
   </div>
 
   {/* buttons */}
-  <div class='z-30 flex gap-x-3.5 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
+  <div class='z-30 flex gap-x-2 group-[.not-top]:gap-x-1.5' style='transition:gap 0.3s'>
     <a
-      class='px-1 py-2 animate-jump sm:px-2'
+      class='px-0.5 py-2 animate-jump sm:px-1'
       href={getLocalizedPath('/search')}
       title={t('search.title')}
     >
@@ -335,6 +335,8 @@ const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))].slice(0
       -webkit-backdrop-filter: blur(12px);
       padding-left: 0.375rem;
       padding-right: 0.375rem;
+      padding-top: 0.375rem;
+      padding-bottom: 0.375rem;
       box-shadow:
         rgb(255, 255, 255) 0px 0px 0px 0px,
         rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
