@@ -32,6 +32,12 @@ export interface ChangelogEntry {
 export const changelogEntries: ChangelogEntry[] = [
     {
         date: '2026-01-12',
+        category: 'content',
+        zh: '📝 <b>新增文章：</b> 发布了《交易记录：TCL科技被迫减仓75%，8%大涨清仓》。',
+        en: '📝 <b>New Article:</b> Published "Trading Log: Forced to Cut 75% of TCL Position, Then Exit on 8% Rally".'
+    },
+    {
+        date: '2026-01-12',
         category: 'feature',
         zh: '✨ <b>新增更新日志页面：</b> 使用时间线组件展示网站的所有更新记录，方便追踪网站的发展历程。',
         en: '✨ <b>Added Changelog Page:</b> Display all website updates using timeline component to easily track the site\'s evolution.'
