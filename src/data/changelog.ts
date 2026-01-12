@@ -37,6 +37,18 @@ export const changelogEntries: ChangelogEntry[] = [
         en: '✨ <b>Added Changelog Page:</b> Display all website updates using timeline component to easily track the site\'s evolution.'
     },
     {
+        date: '2026-01-12',
+        category: 'ui',
+        zh: '🎨 <b>首页 Header 布局调整：</b> 修改了首页 Header 栏的布局，优化视觉体验。',
+        en: '🎨 <b>Homepage Header Layout:</b> Modified the homepage header layout for better visual experience.'
+    },
+    {
+        date: '2026-01-12',
+        category: 'content',
+        zh: '📝 <b>文章更新：</b> 更新了文章《网站Favicon 终极解决方案》。',
+        en: '📝 <b>Article Update:</b> Updated the article "The Ultimate Favicon Solution for Websites".'
+    },
+    {
         date: '2026-01-09',
         category: 'feature',
         zh: '💝 <b>实现捐赠弹窗：</b> 在文章页面底部添加赞赏功能，支持支付宝、微信支付以及国际支付平台。',
@@ -97,9 +109,9 @@ export const changelogEntries: ChangelogEntry[] = [
         en: '🌐 <b>Language Picker Improvement:</b> Replaced text switcher with icon for better UX.'
     },
     {
-        date: '2025-01-26',
+        date: '2025-12-30',
         category: 'feature',
-        zh: '🎉 <b>项目启动：</b> 在腊月二十七，建立了这个基于 Astro Theme Pure 的个人网站。',
+        zh: '🎉 <b>项目启动：</b> 建立了这个基于 Astro Theme Pure 的个人网站。',
         en: '🎉 <b>Project Launch:</b> Established this personal website based on Astro Theme Pure.'
     }
 ]

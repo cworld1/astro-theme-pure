@@ -216,15 +216,23 @@ function getTagColor(tagName: string) {
 
   // Topic Filtering Functionality
   function initTopicFilters() {
+    console.log('Use Topic Filtering')
     const filterButtons = document.querySelectorAll('.topic-filter')
     const blogPosts = document.querySelectorAll('.blog-post')
     const noPostsMessage = document.getElementById('no-posts-message')
     const blogList = document.getElementById('blog-list')
 
-    if (!filterButtons.length || !blogPosts.length) return
+    if (!filterButtons.length || !blogPosts.length) {
+      console.log('Filters or posts not found', {
+        buttons: filterButtons.length,
+        posts: blogPosts.length
+      })
+      return
+    }
 
     function filterPosts(selectedTag: string) {
       let visibleCount = 0
+      console.log(`Filtering for tag: ${selectedTag}`)
 
       blogPosts.forEach((post) => {
         const postTagsStr = post.getAttribute('data-tags') || ''
