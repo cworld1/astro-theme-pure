@@ -1,0 +1,42 @@
+{
+  "navigation": {
+    "back": "Atrás"
+  },
+  "search": {
+    "dev_disabled": "Estás en modo de desarrollo, la búsqueda está deshabilitada."
+  },
+  "toc": {
+    "title": "Tabla de contenido",
+    "scroll_to_section": "Desplazarse a la sección: {section}"
+  },
+  "hero": {
+    "draft": "(Borrador)",
+    "update_label": "Actualizar",
+    "blur_alt": "Desenfocar imagen",
+    "tag_aria_prefix": "Ver más blogs con la etiqueta "
+  },
+  "backToTop": {
+    "aria_label": "Volver arriba"
+  },
+  "copyright": {
+    "author_label": "Autor",
+    "published_at_label": "Publicado en",
+    "copyright_label": "Derechos de autor",
+    "license_text": "CC BY-NC-SA 4.0",
+    "sponsor_text": "Invítame a un café ☕.",
+    "link_copied_toast": "¡Enlace copiado!"
+  },
+  "post_preview": {
+    "draft_prefix": "(Borrador) "
+  },
+  "not_found_description": "No encontrado",
+  "theme": {
+    "set_message": "Esquema de color",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "del sistema"
+  },
+  "share": {
+    "copied_link": "¡Enlace copiado!"
+  }
+}
