@@ -31,6 +31,24 @@ export interface ChangelogEntry {
  */
 export const changelogEntries: ChangelogEntry[] = [
     {
+        date: '2026-01-13',
+        category: 'content',
+        zh: '📝 <b>文章更新：</b> 更新了两篇文章：《交易记录：TCL科技4.68买入》和《交易笔记：诺和诺德60.17卖出一半仓位》。',
+        en: '📝 <b>Articles Updated:</b> Updated two articles: "Trading Log: Re-entering TCL at ¥4.68" and "Trading Notes: Novo Nordisk Sell at $60.17".'
+    },
+    {
+        date: '2026-01-13',
+        category: 'ui',
+        zh: '🎨 <b>首页筛选样式调整：</b> 优化了首页文章筛选部分的视觉效果，使其更加整洁统一。',
+        en: '🎨 <b>Homepage Filter Style:</b> Optimized the visual style of the homepage article filter section for a cleaner and more unified look.'
+    },
+    {
+        date: '2026-01-13',
+        category: 'content',
+        zh: '💝 <b>赞赏码更新：</b> 更新了赞赏功能的二维码图片。',
+        en: '💝 <b>Donation QR Codes:</b> Updated the QR code images for the donation feature.'
+    },
+    {
         date: '2026-01-12',
         category: 'content',
         zh: '📝 <b>新增文章：</b> 发布了《交易记录：TCL科技被迫减仓75%，8%大涨清仓》。',

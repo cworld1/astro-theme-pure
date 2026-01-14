@@ -106,43 +106,55 @@ function getTagColor(tagName: string) {
       {
         allPostsByDate.length > 0 && (
           <Section title={t('nav.blog')}>
-            {/* Horizontal Topic Filter Bar */}
-            <div class='mb-4 flex flex-col gap-y-2.5'>
-              <p class='text-xs font-medium uppercase tracking-wide text-muted-foreground/60'>
-                {lang === 'zh' ? '筛选' : 'Filter'}
-              </p>
-              <div class='flex flex-wrap gap-1.5'>
-                {/* All Button */}
-                <button
-                  data-tag='all'
-                  class='topic-filter active rounded-lg border border-border/50 bg-gradient-to-br from-primary/90 to-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] active:scale-95'
-                >
-                  <span>{lang === 'zh' ? '全部' : 'All'}</span>
-                  <span class='ml-1.5 rounded bg-white/25 px-1.5 py-0.5 text-[10px] font-bold'>
-                    {allPostsByDate.length}
-                  </span>
-                </button>
+            {/* Topic Filter Section - Inline Layout */}
+            <div class='mb-2 flex flex-col gap-y-2'>
+              {/* Single Row: Icon + Title + Tags */}
+              <div class='flex flex-wrap items-center gap-2'>
+                {/* Icon and Title with Colon */}
+                <div class='flex items-center gap-2'>
+                  <svg class='size-5 text-foreground' fill='currentColor' viewBox='0 0 24 24'>
+                    <path d='M10.238 4.827a3 3 0 0 1 2.122.878l6.485 6.486a3 3 0 0 1 0 4.242l-4.243 4.243a3 3 0 0 1-4.242 0l-6.486-6.485a3 3 0 0 1-.878-2.122V7.327a2.5 2.5 0 0 1 2.5-2.5zm0 2H5.496a.5.5 0 0 0-.5.5v4.742a1 1 0 0 0 .292.707l6.486 6.486a1 1 0 0 0 1.414 0l4.243-4.243a1 1 0 0 0 0-1.414L10.945 7.12a1 1 0 0 0-.707-.293M7.531 9.362a1.5 1.5 0 1 1 2.121 2.122a1.5 1.5 0 0 1-2.121-2.122M11.652 2a3 3 0 0 1 2.122.878l7.192 7.193a1 1 0 0 1-1.414 1.414L12.36 4.29a1 1 0 0 0-.708-.29H7a1 1 0 0 1 0-2z' />
+                  </svg>
+                  <h3 class='text-base font-medium text-foreground'>
+                    {lang === 'zh' ? '标签：' : 'Tags:'}
+                  </h3>
+                </div>
 
-                {/* Auto-generated Tag Filters */}
-                {allTags.map(([tagName, count]) => (
-                  <button
-                    data-tag={tagName}
-                    class='topic-filter rounded-lg border border-border/40 bg-muted/50 px-3 py-1.5 text-xs font-medium text-foreground/80 backdrop-blur-sm transition-all duration-200 hover:border-border hover:bg-muted hover:text-foreground hover:shadow-sm hover:scale-[1.02] active:scale-95'
-                  >
-                    <span>{t(`tag.${tagName.toLowerCase()}` as any) || tagName}</span>
-                    <span class='ml-1.5 rounded bg-foreground/10 px-1.5 py-0.5 text-[10px] font-semibold'>
-                      {count}
-                    </span>
-                  </button>
-                ))}
+                {/* Individual Tags with Count Badges */}
+                {allTags.map(([tagName, count], index) => {
+                  // Generate different colors for count badges
+                  const colors = [
+                    'bg-blue-500',
+                    'bg-green-500',
+                    'bg-purple-500',
+                    'bg-orange-500',
+                    'bg-pink-500',
+                    'bg-teal-500'
+                  ]
+                  const colorClass = colors[index % colors.length]
 
-                {/* View All Tags Link */}
+                  return (
+                    <a
+                      href={`/${lang}/tags/${tagName.toLowerCase()}`}
+                      class='group flex items-center gap-1.5 rounded-md bg-muted px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-muted/70'
+                    >
+                      <span>{t(`tag.${tagName.toLowerCase()}` as any) || tagName}</span>
+                      <span
+                        class={`size-5 flex items-center justify-center rounded-full ${colorClass} text-[10px] font-bold text-white`}
+                      >
+                        {count}
+                      </span>
+                    </a>
+                  )
+                })}
+
+                {/* View All as Tag */}
                 <a
                   href={`/${lang}/tags`}
-                  class='flex items-center gap-1 rounded-lg border border-dashed border-border/50 bg-transparent px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-solid hover:border-border hover:bg-muted/30 hover:text-foreground'
+                  class='flex items-center gap-1 rounded-md bg-muted px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-muted/70'
                 >
-                  {t('tags.view_all')}
-                  <svg class='size-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <span>{lang === 'zh' ? '查看所有' : 'View All'}</span>
+                  <svg class='size-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path
                       stroke-linecap='round'
                       stroke-linejoin='round'
@@ -152,30 +164,22 @@ function getTagColor(tagName: string) {
                   </svg>
                 </a>
               </div>
+
+              {/* Separator Line */}
+              <div class='border-t border-border/50' />
             </div>
 
             {/* Blog Posts List */}
-            <ul id='blog-list' class='flex flex-col gap-y-3'>
-              {allPostsByDate.map((p) => (
+            <ul class='flex flex-col gap-y-3'>
+              {allPostsByDate.map((p, index) => (
                 <li
-                  class='blog-post opacity-100 transition-all duration-300'
-                  data-tags={p.data.tags.join(',')}
+                  class='animate-fade-in transition-all duration-300'
+                  style={`animation-delay: ${index * 50}ms`}
                 >
                   <PostPreview post={p} detailed />
                 </li>
               ))}
             </ul>
-
-            {/* No Posts Message */}
-            <div id='no-posts-message' class='hidden py-12 text-center text-muted-foreground'>
-              <div class='mx-auto max-w-sm'>
-                <p class='mb-2 text-4xl'>😅</p>
-                <p class='mb-1 text-base font-medium'>
-                  {lang === 'zh' ? '暂无匹配的文章' : 'No matching posts'}
-                </p>
-                <p class='text-sm'>{lang === 'zh' ? '试试其他话题吧' : 'Try another topic'}</p>
-              </div>
-            </div>
 
             {/* More Posts Button */}
             <div class='mt-6 flex justify-end'>
@@ -213,119 +217,6 @@ function getTagColor(tagName: string) {
 
 <script>
   import { showToast } from 'astro-pure/utils'
-
-  // Topic Filtering Functionality
-  function initTopicFilters() {
-    console.log('Use Topic Filtering')
-    const filterButtons = document.querySelectorAll('.topic-filter')
-    const blogPosts = document.querySelectorAll('.blog-post')
-    const noPostsMessage = document.getElementById('no-posts-message')
-    const blogList = document.getElementById('blog-list')
-
-    if (!filterButtons.length || !blogPosts.length) {
-      console.log('Filters or posts not found', {
-        buttons: filterButtons.length,
-        posts: blogPosts.length
-      })
-      return
-    }
-
-    function filterPosts(selectedTag: string) {
-      let visibleCount = 0
-      console.log(`Filtering for tag: ${selectedTag}`)
-
-      blogPosts.forEach((post) => {
-        const postTagsStr = post.getAttribute('data-tags') || ''
-        const postTags = postTagsStr.split(',').map((tag) => tag.trim().toLowerCase())
-        const shouldShow = selectedTag === 'all' || postTags.includes(selectedTag.toLowerCase())
-
-        const htmlPost = post as HTMLElement
-
-        if (shouldShow) {
-          visibleCount++
-          post.classList.remove('hidden')
-          // Reset inline styles that might have been added by previous hides
-          htmlPost.style.display = ''
-
-          // Simple fade-in effect
-          htmlPost.style.opacity = '0'
-          htmlPost.style.transform = 'translateY(10px)'
-          requestAnimationFrame(() => {
-            htmlPost.style.opacity = '1'
-            htmlPost.style.transform = 'translateY(0)'
-          })
-        } else {
-          post.classList.add('hidden')
-          htmlPost.style.display = 'none' // Explicitly set none to ensure it overrides everything
-        }
-      })
-
-      // Show/hide no posts message
-      if (visibleCount === 0) {
-        noPostsMessage?.classList.remove('hidden')
-        blogList?.classList.add('hidden')
-      } else {
-        noPostsMessage?.classList.add('hidden')
-        blogList?.classList.remove('hidden')
-      }
-    }
-
-    filterButtons.forEach((button) => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault()
-        const target = e.currentTarget as HTMLElement
-        const selectedTag = target.getAttribute('data-tag')
-        if (!selectedTag) return
-
-        // Update active state
-        filterButtons.forEach((btn) => {
-          btn.classList.remove('active')
-          if (btn.getAttribute('data-tag') !== 'all') {
-            btn.classList.remove('shadow-md', 'border-border')
-            btn.classList.add('border-border/40')
-          } else {
-            btn.classList.remove(
-              'bg-gradient-to-br',
-              'from-primary/90',
-              'to-primary',
-              'text-primary-foreground',
-              'border-border/50'
-            )
-            btn.classList.add('bg-muted/50', 'text-foreground/80', 'border-border/40')
-          }
-        })
-
-        // Set active state for clicked button
-        target.classList.add('active')
-        if (selectedTag === 'all') {
-          target.classList.remove('bg-muted/50', 'text-foreground/80', 'border-border/40')
-          target.classList.add(
-            'bg-gradient-to-br',
-            'from-primary/90',
-            'to-primary',
-            'text-primary-foreground',
-            'border-border/50',
-            'shadow-md'
-          )
-        } else {
-          target.classList.remove('border-border/40')
-          target.classList.add('border-border', 'shadow-md')
-        }
-
-        filterPosts(selectedTag)
-
-        // Show toast for feedback
-        if (selectedTag !== 'all') {
-          const tagText = target.querySelector('span:first-child')?.textContent || selectedTag
-          showToast({
-            message: `${tagText}`,
-            icon: 'filter',
-            time: 1500
-          })
-        }
-      })
-    })
-  }
 
   // Easter Egg Script
   const messages = [
@@ -377,18 +268,24 @@ function getTagColor(tagName: string) {
 
   // Initialize on page load (support for View Transitions)
   document.addEventListener('astro:page-load', () => {
-    initTopicFilters()
     setupEasterEgg()
   })
-
-  // Fallback for initial load if not using View Transitions or if script runs after event
-  if (document.readyState === 'complete') {
-    initTopicFilters()
-    setupEasterEgg()
-  } else {
-    document.addEventListener('DOMContentLoaded', () => {
-      initTopicFilters()
-      setupEasterEgg()
-    })
-  }
 </script>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+    opacity: 0;
+  }
+</style>

@@ -50,7 +50,7 @@ const isChinese = lang === 'zh'
         aria-label={t('donation.modal.close')}
         class='rounded-full p-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
       >
-        <Icon class='size-5' name='x' />
+        <Icon class='size-5' name='close' />
       </button>
     </div>
 
@@ -133,6 +133,9 @@ const isChinese = lang === 'zh'
           </div>
         )
       }
+      <p class='mt-6 text-center text-sm text-muted-foreground'>
+        {t('donation.modal.slogan')}
+      </p>
     </div>
   </div>
 </div>
