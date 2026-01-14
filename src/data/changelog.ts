@@ -31,6 +31,30 @@ export interface ChangelogEntry {
  */
 export const changelogEntries: ChangelogEntry[] = [
     {
+        date: '2026-01-14',
+        category: 'content',
+        zh: '📝 <b>新增文章：</b> 发布了《交易笔记：TCL科技减仓一半，两倍做多恒生指数止盈清仓。》。',
+        en: '📝 <b>New Article:</b> Published "Trading Notes: Halving TCL Technology, Clearing 2x Long Hang Seng".'
+    },
+    {
+        date: '2026-01-14',
+        category: 'feature',
+        zh: '🔍 <b>SEO与广告优化：</b> 优化了Google SEO并添加了Google Ads支持。',
+        en: '🔍 <b>SEO & Ads Optimization:</b> Optimized Google SEO and added support for Google Ads.'
+    },
+    {
+        date: '2026-01-14',
+        category: 'ui',
+        zh: '🔔 <b>Toast提醒优化：</b> 改进了Toast通知的交互体验。',
+        en: '🔔 <b>Toast Optimization:</b> Improved the interaction experience of Toast notifications.'
+    },
+    {
+        date: '2026-01-14',
+        category: 'feature',
+        zh: '📈 <b>股票组件（WIP）：</b> 添加了股票交易组件（开发中）。',
+        en: '📈 <b>Stock Component (WIP):</b> Added stock trading component (Work In Progress).'
+    },
+    {
         date: '2026-01-13',
         category: 'content',
         zh: '📝 <b>文章更新：</b> 更新了两篇文章：《交易记录：TCL科技4.68买入》和《交易笔记：诺和诺德60.17卖出一半仓位》。',
