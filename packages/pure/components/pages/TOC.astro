@@ -9,9 +9,10 @@ interface Props {
   headings: MarkdownHeading[]
   class?: string
   id?: string
+  title?: string
 }
 
-const { headings, class: className, ...props } = Astro.props
+const { headings, class: className, title, ...props } = Astro.props
 
 const toc = generateToc(headings)
 
@@ -20,7 +21,7 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
 ---
 
 <toc-heading class={className} {...props}>
-  <h2 class='font-medium'>{t('toc.title')}</h2>
+  <h2 class='font-medium'>{title || t('toc.title')}</h2>
   <ul class='mt-4'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ul>
@@ -52,7 +53,7 @@ const t = useTranslations(lang in ui ? lang : defaultLang)
       // Initialize the headings and tocLinks
       this.headings = Array.from(
         document.querySelectorAll(
-          'article h1, article h2, article h3, article h4, article h5, article h6'
+          'article h1, article h2, article h3, article h4, article h5, article h6, .toc-anchor'
         )
       )
       this.tocLinks = Array.from(this.querySelectorAll('a[href^="#"]')).map((link) => ({

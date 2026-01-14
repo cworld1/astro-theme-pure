@@ -28,9 +28,10 @@ const { class: className, events, ...props } = Astro.props
             <div class='flex gap-2 max-sm:flex-col'>
               <samp
                 class:list={[
-                  'w-fit grow-0 rounded-md py-1 text-sm max-sm:bg-card max-sm:px-2 sm:min-w-[82px] sm:text-right',
+                  'toc-anchor w-fit grow-0 rounded-md py-1 text-sm max-sm:bg-card max-sm:px-2 sm:min-w-[82px] sm:scroll-mt-36 sm:text-right',
                   { 'invisible max-sm:hidden': isSameDate }
                 ]}
+                id={!isSameDate ? event.date : undefined}
               >
                 {event.date}
               </samp>

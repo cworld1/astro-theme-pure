@@ -143,20 +143,12 @@ const rainbowColors = ['#428BCA', '#AEDCAE', '#ECA9A7', '#DA99FF', '#FFB380', '#
                 })}
 
                 {/* View All as Tag */}
-                <a
+                <Button
                   href={`/${lang}/tags`}
-                  class='flex items-center gap-1 rounded-md bg-muted px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-muted/70'
-                >
-                  <span>{lang === 'zh' ? '查看所有' : 'View All'}</span>
-                  <svg class='size-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      stroke-width='2'
-                      d='M9 5l7 7-7 7'
-                    />
-                  </svg>
-                </a>
+                  title={lang === 'zh' ? '查看所有' : 'View All'}
+                  variant='ahead'
+                  class='rounded-md bg-muted px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-muted/70 border-none'
+                />
               </div>
 
               {/* Separator Line */}

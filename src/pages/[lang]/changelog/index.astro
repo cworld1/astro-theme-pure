@@ -1,4 +1,5 @@
 ---
+import type { MarkdownHeading } from 'astro'
 import { changelogEntries } from '@/data/changelog'
 import { languages, useTranslations } from '@/i18n/ui'
 
@@ -21,43 +22,30 @@ const timelineEvents: TimelineEvent[] = changelogEntries.map((entry) => ({
   content: lang === 'zh' ? entry.zh : entry.en
 }))
 
-// 页面目录（可选，如果需要的话）
-const headings = [{ depth: 2, slug: 'all-updates', text: t('changelog.all_updates') }]
+// 页面目录
+const uniqueDates = [...new Set(changelogEntries.map((entry) => entry.date))]
+const headings: MarkdownHeading[] = [
+  { depth: 2, slug: 'latest-update', text: lang === 'zh' ? '最新更新' : 'Latest Update' },
+  ...uniqueDates.map((date) => ({
+    depth: 2,
+    slug: date,
+    text: date
+  }))
+]
 ---
 
-<PageLayout title={t('changelog.title')} {headings}>
-  <div class='changelog-intro mb-8'>
+<PageLayout
+  title={t('changelog.title')}
+  tocTitle={lang === 'zh' ? '更新时间' : 'Update Time'}
+  {headings}
+>
+  <div class='toc-anchor changelog-intro mb-8' id='latest-update'>
     <p class='text-lg text-muted-foreground'>
       {t('changelog.intro')}
     </p>
   </div>
 
-  <h2 id='all-updates' class='mb-6 text-2xl font-bold'>
-    {t('changelog.all_updates')}
-  </h2>
-
   <Timeline events={timelineEvents} class='changelog-timeline' />
-
-  <div class='mt-12 rounded-lg border border-border bg-card/50 p-6 backdrop-blur-sm'>
-    <h3 class='mb-3 text-lg font-semibold'>
-      {lang === 'zh' ? '📝 如何添加新的更新条目？' : '📝 How to Add New Updates?'}
-    </h3>
-    <p class='mb-3 text-sm text-muted-foreground'>
-      {
-        lang === 'zh'
-          ? '编辑以下文件即可添加新的更新条目：'
-          : 'Edit the following file to add new changelog entries:'
-      }
-    </p>
-    <code class='block rounded bg-muted px-3 py-2 text-sm'> src/data/changelog.ts </code>
-    <p class='mt-3 text-sm text-muted-foreground'>
-      {
-        lang === 'zh'
-          ? '在数组最前面添加新条目，保存文件后页面会自动更新。'
-          : 'Add new entries at the beginning of the array, the page will update automatically after saving.'
-      }
-    </p>
-  </div>
 </PageLayout>
 
 <style>

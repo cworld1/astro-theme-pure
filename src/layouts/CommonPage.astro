@@ -10,13 +10,14 @@ interface Props {
   headings?: MarkdownHeading[]
   view?: boolean
   comment?: boolean
+  tocTitle?: string
 }
 
-const { title, headings, view, comment: enableComment, ...props } = Astro.props
+const { title, headings, view, comment: enableComment, tocTitle, ...props } = Astro.props
 ---
 
 <PageLayout meta={{ title }} {...props}>
-  {headings?.length && <TOC headings={headings} slot='sidebar' />}
+  {headings?.length && <TOC headings={headings} title={tocTitle} slot='sidebar' />}
 
   <Fragment slot='header'>
     <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>{title}</h1>
