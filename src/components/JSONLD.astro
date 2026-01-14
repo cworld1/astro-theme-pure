@@ -1,0 +1,88 @@
+---
+import config from 'virtual:config'
+
+import type { SiteMeta } from 'astro-pure/types'
+
+type Props = SiteMeta
+
+const { title, description, articleDate, ogImage } = Astro.props
+
+const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url).href
+
+const schema: Record<string, any>[] = []
+
+// WebSite Schema (Applied to all pages)
+schema.push({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  url: Astro.site,
+  name: config.title,
+  description: config.description,
+  author: {
+    '@type': 'Person',
+    name: config.author
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${Astro.site}search?q={search_term_string}`
+    },
+    'query-input': 'required name=search_term_string'
+  }
+})
+
+// BlogPosting Schema (Only for articles)
+if (articleDate) {
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    image: socialImageURL,
+    datePublished: articleDate,
+    dateModified: articleDate, // Fallback to publish date if no update date passed, or we can add updatedDate prop
+    author: {
+      '@type': 'Person',
+      name: config.author,
+      url: Astro.site
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: config.title,
+      logo: {
+        '@type': 'ImageObject',
+        url: new URL(config.favicon.href, Astro.site).href
+      }
+    },
+    description: description,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalURL.href
+    }
+  })
+}
+
+// BreadcrumbList Schema
+const pathSegments = Astro.url.pathname.split('/').filter(Boolean)
+if (pathSegments.length > 0) {
+  const breadcrumbs = pathSegments.map((segment, index) => {
+    const url = new URL(pathSegments.slice(0, index + 1).join('/'), Astro.site).href
+    return {
+      '@type': 'ListItem',
+      position: index + 1,
+      name: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
+      item: url
+    }
+  })
+
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs
+  })
+}
+---
+
+{schema.map((s) => <script type='application/ld+json' set:html={JSON.stringify(s)} />)}

@@ -5,6 +5,8 @@ import config from 'virtual:config'
 import { prod } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
 
+import JSONLD from './JSONLD.astro'
+
 type Props = SiteMeta
 
 const { articleDate, description, ogImage, title } = Astro.props
@@ -102,7 +104,30 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content={Astro.generator} name='generator' />
 
 {
-  /* User script*/
+  /* Baidu Auto Push */
+  prod && (
+    <script
+      is:inline
+      set:html={`
+      (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+      })();
+    `}
+    />
+  )
+}
+
+{
+  /* User script */
   prod && (
     <script>
       console.log( '%c Astro Theme Pure %c https://github.com/cworld1/astro-theme-pure/',
@@ -111,3 +136,6 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
     </script>
   )
 }
+
+{/* JSON-LD Structured Data */}
+<JSONLD {articleDate} {description} {ogImage} {title} />
