@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { InferEntrySchema } from 'astro:content'
-import { defaultLang, languages, ui, useTranslations } from '@/i18n/ui'
+import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 
 import { FormattedDate, Icon } from '../user'
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const {
-  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language },
+  data: { title, description, draft, heroImage, publishDate, updatedDate, tags },
   remarkPluginFrontmatter
 } = Astro.props
 

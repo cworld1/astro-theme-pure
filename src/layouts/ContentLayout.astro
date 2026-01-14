@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl, languages, useTranslations } from '@/i18n/ui'
+import { getLangFromUrl, useTranslations } from '@/i18n/ui'
 
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
@@ -161,7 +161,6 @@ const localizedBack =
     }
   }
 
-  let isInit = false
   function init() {
     log('Init triggered')
     // Clean up previous listener just in case

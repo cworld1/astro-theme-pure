@@ -1,15 +1,14 @@
 ---
 import { Image } from 'astro:assets'
-import { languages, useTranslations } from '@/i18n/ui'
+import { useTranslations } from '@/i18n/ui'
 
 import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Icon, Label } from 'astro-pure/user'
+import { Button, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/home/ProjectCard.astro'
 import Section from '@/components/home/Section.astro'
-import SkillLayout from '@/components/home/SkillLayout.astro'
 import config from '@/site-config'
 
 export const prerender = false
@@ -51,11 +50,6 @@ if (!images[imagePath])
 
 // --- Rainbow color scheme for tags ---
 const rainbowColors = ['#428BCA', '#AEDCAE', '#ECA9A7', '#DA99FF', '#FFB380', '#D9B999']
-
-function getTagColor(tagName: string) {
-  const index = tagName.length % rainbowColors.length
-  return rainbowColors[index]
-}
 ---
 
 <PageLayout meta={{ title: t('nav.home') }} highlightColor='#659EB9'>

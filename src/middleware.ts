@@ -1,5 +1,5 @@
 import { defineMiddleware } from "astro:middleware";
-import { defaultLang, languages } from './i18n/ui';
+import { defaultLang } from './i18n/ui';
 
 export const onRequest = defineMiddleware((context, next) => {
     const pathname = context.url.pathname;

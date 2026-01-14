@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
-import { defaultLang, languages, ui, useTranslations } from '@/i18n/ui'
+import { languages, useTranslations } from '@/i18n/ui'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
@@ -32,13 +32,6 @@ export const getStaticPaths = (async ({ paginate }) => {
     })
   })
 }) satisfies GetStaticPaths
-
-interface Props {
-  page: Page<CollectionEntry<'blog'>>
-  uniqueTags: string[]
-  collectionsCount: number
-  lang: string
-}
 
 const { page, uniqueTags, collectionsCount, lang } = Astro.props
 const t = useTranslations(lang as any)

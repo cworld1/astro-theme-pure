@@ -3,8 +3,6 @@ import { Image } from 'astro:assets'
 import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 import { defaultLang, ui, useTranslations } from '@/i18n/ui'
 
-import config from '@/site-config'
-
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
 
@@ -15,7 +13,7 @@ type Props<T extends CollectionKey> = {
 }
 
 const { post, detailed = false, class: className } = Astro.props
-const { id, data, slug } = post
+const { id, data } = post
 const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.updatedDate ?? data.publishDate
 

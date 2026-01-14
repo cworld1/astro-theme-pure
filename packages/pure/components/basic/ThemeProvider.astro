@@ -114,20 +114,7 @@
       const normalizedBrowser = browserLang.toLowerCase()
       const normalizedCurrent = currentLang.toLowerCase()
 
-      // Logic: if current is 'en' but browser is 'zh', or current is 'zh' but browser is 'en'
-      const mismatch =
-        (normalizedCurrent.startsWith('en') && normalizedBrowser.startsWith('zh')) ||
-        (normalizedCurrent.startsWith('zh') && !normalizedBrowser.startsWith('zh')) // If zh page, but browser NOT zh (e.g. en, fr)
-
-      /* 
-         Revised Logic:
-         User wants reminder if language does not match.
-         Simple check: !normalizedBrowser.startsWith(normalizedCurrent)
-         Example: 
-         - Page: en, Browser: zh-CN. 'zh-cn'.startsWith('en') -> false. Mismatch. Warn.
-         - Page: zh, Browser: en-US. 'en-us'.startsWith('zh') -> false. Mismatch. Warn.
-       */
-
+      // Check if browser language doesn't match current page language
       if (!normalizedBrowser.startsWith(normalizedCurrent)) {
         // Calculate target path
         const targetLang = normalizedCurrent.startsWith('en') ? 'zh' : 'en'

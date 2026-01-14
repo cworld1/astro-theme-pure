@@ -35,7 +35,7 @@ function isCJK(char: string): boolean {
 /**
  * Calculates the reading time of a text
  * @param {string} text - The text to calculate
- * @param {number} wordsPerMinute - The number of words read per minute, default is 200
+ * @param {object} options - Options object with cjkSpeed and enSpeed properties
  * @returns {ReadingTimeResult} - An object containing the reading time
  */
 export function getReadingTime(text: string, options: { cjkSpeed?: number; enSpeed?: number } = {}): ReadingTimeResult {
