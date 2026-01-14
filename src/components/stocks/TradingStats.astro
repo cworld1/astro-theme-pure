@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content'
+import { useTranslations } from '@/i18n/ui'
+
+const { lang } = Astro.params
+const t = useTranslations(lang as any)
+
+const stocks = await getCollection('stocks')
+// Filter stocks for current language and non-draft
+const myStocks = stocks.filter((stock) => {
+  const [stockLang] = stock.id.split('/')
+  return stockLang === lang && !stock.data.draft
+})
+
+const totalTrades = myStocks.length
+const closedTrades = myStocks.filter((s) => s.data.status === 'closed').length
+const winningTrades = myStocks.filter((s) => (s.data.profitLoss || 0) > 0).length
+const winRate = closedTrades > 0 ? (winningTrades / closedTrades) * 100 : 0
+const totalPnL = myStocks.reduce((acc, s) => acc + (s.data.profitLoss || 0), 0)
+const avgPnL = totalTrades > 0 ? totalPnL / totalTrades : 0
+
+// Calculate best trade
+let bestTrade = { ticker: '-', pnl: 0 }
+if (myStocks.length > 0) {
+  const sorted = [...myStocks].sort((a, b) => (b.data.profitLoss || 0) - (a.data.profitLoss || 0))
+  if (sorted[0] && sorted[0].data.profitLoss !== undefined) {
+    bestTrade = { ticker: sorted[0].data.ticker, pnl: sorted[0].data.profitLoss }
+  }
+}
+---
+
+<div class='my-6 rounded-xl border bg-card p-6 shadow-sm'>
+  <div class='flex items-center justify-between mb-4'>
+    <h3 class='text-lg font-bold flex items-center gap-2 m-0'>
+      <span class='inline-block w-2 h-6 bg-primary rounded-full'></span>
+      {lang === 'zh' ? '实盘交易统计' : 'Trading Statistics'}
+    </h3>
+    <a
+      href={`/${lang}/stocks`}
+      class='text-sm text-muted-foreground hover:text-primary transition-colors'
+    >
+      {lang === 'zh' ? '查看详情 →' : 'View Details →'}
+    </a>
+  </div>
+
+  <div class='grid grid-cols-2 md:grid-cols-4 gap-4 text-center'>
+    <div class='p-4 rounded-lg bg-secondary/30'>
+      <div class='text-3xl font-bold text-foreground'>
+        {totalTrades}
+      </div>
+      <div class='text-xs text-muted-foreground mt-1 uppercase tracking-wider'>
+        {lang === 'zh' ? '总交易数' : 'Total Trades'}
+      </div>
+    </div>
+
+    <div class='p-4 rounded-lg bg-secondary/30'>
+      <div class={`text-3xl font-bold ${winRate >= 50 ? 'text-green-500' : 'text-yellow-500'}`}>
+        {winRate.toFixed(0)}<span class='text-sm ml-1'>%</span>
+      </div>
+      <div class='text-xs text-muted-foreground mt-1 uppercase tracking-wider'>
+        {lang === 'zh' ? '胜率' : 'Win Rate'}
+      </div>
+    </div>
+
+    <div class='p-4 rounded-lg bg-secondary/30'>
+      <div class={`text-3xl font-bold ${avgPnL > 0 ? 'text-green-500' : 'text-red-500'}`}>
+        {avgPnL > 0 ? '+' : ''}{avgPnL.toFixed(1)}<span class='text-sm ml-1'>%</span>
+      </div>
+      <div class='text-xs text-muted-foreground mt-1 uppercase tracking-wider'>
+        {lang === 'zh' ? '平均盈亏' : 'Avg P&L'}
+      </div>
+    </div>
+
+    <div class='p-4 rounded-lg bg-secondary/30 hidden md:block'>
+      <div class='text-3xl font-bold text-primary'>
+        {bestTrade.ticker}
+      </div>
+      <div class='text-xs text-muted-foreground mt-1 uppercase tracking-wider'>
+        {lang === 'zh' ? '最佳交易' : 'Best Trade'}
+      </div>
+    </div>
+  </div>
+</div>

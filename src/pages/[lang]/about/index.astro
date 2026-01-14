@@ -4,6 +4,7 @@ import { languages, useTranslations } from '@/i18n/ui'
 import { Button, Collapse, Spoiler, Timeline } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import ToolSection from '@/components/about/ToolSection.astro'
+import TradingStats from '@/components/stocks/TradingStats.astro'
 
 export const prerender = true
 
@@ -65,6 +66,8 @@ const headings = [
     <li><strong>投资逻辑：</strong> 审计商业本质，构建不焦虑的“资产底座”。</li>
     <li><strong>内心探索：</strong> 调试心理机制，寻找复杂世界中的“理性平静”。</li>
   </ul>
+
+  <TradingStats />
 
   {/* 04. 工具栈 */}
   <h2 id='tools'>04. 工具栈 (Toolbox)</h2>

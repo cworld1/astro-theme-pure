@@ -1,0 +1,81 @@
+﻿
+> astro-theme-pure@4.1.1 sync
+> astro sync
+
+[2m20:55:27[22m [34m[astro-mermaid][39m Setting up Mermaid integration
+[2m20:55:27[22m [34m[astro-mermaid][39m Existing rehype plugins:
+[2m20:55:27[22m [34m[astro-mermaid][39m Skipping ELK support
+[2m20:55:28[22m [34m[content][39m Syncing content
+[2m20:55:28[22m [34m[content][39m Astro config changed
+[2m20:55:28[22m [34m[content][39m Content config changed
+[2m20:55:28[22m [34m[content][39m Clearing content store
+node.exe : [31m[Inva
+lidContentEntryDataEr
+ror][39m [1mblog 鈫?
+zh/nvo-trading-notes
+[22m data does not ma
+tch collection schema
+.
+所在位置 行:1 字符: 1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Users\shiyv\AppData\
+Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: ([31m[I   
+ nvalidCo...lecti    
+on schema.:Strin    g
+) [], RemoteExc    ep
+tion
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+
+  ****: Unrecognized 
+key(s) in object: 'ti
+cker', 'market', 'ent
+ryPrice', 'exitPrice'
+, 'entryDate', 'exitD
+ate', 'position', 'st
+atus', 'profitLoss'
+
+  [1mHint:[22m
+[33m    See [4mhttp
+s://docs.astro.build/
+en/guides/content-col
+lections/[24m for mo
+re information on con
+tent schemas.[39m
+  [1mError reference
+:[22m
+    [36m[4mhttps://
+docs.astro.build/en/r
+eference/errors/inval
+id-content-entry-data
+-error/[24m[39m
+  [1mLocation:[22m
+    [4mE:\bytechox\a
+stro-theme-pure\src\c
+ontent\blog\zh\nvo-tr
+ading-notes\index.mdx
+:0:0[24m
+  [1mStack trace:[2
+2m
+[2m    at getEntryDa
+taAndImages (file:///
+E:/bytechox/astro-the
+me-pure/node_modules/
+astro/dist/content/ut
+ils.js:161:26)
+    at async syncData
+ (E:/bytechox/astro-t
+heme-pure/node_module
+s/astro/dist/content/
+loaders/glob.js:97:28
+)[22m

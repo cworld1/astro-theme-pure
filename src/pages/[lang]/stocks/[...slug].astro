@@ -1,0 +1,218 @@
+---
+import type { GetStaticPaths } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+import { getCollection, render } from 'astro:content'
+import { languages, useTranslations } from '@/i18n/ui'
+import Copyright from 'packages/pure/components/pages/Copyright.astro'
+
+import { Hero } from 'astro-pure/components/pages'
+import { Button, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const stocks = await getCollection('stocks')
+
+  return stocks.map((stock) => {
+    const [lang, ...slugParts] = stock.id.split('/')
+    // Clean up the slug: remove index.mdx, index.md, .mdx, .md extensions
+    const slug = slugParts
+      .join('/')
+      .replace(/\/index\.mdx?$/, '')
+      .replace(/\.mdx?$/, '')
+
+    return {
+      params: { lang, slug },
+      props: { stock }
+    }
+  })
+}) satisfies GetStaticPaths
+
+const { stock } = Astro.props
+const { lang, slug } = Astro.params
+const t = useTranslations(lang as any)
+
+const { Content, headings, remarkPluginFrontmatter } = await render(stock)
+
+// Get all stocks to find related trades
+const allStocks = await getCollection('stocks')
+const langStocks = allStocks.filter((s) => {
+  const [stockLang] = s.id.split('/')
+  return stockLang === lang && !s.data.draft && s.id !== stock.id
+})
+const relatedTrades = langStocks.slice(0, 3)
+
+const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+---
+
+<PageLayout meta={{ title: stock.data.title, description: stock.data.description }}>
+  <Button title={t('common.back')} href={`/${lang}/stocks`} variant='back' />
+
+  <div class='mt-8 gap-x-10 lg:flex lg:items-start'>
+    <article class='flex-grow break-words' data-pagefind-body>
+      <div id='blog-hero'>
+        <Hero data={stock.data as any} remarkPluginFrontmatter={remarkPluginFrontmatter} />
+      </div>
+
+      {/* Trading Metadata Card */}
+      <div class='animate my-8 rounded-lg border p-6'>
+        <h3 class='mb-4 flex items-center text-lg font-medium'>
+          <Icon name='tag-2' class='me-2' />
+          {t('stocks.title')}
+        </h3>
+        <div class='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          <div>
+            <div class='text-sm text-muted-foreground'>{t('stocks.ticker')}</div>
+            <div class='font-medium'>{stock.data.ticker}</div>
+          </div>
+          {
+            stock.data.market && (
+              <div>
+                <div class='text-sm text-muted-foreground'>{t('stocks.market')}</div>
+                <div class='font-medium'>{stock.data.market}</div>
+              </div>
+            )
+          }
+          <div>
+            <div class='text-sm text-muted-foreground'>{t('stocks.status')}</div>
+            <div>
+              <span
+                class:list={[
+                  'px-2 py-1 rounded text-xs',
+                  stock.data.status === 'closed' && 'bg-gray-100 text-gray-800',
+                  stock.data.status === 'open' && 'bg-blue-100 text-blue-800',
+                  stock.data.status === 'partial' && 'bg-yellow-100 text-yellow-800'
+                ]}
+              >
+                {t(`stocks.status.${stock.data.status}` as any)}
+              </span>
+            </div>
+          </div>
+          {
+            stock.data.entryDate && (
+              <div>
+                <div class='text-sm text-muted-foreground'>{t('stocks.entry_date')}</div>
+                <div class='font-medium'>{formatDate(stock.data.entryDate)}</div>
+              </div>
+            )
+          }
+          {
+            stock.data.exitDate && (
+              <div>
+                <div class='text-sm text-muted-foreground'>{t('stocks.exit_date')}</div>
+                <div class='font-medium'>{formatDate(stock.data.exitDate)}</div>
+              </div>
+            )
+          }
+          {
+            stock.data.profitLoss !== undefined && (
+              <div>
+                <div class='text-sm text-muted-foreground'>{t('stocks.pl')}</div>
+                <div
+                  class:list={[
+                    'text-xl font-bold',
+                    stock.data.profitLoss > 0
+                      ? 'text-green-600'
+                      : stock.data.profitLoss < 0
+                        ? 'text-red-600'
+                        : ''
+                  ]}
+                >
+                  {stock.data.profitLoss > 0 ? '+' : ''}
+                  {stock.data.profitLoss.toFixed(2)}%
+                </div>
+              </div>
+            )
+          }
+          {
+            stock.data.entryPrice && (
+              <div>
+                <div class='text-sm text-muted-foreground'>{t('stocks.entry')}</div>
+                <div class='font-medium'>${stock.data.entryPrice.toFixed(2)}</div>
+              </div>
+            )
+          }
+          {
+            stock.data.exitPrice && (
+              <div>
+                <div class='text-sm text-muted-foreground'>{t('stocks.exit')}</div>
+                <div class='font-medium'>${stock.data.exitPrice.toFixed(2)}</div>
+              </div>
+            )
+          }
+          <div>
+            <div class='text-sm text-muted-foreground'>{t('stocks.position.long')}</div>
+            <div class='font-medium'>{t(`stocks.position.${stock.data.position}` as any)}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Article Content */}
+      <div
+        id='article'
+        class='prose prose-base prose-cactus mt-12 max-w-full prose-headings:font-medium prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent prose-headings:before:content-["#"] prose-th:before:content-none'
+      >
+        <Content />
+      </div>
+
+      {/* Copyright */}
+      <div class='mt-12'>
+        <Copyright data={stock.data} />
+      </div>
+    </article>
+
+    {/* Sidebar: Related Trades */}
+    {
+      relatedTrades.length > 0 && (
+        <aside class='mt-12 lg:mt-0 lg:w-80 lg:shrink-0'>
+          <div class='animate sticky top-24'>
+            <h3 class='mb-4 text-lg font-medium'>{t('common.more')}</h3>
+            <ul class='flex flex-col gap-4'>
+              {relatedTrades.map((trade) => (
+                <li class='border-b pb-4 last:border-0'>
+                  <a href={`/${lang}/stocks/${trade.id.split('/')[1]}`} class='group block'>
+                    <div class='mb-1 flex items-start justify-between gap-2'>
+                      <h4 class='font-medium group-hover:underline line-clamp-2 text-sm'>
+                        {trade.data.title}
+                      </h4>
+                      {trade.data.profitLoss !== undefined && (
+                        <span
+                          class:list={[
+                            'shrink-0 text-sm font-medium',
+                            trade.data.profitLoss > 0
+                              ? 'text-green-600'
+                              : trade.data.profitLoss < 0
+                                ? 'text-red-600'
+                                : ''
+                          ]}
+                        >
+                          {trade.data.profitLoss > 0 ? '+' : ''}
+                          {trade.data.profitLoss.toFixed(1)}%
+                        </span>
+                      )}
+                    </div>
+                    <p class='text-xs text-muted-foreground'>
+                      {trade.data.ticker} • {formatDate(trade.data.publishDate)}
+                    </p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div class='mt-4'>
+              <a href={`/${lang}/stocks`} class='text-sm hover:underline'>
+                {t('stocks.view_all')}
+              </a>
+            </div>
+          </div>
+        </aside>
+      )
+    }
+  </div>
+</PageLayout>
