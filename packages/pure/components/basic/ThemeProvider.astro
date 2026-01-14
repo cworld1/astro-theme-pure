@@ -36,7 +36,7 @@
       container = document.createElement('div')
       container.id = 'toast-container'
       container.className =
-        'fixed top-24 right-4 z-[60] sm:top-4 flex flex-col gap-2 w-full max-w-[calc(100vw-2rem)] sm:max-w-sm pointer-events-none'
+        'fixed top-6 right-6 z-[60] flex flex-col gap-3 items-end pointer-events-none'
       document.body.appendChild(container)
     }
 
@@ -63,32 +63,33 @@
 
     // 4. Create Toast
     const toast = document.createElement('div')
-    // Initial state: translated to right (slide-in effect) and hidden
-    toast.className = `pointer-events-auto relative flex w-full translate-x-full items-center gap-3 overflow-hidden rounded-lg border p-3 shadow-lg shadow-black/5 backdrop-blur-[8px] transition-all duration-300 ease-out ${themeClass}`
+    // Initial state: translated to right (offscreen) and hidden
+    // Fixed width w-[22rem], smooth bezier animation, flex layout handling
+    toast.className = `pointer-events-auto relative flex w-[22rem] translate-x-[120%] items-start gap-3 overflow-hidden rounded-xl border p-4 shadow-2xl shadow-black/5 backdrop-blur-[10px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${themeClass}`
 
-    // Close button
-    const closeBtn = `<button class="absolute top-2 right-2 p-1 opacity-50 hover:opacity-100 transition-opacity" onclick="this.parentElement.remove()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>`
+    // Close button - defined as flex item, not absolute, to prevent overlap
+    const closeBtn = `<button class="shrink-0 p-1 opacity-40 hover:opacity-100 transition-opacity -mt-1 -mr-1" onclick="this.parentElement.remove()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>`
 
-    toast.innerHTML = `${closeBtn}<div class="shrink-0"><svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'>${iconSvg}</svg></div><div class="flex-1 text-sm font-medium leading-relaxed">${message}</div>`
+    toast.innerHTML = `<div class="shrink-0 mt-0.5"><svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'>${iconSvg}</svg></div><div class="flex-1 text-sm font-medium leading-snug break-words">${message}</div>${closeBtn}`
 
     // Add to container (prepend for new on top)
     container.prepend(toast)
 
     // Trigger animation next frame
     requestAnimationFrame(() => {
-      toast.classList.remove('translate-x-full')
+      toast.classList.remove('translate-x-[120%]')
     })
 
     // Auto dismiss
     setTimeout(() => {
-      toast.classList.add('translate-x-full', 'opacity-0')
+      toast.classList.add('translate-x-[120%]', 'opacity-0')
       setTimeout(() => {
         toast.remove()
         // Remove container if empty
         if (container && container.childNodes.length === 0) {
           container.remove()
         }
-      }, 300)
+      }, 500) // Match duration
     }, time || 3000)
   })
 
