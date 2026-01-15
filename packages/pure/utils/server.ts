@@ -4,18 +4,33 @@ type Collections = CollectionEntry<CollectionKey>[]
 
 export const prod = import.meta.env.PROD
 
+// Helper type for collections that have standard blog fields
+type CollectionWithDate = {
+  data: {
+    updatedDate?: Date
+    publishDate?: Date
+    date?: Date // Support 'date' for trades
+    tags?: string[]
+    draft?: boolean
+  }
+}
+
 /** Note: this function filters out draft posts based on the environment */
-export async function getBlogCollection(contentType: CollectionKey = 'blog') {
-  return await getCollection(contentType, ({ data }: CollectionEntry<typeof contentType>) => {
+export async function getBlogCollection<T extends CollectionKey = 'blog'>(contentType: T = 'blog' as T) {
+  return await getCollection(contentType, ({ data }: CollectionEntry<T>) => {
     // Not in production & draft is not false
-    return prod ? !data.draft : true
+    if ('draft' in data) {
+      return prod ? !(data as any).draft : true
+    }
+    return true
   })
 }
 
 function getYearFromCollection<T extends CollectionKey>(
   collection: CollectionEntry<T>
 ): number | undefined {
-  const dateStr = collection.data.updatedDate ?? collection.data.publishDate
+  const data = collection.data as any
+  const dateStr = data.updatedDate ?? data.publishDate ?? data.date
   return dateStr ? new Date(dateStr).getFullYear() : undefined
 }
 export function groupCollectionsByYear<T extends CollectionKey>(
@@ -37,17 +52,25 @@ export function groupCollectionsByYear<T extends CollectionKey>(
   ).sort((a, b) => b[0] - a[0])
 }
 
-export function sortMDByDate(collections: Collections): Collections {
+export function sortMDByDate<T extends CollectionKey>(collections: CollectionEntry<T>[]): CollectionEntry<T>[] {
   return collections.sort((a, b) => {
-    const aDate = new Date(a.data.updatedDate ?? a.data.publishDate ?? 0).valueOf()
-    const bDate = new Date(b.data.updatedDate ?? b.data.publishDate ?? 0).valueOf()
+    const aData = a.data as any
+    const bData = b.data as any
+    const aDate = new Date(aData.updatedDate ?? aData.publishDate ?? aData.date ?? 0).valueOf()
+    const bDate = new Date(bData.updatedDate ?? bData.publishDate ?? bData.date ?? 0).valueOf()
     return bDate - aDate
   })
 }
 
 /** Note: This function doesn't filter draft posts, pass it the result of getAllPosts above to do so. */
 export function getAllTags(collections: Collections) {
-  return collections.flatMap((collection) => [...collection.data.tags])
+  return collections.flatMap((collection) => {
+    const data = collection.data as any
+    if (data.tags) {
+      return [...data.tags]
+    }
+    return []
+  })
 }
 
 /** Note: This function doesn't filter draft posts, pass it the result of getAllPosts above to do so. */

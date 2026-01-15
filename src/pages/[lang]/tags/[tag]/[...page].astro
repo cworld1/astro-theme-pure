@@ -12,7 +12,7 @@ import config from '@/site-config'
 export const prerender = true
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const allPosts = await getBlogCollection()
+  const allPosts = await getBlogCollection('blog')
   const allPostsByDate = sortMDByDate(allPosts)
 
   return Object.keys(languages).flatMap((lang) => {
@@ -25,7 +25,7 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
     const uniqueTags = getUniqueTags(langPosts)
 
     return uniqueTags.flatMap((tag) => {
-      const filterPosts = langPosts.filter((post) => post.data.tags.includes(tag))
+      const filterPosts = langPosts.filter((post) => (post.data as any).tags?.includes(tag))
       return paginate(filterPosts, {
         pageSize: config.content.blogPageSize,
         params: { lang, tag },
