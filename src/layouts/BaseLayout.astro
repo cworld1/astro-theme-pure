@@ -30,6 +30,11 @@ const lang = getLangFromUrl(Astro.url)
 <html lang={lang}>
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
+    {/* Google AdSense */}
+    <script
+      async
+      src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8394977410802385'
+      crossorigin='anonymous'></script>
     <script is:inline>
       /* Filter out noisy browser extension logs */
       ;(function () {

@@ -81,4 +81,32 @@ const stocks = defineCollection({
     }).strict()
 })
 
-export const collections = { blog, stocks }
+// Define trades collection
+const trades = defineCollection({
+  loader: glob({ base: './src/content/trades', pattern: '**/*.{md,mdx}' }),
+  schema: ({ image }) =>
+    z.object({
+      ticker: z.string(),
+      type: z.enum(['Buy', 'Sell']),
+      date: z.coerce.date(),
+      price: z.number(),
+      quantity: z.number(),
+      strategy: z.string().optional(),
+      notes: z.string(),
+      screenshot: image().optional()
+    })
+})
+
+// Define analysis collection
+const analysis = defineCollection({
+  loader: glob({ base: './src/content/analysis', pattern: '**/*.{md,mdx}' }),
+  schema: ({ image }) =>
+    z.object({
+      ticker: z.string(),
+      title: z.string(),
+      date: z.coerce.date(),
+      tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase)
+    })
+})
+
+export const collections = { blog, stocks, trades, analysis }

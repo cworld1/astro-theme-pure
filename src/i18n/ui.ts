@@ -262,11 +262,17 @@ export const ui = {
 export function getLangFromUrl(url: URL) {
     const [, lang] = url.pathname.split('/');
     if (lang in ui) return lang as keyof typeof ui;
+    // console.log(`[i18n] Fallback to defaultLang '${defaultLang}' for path: ${url.pathname}`)
     return defaultLang;
 }
 
 export function useTranslations(lang: keyof typeof ui) {
+    // console.log(`[i18n] Using translations for lang:`, lang)
     return function t(key: keyof typeof ui[typeof defaultLang]) {
+        if (!ui[lang]) {
+            console.error(`[i18n] Error: ui[${lang}] is undefined. Key: ${key}`)
+            return ui[defaultLang][key]
+        }
         return ui[lang][key] || ui[defaultLang][key];
     }
 }

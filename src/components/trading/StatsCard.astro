@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content'
+
+import { calculatePortfolioStats, formatCurrency } from '../../utils/trading-stats'
+
+const trades = await getCollection('trades')
+const stats = calculatePortfolioStats(trades)
+
+const cards = [
+  {
+    label: 'Total P/L',
+    value: formatCurrency(stats.totalProfitLoss),
+    color: stats.totalProfitLoss >= 0 ? 'text-green-500' : 'text-red-500'
+  },
+  {
+    label: 'Win Rate',
+    value: `${stats.winRate.toFixed(1)}%`,
+    color: 'text-blue-500'
+  },
+  {
+    label: 'Profit Factor',
+    value: stats.profitFactor.toFixed(2),
+    color: 'text-purple-500'
+  },
+  {
+    label: 'Total Trades',
+    value: stats.totalTrades,
+    color: 'text-orange-500'
+  }
+]
+---
+
+<div class='grid grid-cols-2 gap-4 md:grid-cols-4'>
+  {
+    cards.map((card) => (
+      <div class='rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
+        <div class='text-sm text-gray-500 dark:text-gray-400'>{card.label}</div>
+        <div class={`mt-2 text-2xl font-bold ${card.color}`}>{card.value}</div>
+      </div>
+    ))
+  }
+</div>

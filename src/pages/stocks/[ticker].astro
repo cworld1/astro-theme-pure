@@ -1,0 +1,223 @@
+---
+import { getCollection } from 'astro:content'
+
+import PageLayout from '@/layouts/ContentLayout.astro'
+import { calculatePortfolioStats, formatCurrency } from '@/utils/trading-stats'
+
+export async function getStaticPaths() {
+  const trades = await getCollection('trades')
+  const analysis = await getCollection('analysis')
+
+  const tickers = new Set([
+    ...trades.map((t) => t.data.ticker),
+    ...analysis.map((a) => a.data.ticker)
+  ])
+
+  return Array.from(tickers).map((ticker) => ({
+    params: { ticker },
+    props: { ticker }
+  }))
+}
+
+const { ticker } = Astro.props
+
+// Fetch Data
+const allTrades = await getCollection('trades')
+const tickerTrades = allTrades.filter((t) => t.data.ticker === ticker)
+const stats = calculatePortfolioStats(tickerTrades)
+
+const allAnalysis = await getCollection('analysis')
+const tickerAnalysis = allAnalysis.filter((a) => a.data.ticker === ticker)
+
+// Merge Timeline
+const timeline = [
+  ...tickerTrades.map((t) => ({
+    type: 'trade' as const,
+    date: t.data.date,
+    data: t.data,
+    id: t.id
+  })),
+  ...tickerAnalysis.map((a) => ({
+    type: 'analysis' as const,
+    date: a.data.date,
+    data: a.data,
+    id: a.id
+  }))
+].sort((a, b) => b.date.getTime() - a.date.getTime())
+
+const meta = {
+  title: `${ticker} - Trading Review`,
+  description: `Trading history and analysis for ${ticker}`
+}
+---
+
+<PageLayout meta={meta}>
+  <div class='mb-8'>
+    <div class='flex items-end justify-between'>
+      <h1 class='text-4xl font-bold'>{ticker}</h1>
+      <span class='text-sm text-gray-500 dark:text-gray-400'>
+        {tickerTrades.length} Trades / {tickerAnalysis.length} Analysis
+      </span>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class='mt-6 grid grid-cols-2 gap-4 md:grid-cols-4'>
+      <div
+        class='rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'
+      >
+        <div class='text-sm text-gray-500 dark:text-gray-400'>Total P/L</div>
+        <div
+          class={`mt-1 text-2xl font-bold ${stats.totalProfitLoss >= 0 ? 'text-green-500' : 'text-red-500'}`}
+        >
+          {formatCurrency(stats.totalProfitLoss)}
+        </div>
+      </div>
+      <div
+        class='rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'
+      >
+        <div class='text-sm text-gray-500 dark:text-gray-400'>Win Rate</div>
+        <div class='mt-1 text-2xl font-bold text-blue-500'>
+          {stats.winRate.toFixed(1)}%
+        </div>
+      </div>
+      <div
+        class='rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'
+      >
+        <div class='text-sm text-gray-500 dark:text-gray-400'>Profit Factor</div>
+        <div class='mt-1 text-2xl font-bold text-purple-500'>
+          {stats.profitFactor.toFixed(2)}
+        </div>
+      </div>
+      <div
+        class='rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'
+      >
+        <div class='text-sm text-gray-500 dark:text-gray-400'>Current Position</div>
+        <div class='mt-1 text-2xl font-bold text-orange-500'>
+          {/* Simple check for open quantity */}
+          {
+            tickerTrades.reduce((acc, t) => {
+              if (t.data.type === 'Buy') return acc + t.data.quantity
+              if (t.data.type === 'Sell') return acc - t.data.quantity
+              return acc
+            }, 0)
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TradingView Widget -->
+  <div
+    class='mb-10 h-[500px] w-full overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700'
+  >
+    <div class='tradingview-widget-container' style='height:100%;width:100%'>
+      <div id='tradingview_widget' style='height:100%;width:100%'></div>
+      <script type='text/javascript' src='https://s3.tradingview.com/tv.js' is:inline></script>
+      <script type='text/javascript' is:inline define:vars={{ ticker }}>
+        new TradingView.widget({
+          autosize: true,
+          symbol: ticker,
+          interval: 'D',
+          timezone: 'Etc/UTC',
+          theme: 'dark',
+          style: '1',
+          locale: 'en',
+          enable_publishing: false,
+          allow_symbol_change: true,
+          container_id: 'tradingview_widget'
+        })
+      </script>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div>
+    <h2 class='mb-6 text-2xl font-bold'>History & Analysis</h2>
+    <div class='ml-3 border-l-2 border-gray-200 dark:border-gray-700'>
+      {
+        timeline.map((item) => (
+          <div class='mb-8 ml-6 relative'>
+            <span
+              class={`absolute -left-[31px] flex size-6 items-center justify-center rounded-full ring-4 ring-white dark:ring-gray-950 ${item.type === 'trade' ? (item.data.type === 'Buy' ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300') : 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300'}`}
+            >
+              {item.type === 'trade' ? (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='14'
+                  height='14'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  stroke-width='2'
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                >
+                  <path d='M12 20v-6M6 20V10M18 20V4' />
+                </svg>
+              ) : (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='14'
+                  height='14'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  stroke-width='2'
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                >
+                  <path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' />
+                  <polyline points='14 2 14 8 20 8' />
+                  <line x1='16' y1='13' x2='8' y2='13' />
+                  <line x1='16' y1='17' x2='8' y2='17' />
+                  <polyline points='10 9 9 9 8 9' />
+                </svg>
+              )}
+            </span>
+
+            <div class='text-sm text-gray-500 dark:text-gray-400 mb-1'>
+              {item.date.toLocaleDateString()}
+            </div>
+
+            {item.type === 'trade' ? (
+              <div class='rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'>
+                <div class='flex items-center justify-between mb-2'>
+                  <span
+                    class={`font-bold ${item.data.type === 'Buy' ? 'text-green-600' : 'text-red-600'}`}
+                  >
+                    {item.data.type.toUpperCase()}
+                  </span>
+                  <span class='font-mono text-sm'>
+                    {item.data.quantity} shares @ {formatCurrency(item.data.price)}
+                  </span>
+                </div>
+                {item.data.strategy && (
+                  <div class='mb-2'>
+                    <span class='inline-block rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300'>
+                      {item.data.strategy}
+                    </span>
+                  </div>
+                )}
+                <p class='text-gray-700 dark:text-gray-300 text-sm'>{item.data.notes}</p>
+              </div>
+            ) : (
+              <a
+                href={`/analysis/${item.id}`}
+                class='block rounded-lg border border-blue-200 bg-blue-50 p-4 transition-colors hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/30 dark:hover:bg-blue-900/50'
+              >
+                <h3 class='text-lg font-bold text-blue-900 dark:text-blue-100'>
+                  {item.data.title}
+                </h3>
+                <div class='mt-2 flex flex-wrap gap-2'>
+                  {item.data.tags.map((tag) => (
+                    <span class='text-xs text-blue-600 dark:text-blue-400'>#{tag}</span>
+                  ))}
+                </div>
+              </a>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</PageLayout>
