@@ -1,0 +1,109 @@
+---
+import type { EquityPoint } from '@/utils/tradeCalculations'
+
+interface Props {
+  data: EquityPoint[]
+}
+
+const { data } = Astro.props
+
+const labels = JSON.stringify(data.map((d) => d.date))
+const values = JSON.stringify(data.map((d) => d.value))
+---
+
+<div
+  class='w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800'
+>
+  <h3 class='mb-4 text-lg font-bold'>Capital Curve (Cumulative P/L)</h3>
+  <div class='relative h-[300px] w-full'>
+    <capital-curve-chart data-labels={labels} data-values={values}>
+      <canvas></canvas>
+    </capital-curve-chart>
+  </div>
+</div>
+
+<script>
+  import Chart from 'chart.js/auto'
+
+  class CapitalCurveChart extends HTMLElement {
+    chart: Chart | null = null
+
+    connectedCallback() {
+      this.initChart()
+    }
+
+    initChart() {
+      const canvas = this.querySelector('canvas')
+      if (!canvas) return
+
+      const labels = JSON.parse(this.dataset.labels || '[]')
+      const values = JSON.parse(this.dataset.values || '[]')
+
+      if (this.chart) {
+        this.chart.destroy()
+      }
+
+      this.chart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Cumulative P/L ($)',
+              data: values,
+              borderColor: 'rgb(75, 192, 192)',
+              backgroundColor: 'rgba(75, 192, 192, 0.1)',
+              fill: true,
+              tension: 0.1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const value = context.parsed.y as number
+                  return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                  }).format(value)
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: {
+                color: 'rgba(200, 200, 200, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      })
+    }
+
+    disconnectedCallback() {
+      if (this.chart) {
+        this.chart.destroy()
+        this.chart = null
+      }
+    }
+  }
+
+  customElements.define('capital-curve-chart', CapitalCurveChart)
+</script>

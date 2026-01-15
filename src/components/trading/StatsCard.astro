@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 
-import { calculatePortfolioStats, formatCurrency } from '../../utils/trading-stats'
+import { calculatePortfolioStats, formatCurrency } from '../../utils/tradeCalculations'
 
 const trades = await getCollection('trades')
 const stats = calculatePortfolioStats(trades)

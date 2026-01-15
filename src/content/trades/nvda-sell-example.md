@@ -1,5 +1,6 @@
 ---
 ticker: "NVDA"
+market: "NASDAQ"
 type: "Sell"
 date: 2025-02-15T14:30:00
 price: 450.00

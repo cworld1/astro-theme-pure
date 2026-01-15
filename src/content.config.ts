@@ -87,6 +87,7 @@ const trades = defineCollection({
   schema: ({ image }) =>
     z.object({
       ticker: z.string(),
+      market: z.string().default('NASDAQ'), // e.g. 'NASDAQ', 'NYSE', 'HK'
       type: z.enum(['Buy', 'Sell']),
       date: z.coerce.date(),
       price: z.number(),
