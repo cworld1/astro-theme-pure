@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/pipitonelabs/pipitonelabs.com/compare/v1.3.0...v1.4.0) (2026-01-25)
+
+### 🚀 Features
+
+* added claude logo and updated about me page ([e36d03e](https://github.com/pipitonelabs/pipitonelabs.com/commit/e36d03e864589eab0c98f4ffc15ac15a4af21539))
+
 ## [1.3.0](https://github.com/pipitonelabs/pipitonelabs.com/compare/v1.2.2...v1.3.0) (2025-12-12)
 
 ### 🚀 Features
