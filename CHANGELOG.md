@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/pipitonelabs/pipitonelabs.com/compare/v1.4.0...v1.5.0) (2026-01-25)
+
+### 🚀 Features
+
+* updated roles ([b8b8e02](https://github.com/pipitonelabs/pipitonelabs.com/commit/b8b8e022e1aa9def317cf6bf342194f8ecd36a72))
+
 ## [1.4.0](https://github.com/pipitonelabs/pipitonelabs.com/compare/v1.3.0...v1.4.0) (2026-01-25)
 
 ### 🚀 Features
