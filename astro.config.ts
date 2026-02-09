@@ -5,6 +5,7 @@ import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
+const DEFAULT_LOCALE = 'en'
 // Local integrations
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
@@ -22,6 +23,10 @@ import {
 } from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
+// Others
+// import { visualizer } from 'rollup-plugin-visualizer'
+
+
 // https://astro.build/config
 export default defineConfig({
   // [Basic]
@@ -35,9 +40,12 @@ export default defineConfig({
 
   // [Adapter]
   // https://docs.astro.build/en/guides/deploy/
-  adapter: vercel(),
-  output: 'server',
-  // Local (standalone)
+  // 1. Vercel (serverless)
+  // adapter: vercel(),
+  output: 'static',
+  // 2. Vercel (static)
+  // adapter: vercelStatic(),
+  // 3. Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',
 
@@ -128,5 +136,28 @@ export default defineConfig({
         subsets: ['latin']
       }
     ]
+  },
+  i18n: {
+    locales: [DEFAULT_LOCALE, 'zh', 'es'],
+    defaultLocale: DEFAULT_LOCALE,
+    fallback: {
+      // es: DEFAULT_LOCALE,
+      // zh: DEFAULT_LOCALE
+    },
+    routing: {
+      fallbackType: 'rewrite'
+    }
+  },
+  vite: {
+    plugins: [
+      //   visualizer({
+      //     emitFile: true,
+      //     filename: 'stats.html'
+      //   })
+    ],
+    optimizeDeps: {
+      // Prebundle CommonJS-only browser build to fix default export error
+      include: ['picocolors']
+    }
   }
 })
