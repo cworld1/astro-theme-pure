@@ -3,7 +3,7 @@ import type { CollectionKey, InferEntrySchema } from 'astro:content'
 
 import config from 'virtual:config'
 
-import { cn, getFormattedDate } from '../../utils'
+import { cn, getFormattedDate, getDisplayUrl } from '../../utils'
 import { QRCode } from '../advanced'
 import { Icon } from '../user'
 
@@ -43,7 +43,7 @@ const shares = {
   {/* title & link */}
   <div class='flex flex-col'>
     <div class='font-medium text-foreground'>{title}</div>
-    <div class='text-sm'>{Astro.url}</div>
+    <div class='text-sm w-3/4 break-all' set:html={getDisplayUrl(Astro.url.href)}></div>
   </div>
 
   {/* common info */}
