@@ -1,0 +1,36 @@
+---
+import { render, type CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+
+import { getBlogCollectionByLocale, sortMDByDate, getLangLocales } from 'astro-pure/server'
+import { normalizeLocaleBlogId } from 'astro-pure/utils'
+import PostLayout from '@/layouts/BlogPost.astro'
+
+export const prerender = true
+
+export const getStaticPaths = (async () => {
+  const locales = await getLangLocales()
+  const out = await Promise.all(
+    locales.map(async (lang) => {
+      const posts = sortMDByDate(await getBlogCollectionByLocale<'blog'>(lang)) as CollectionEntry<'blog'>[]
+      return posts.map((post) => ({
+        params: { lang, id: normalizeLocaleBlogId(post.id) },
+        props: { post, posts }
+      }))
+    })
+  )
+  return out.flat()
+}) satisfies GetStaticPaths
+
+type Props = {
+  post: CollectionEntry<'blog'>
+  posts: CollectionEntry<'blog'>[]
+}
+
+const { post, posts } = Astro.props as Props
+const { Content, headings, remarkPluginFrontmatter } = await render(post)
+---
+
+<PostLayout {post} {posts} {headings} {remarkPluginFrontmatter}>
+  <Content />
+</PostLayout>

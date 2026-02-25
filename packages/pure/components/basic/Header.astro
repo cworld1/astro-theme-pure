@@ -1,19 +1,27 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n'
 import config from 'virtual:config'
-
+import { isAbsoluteUrl } from 'astro-pure/utils'
+import { resolveMenu } from '../../utils/locale'
 import { Icon } from '../user'
+import LanguageSwitch from './LanguageSwitch.astro'
+
+const menu = resolveMenu(config.header.menu, Astro.currentLocale, Astro.url?.pathname)
+
+const currentLocale = Astro.currentLocale as string
 ---
 
-<header-component
+<header-component current-locale={currentLocale}
   class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
-  <a
-    class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
-    style='transition:margin-inline 0.3s'
-    href='/'
+  <slot name='branding'>
+    <a
+      class='z-30 text-xl font-medium group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
+      style='transition:margin-inline 0.3s'
+      href={getRelativeLocaleUrl(Astro.currentLocale as string)}
     aria-label='Brand'>{config.title}</a
   >
-
+  </slot>
   <div class='flex items-center gap-x-2'>
     {/* Menu links */}
     <div
@@ -22,9 +30,13 @@ import { Icon } from '../user'
     >
       <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
         {
-          config.header.menu.map((item) => (
+          menu.map((item) => (
             <a
-              href={item.link}
+              href={
+                isAbsoluteUrl(item.link)
+                  ? item.link
+                  : getRelativeLocaleUrl(Astro.currentLocale as string, item.link)
+              }
               class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
               aria-label='Nav menu item'
             >
@@ -32,8 +44,13 @@ import { Icon } from '../user'
             </a>
           ))
         }
+        <slot name='extra-actions' />
         <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
-          <a class='px-1 py-2 transition-none sm:px-2' href='/search' title='Search'>
+          <a
+            class='px-1 py-2 transition-none sm:px-2'
+            href={getRelativeLocaleUrl(Astro.currentLocale as string, '/search')}
+            title='Search'
+          >
             <span class='sr-only'>Search</span>
             <Icon name='search' class='size-5' />
           </a>
@@ -43,25 +60,27 @@ import { Icon } from '../user'
 
     {/* buttons */}
     <div class='z-30 flex gap-x-4 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
-      <button
-        id='toggleDarkMode'
-        class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
-      >
-        <span class='sr-only'>Dark Theme</span>
-        <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
-        <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
-        <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
-      </button>
-      <button
-        id='toggleMenu'
-        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
-      >
-        <span class='sr-only'>Menu</span>
-        <Icon class='size-5' name='menu' />
-      </button>
+      <slot name='extra-buttons'>
+        <LanguageSwitch />
+        <button
+          id='toggleDarkMode'
+          class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+        >
+          <span class='sr-only'>Dark Theme</span>
+          <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
+          <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
+          <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
+        </button>
+        <button
+          id='toggleMenu'
+          class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+        >
+          <span class='sr-only'>Menu</span>
+          <Icon class='size-5' name='menu' />
+        </button>
+      </slot>
     </div>
   </div>
-</header-component>
 
 {/* Use inline to load icon quicker firstly */}
 <script is:inline>
@@ -71,10 +90,13 @@ import { Icon } from '../user'
   }
 </script>
 <script>
-  import { setTheme, showToast } from '../../utils'
-
+  import { setTheme, showToast, useTranslations } from '../../utils'
+  
   class HeaderComponent extends HTMLElement {
     connectedCallback() {
+      const currentLocale = this.getAttribute('current-locale') || 'en'
+      const { t } = useTranslations('common', currentLocale)
+
       // Header
       let preScrollY = window.scrollY
       this.classList.toggle('not-top', preScrollY > 20)
@@ -94,7 +116,7 @@ import { Icon } from '../user'
         // document.dispatchEvent(toggleDarkModeEvent)
         const newTheme = setTheme(undefined, true)
         darkModeBtn.dataset.theme = newTheme
-        showToast({ message: `Set theme to ${newTheme}` })
+        showToast({ message: `${t('theme.set_message')} ${t('theme.' + newTheme)}` })
       })
 
       // Menu
@@ -206,3 +228,4 @@ import { Icon } from '../user'
     }
   }
 </style>
+</header-component>

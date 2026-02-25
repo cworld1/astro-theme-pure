@@ -3,6 +3,8 @@ import { Image } from 'astro:assets'
 import type { InferEntrySchema } from 'astro:content'
 
 import { FormattedDate, Icon } from '../user'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getLanguageDisplayName } from '../../utils'
 
 interface Props {
   data: InferEntrySchema<'blog'>
@@ -10,7 +12,7 @@ interface Props {
 }
 
 const {
-  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language },
+  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, lang },
   remarkPluginFrontmatter
 } = Astro.props
 
@@ -72,10 +74,10 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
     </div>
     {
       // Language
-      language && (
+      lang && (
         <span class='flex items-center gap-1'>
           <Icon name='earth' class='size-5' />
-          {language}
+          {getLanguageDisplayName(lang)}
         </span>
       )
     }
@@ -90,7 +92,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
                 aria-label={`View more blogs with the tag ${tag}`}
                 class='hover:underline hover:underline-offset-4'
                 data-pagefind-filter='tag'
-                href={`/tags/${tag}`}
+                href={getRelativeLocaleUrl(Astro.currentLocale as string, `/tags/${tag}`)}
               >
                 {tag}
               </a>

@@ -1,0 +1,41 @@
+---
+import { PFSearch } from 'astro-pure/components/pages'
+import { Button } from 'astro-pure/user'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { useTranslations } from 'astro-pure/utils'
+import { integ } from '@/site-config'
+
+export { getLangStaticPaths as getStaticPaths } from 'astro-pure/server'
+
+const { t } = useTranslations(['blog', 'common'], Astro.currentLocale)
+const meta = {
+  description: t('search.description'),
+  title: t('search.title')
+}
+---
+<PageLayout {meta}>
+  <Button
+    title={t('navigation.back')}
+    href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')}
+    variant='back'
+  />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-6 text-3xl font-medium'>{t('search.title')}</h1>
+    </div>
+
+    <div id='content' class='animate'>
+      {
+        integ.pagefind ? (
+          <>
+            <p>{t('search.intro')}</p>
+            <PFSearch />
+          </>
+        ) : (
+          <p>{t('search.disabled')}</p>
+        )
+      }
+    </div>
+  </main>
+</PageLayout>

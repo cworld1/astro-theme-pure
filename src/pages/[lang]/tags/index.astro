@@ -1,22 +1,33 @@
 ---
-import { getBlogCollectionByLocale, getUniqueTagsWithCount } from 'astro-pure/server'
+import { getBlogCollectionByLocale, getUniqueTagsWithCount, getLangLocales } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { useTranslations } from 'astro-pure/utils'
 
-const allPosts = await getBlogCollectionByLocale(Astro.currentLocale)
-const allTags = getUniqueTagsWithCount(allPosts)
+export const prerender = true
+
+export async function getStaticPaths() {
+  const locales = await getLangLocales()
+  return await Promise.all(
+    locales.map(async (lang) => {
+      const allPosts = await getBlogCollectionByLocale(lang)
+      const allTags = getUniqueTagsWithCount(allPosts)
+      return { params: { lang }, props: { allTags } }
+    })
+  )
+}
+
+interface Props {
+  allTags: [string, number][]
+}
 
 const { t } = useTranslations(['common', 'blog'], Astro.currentLocale)
-const meta = {
-  description: t('tags.description'),
-  title: t('tags.all_title')
-}
+const { allTags } = Astro.props as Props
 ---
 
-<PageLayout {meta}>
+<PageLayout meta={{ description: t('tags.description'), title: t('tags.all_title') }}>
   <Button title={t('navigation.back')} href={getRelativeLocaleUrl(Astro.currentLocale as string, '/blog')} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>

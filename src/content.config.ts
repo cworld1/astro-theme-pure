@@ -1,5 +1,7 @@
 import { glob } from 'astro/loaders'
 import { defineCollection, z } from 'astro:content'
+import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array
@@ -10,8 +12,12 @@ function removeDupsAndLowerCase(array: string[]) {
 
 // Define blog collection
 const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  // Load Markdown and MDX files from default blog and localized blog directories.
+  // This enables posts under `src/content/blog` and `src/content/localized/<lang>/blog`.
+  loader: glob({
+    base: './src/content',
+    pattern: ['blog/**/*.{md,mdx}', 'localized/*/blog/**/*.{md,mdx}']
+  }),
   // Required
   schema: ({ image }) =>
     z.object({
@@ -34,6 +40,8 @@ const blog = defineCollection({
         .optional(),
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
       language: z.string().optional(),
+      // Locale code (e.g., en, en-US, zh). Used for filtering by locale.
+      lang: z.string().optional(),
       draft: z.boolean().default(false),
       // Special fields
       comment: z.boolean().default(true)
@@ -56,4 +64,17 @@ const docs = defineCollection({
     })
 })
 
-export const collections = { blog, docs }
+type I18nJSON = string | number | boolean | { [key: string]: I18nJSON }
+const I18nScalar = z.union([z.string(), z.number(), z.boolean()])
+const I18nJSONSchema: z.ZodType<I18nJSON> = z.lazy(() =>
+  z.union([I18nScalar, z.record(I18nJSONSchema)])
+)
+const hasI18nDir = existsSync(fileURLToPath(new URL('./content/i18n', import.meta.url)))
+const i18n = hasI18nDir
+  ? defineCollection({
+      loader: glob({ base: './src/content/i18n', pattern: '**/*.json' }),
+      schema: () => z.record(I18nJSONSchema)
+    })
+  : undefined
+
+export const collections = hasI18nDir ? { blog, docs, i18n } : { blog, docs }

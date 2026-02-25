@@ -2,16 +2,17 @@
 import { Button, CardList } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { useTranslations } from 'astro-pure/utils'
 import { integ, terms } from '@/site-config'
 
 const meta = {
   title: 'Site policy',
   description: 'Site policy documentation'
 }
+const { t } = useTranslations(['common'], Astro.currentLocale)
 ---
-
 <PageLayout {meta}>
-  <Button title='Back' href='/' variant='back' />
+  <Button title={t('navigation.back')} href='/' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>Site Policy</h1>

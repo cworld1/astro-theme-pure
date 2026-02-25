@@ -6,7 +6,7 @@ description: '3D imagery has the power to bring cinematic visions to life and he
 tags:
   - Example
   - 3D
-language: 'English'
+lang: 'en'
 heroImage: { src: './thumbnail.jpg', color: '#D58388' }
 ---
 
