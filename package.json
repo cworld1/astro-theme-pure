@@ -21,22 +21,22 @@
     "cache:avatars": "tsx preset/scripts/cacheAvatars.ts"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/vercel": "^9.0.4",
-    "@waline/client": "^3.12.2",
-    "astro": "^5.17.3",
+    "@astrojs/check": "0.9.8",
+    "@astrojs/rss": "4.0.18",
+    "@astrojs/vercel": "10.0.4",
+    "@waline/client": "^3.13.0",
+    "astro": "6.1.3",
     "astro-pure": "1.4.2",
-    "katex": "^0.16.33",
+    "katex": "^0.16.45",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.34.5",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@typescript-eslint/parser": "^8.56.1",
-    "eslint": "^9.39.3",
+    "@typescript-eslint/parser": "^8.58.0",
+    "eslint": "^10.2.0",
     "eslint-plugin-astro": "^1.6.0",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1"
