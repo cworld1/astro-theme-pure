@@ -17,21 +17,21 @@ import '@pagefind/default-ui/css/ui.css'
 </site-search>
 
 <script>
+  // const shouldStrip = this.dataset.stripTrailingSlash !== undefined
+  // const stripTrailingSlash = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
+  // const formatURL = shouldStrip ? stripTrailingSlash : (path: string) => path
+  const formatURL = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
+
   class SiteSearch extends HTMLElement {
     constructor() {
       super()
-      // const shouldStrip = this.dataset.stripTrailingSlash !== undefined
-      // const stripTrailingSlash = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
-      // const formatURL = shouldStrip ? stripTrailingSlash : (path: string) => path
-      const formatURL = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
-
       window.addEventListener('DOMContentLoaded', () => {
         // if (import.meta.env.DEV) return
         const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
         onIdle(async () => {
           // @ts-expect-error — Missing types for @pagefind/default-ui package.
           const { PagefindUI } = await import('@pagefind/default-ui')
-          new PagefindUI({
+          const pagefindUI = new PagefindUI({
             element: '#site-search',
             baseUrl: import.meta.env.BASE_URL,
             bundlePath: `${import.meta.env.BASE_URL.replace(/\/$/, '')}/pagefind/`,

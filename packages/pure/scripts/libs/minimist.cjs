@@ -63,17 +63,17 @@ module.exports = (args, opts) => {
     })
   })
 
-  ;[]
-    .concat(opts.string)
-    .filter(Boolean)
-    .forEach((key) => {
-      flags.strings[key] = true
-      if (aliases[key]) {
-        ;[].concat(aliases[key]).forEach((k) => {
-          flags.strings[k] = true
-        })
-      }
-    })
+    ;[]
+      .concat(opts.string)
+      .filter(Boolean)
+      .forEach((key) => {
+        flags.strings[key] = true
+        if (aliases[key]) {
+          ;[].concat(aliases[key]).forEach((k) => {
+            flags.strings[k] = true
+          })
+        }
+      })
 
   var defaults = opts.default || {}
 
@@ -145,9 +145,9 @@ module.exports = (args, opts) => {
       key.split('.'),
       value
     )
-    ;(aliases[key] || []).forEach((x) => {
-      setKey(argv, x.split('.'), value)
-    })
+      ; (aliases[key] || []).forEach((x) => {
+        setKey(argv, x.split('.'), value)
+      })
   }
 
   Object.keys(flags.bools).forEach((key) => {
@@ -164,8 +164,6 @@ module.exports = (args, opts) => {
   var i, arg, key, next, m, value, letters, broken, j
   for (i = 0; i < args.length; i++) {
     arg = args[i]
-    key
-    next
 
     if (/^--.+=/.test(arg)) {
       // Using [\s\S] instead of . because js doesn't support the
@@ -264,9 +262,9 @@ module.exports = (args, opts) => {
     if (!hasKey(argv, k.split('.'))) {
       setKey(argv, k.split('.'), defaults[k])
 
-      ;(aliases[k] || []).forEach((x) => {
-        setKey(argv, x.split('.'), defaults[k])
-      })
+        ; (aliases[k] || []).forEach((x) => {
+          setKey(argv, x.split('.'), defaults[k])
+        })
     }
   })
 

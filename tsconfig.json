@@ -1,6 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
+  "include": ["./.astro/types.d.ts", "./**/*"],
   "compilerOptions": {
     // Basic
     "allowJs": true,
@@ -11,20 +11,19 @@
     // Type Imports
     "verbatimModuleSyntax": true,
     // Others
-    "baseUrl": ".",
     "strictNullChecks": true,
     // Paths
     "paths": {
-      "@/assets/*": ["src/assets/*"],
-      "@/components/*": ["src/components/*"],
-      "@/layouts/*": ["src/layouts/*"],
-      "@/utils": ["src/utils/index.ts"],
-      "@/utils/*": ["src/utils/*"],
-      "@/plugins/*": ["src/plugins/*"],
-      "@/pages/*": ["src/pages/*"],
-      "@/types": ["src/types/index.ts"],
-      "@/site-config": ["src/site.config.ts"]
+      "@/assets/*": ["./src/assets/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/layouts/*": ["./src/layouts/*"],
+      "@/utils": ["./src/utils/index.ts"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/plugins/*": ["./src/plugins/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/types": ["./src/types/index.ts"],
+      "@/site-config": ["./src/site.config.ts"]
     }
   },
-  "exclude": ["node_modules", "**/node_modules/*", ".vscode", "dist", "public/scripts/*", "test/*"]
+  "exclude": ["./node_modules", "./**/node_modules/*", "./.vscode", "./dist", "./public/scripts/*", "./test/*"]
 }
