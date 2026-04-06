@@ -15,7 +15,7 @@ export default function rehypeAutolinkHeadings({
         const link: Element = {
           type: 'element',
           tagName: 'a',
-          properties: { ...properties, href: `#${node.properties.id}` },
+          properties: { ...properties, href: `#${node.properties.id.toString()}` },
           // children: Array.isArray(content) ? content : [content]
           children: Array.isArray(content)
             ? content

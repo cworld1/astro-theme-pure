@@ -29,26 +29,26 @@ export interface TransformerNotationDiffOptions extends MatchAlgorithmOptions {
  * Use `[!code ++]` and `[!code --]` to mark added and removed lines.
  */
 export function transformerNotationDiff(
-  options: TransformerNotationDiffOptions = {}
+  options: TransformerNotationDiffOptions = {},
 ): ShikiTransformer {
   const {
     classLineAdd = 'diff add',
     classLineRemove = 'diff remove',
     classActivePre = 'has-diff',
-    classActiveCode
+    classActiveCode,
   } = options
 
   return transformerNotationMap(
     {
       classMap: {
         '++': classLineAdd,
-        '--': classLineRemove
+        '--': classLineRemove,
       },
       classActivePre,
       classActiveCode,
-      matchAlgorithm: options.matchAlgorithm
+      matchAlgorithm: options.matchAlgorithm,
     },
-    '@shikijs/transformers:notation-diff'
+    '@shikijs/transformers:notation-diff',
   )
 }
 
@@ -72,25 +72,25 @@ export interface TransformerNotationHighlightOptions extends MatchAlgorithmOptio
  * Allow using `[!code highlight]` notation in code to mark highlighted lines.
  */
 export function transformerNotationHighlight(
-  options: TransformerNotationHighlightOptions = {}
+  options: TransformerNotationHighlightOptions = {},
 ): ShikiTransformer {
   const {
     classActiveLine = 'highlighted',
     classActivePre = 'has-highlighted',
-    classActiveCode
+    classActiveCode,
   } = options
 
   return transformerNotationMap(
     {
       classMap: {
         highlight: classActiveLine,
-        hl: classActiveLine
+        hl: classActiveLine,
       },
       classActivePre,
       classActiveCode,
-      matchAlgorithm: options.matchAlgorithm
+      matchAlgorithm: options.matchAlgorithm,
     },
-    '@shikijs/transformers:notation-highlight'
+    '@shikijs/transformers:notation-highlight',
   )
 }
 
@@ -108,7 +108,8 @@ export function transformerRemoveNotationEscape(): ShikiTransformer {
       function replace(node: ElementContent): void {
         if (node.type === 'text') {
           node.value = node.value.replace('[\\!code', '[!code')
-        } else if ('children' in node) {
+        }
+        else if ('children' in node) {
           for (const child of node.children) {
             replace(child)
           }
@@ -117,6 +118,6 @@ export function transformerRemoveNotationEscape(): ShikiTransformer {
 
       replace(hast)
       return hast
-    }
+    },
   }
 }
