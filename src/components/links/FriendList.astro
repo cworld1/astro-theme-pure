@@ -8,7 +8,7 @@ interface AvatarCache {
   path: string
 }
 
-interface friend {
+interface Friend {
   avatar: string
   avatar_cache?: AvatarCache
   name: string
@@ -16,13 +16,13 @@ interface friend {
   link: string
 }
 
-interface friend_list {
+interface FriendList {
   id_name: string
   desc: string
-  link_list: friend[]
+  link_list: Friend[]
 }
 
-function shuffle(arr: friend[]) {
+function shuffle(arr: Friend[]) {
   return arr.sort(() => {
     return Math.random() - 0.5
   })
@@ -30,11 +30,11 @@ function shuffle(arr: friend[]) {
 
 interface Props {
   title?: string
-  list: friend_list
+  list: FriendList
 }
 const { title, list: friendList, ...props } = Astro.props
 
-const getAvatarSrc = (friend: friend) =>
+const getAvatarSrc = (friend: Friend) =>
   (config.integ?.links?.cacheAvatar ?? false)
     ? (friend.avatar_cache?.path ?? friend.avatar)
     : friend.avatar
@@ -44,14 +44,14 @@ const getAvatarSrc = (friend: friend) =>
 <div class='grid gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3' {...props}>
   {
     friendList.link_list.length > 0 ? (
-      shuffle(friendList.link_list).map((frd: friend) => (
+      shuffle(friendList.link_list).map((frd: Friend) => (
         <a href={frd.link} target='_blank' class='no-underline'>
           <div class='group relative h-full overflow-hidden rounded-2xl border bg-background px-2.5 py-1.5 transition-colors hover:bg-muted sm:px-4 sm:py-2'>
             <div class='relative z-10 flex h-full items-center gap-3'>
               {/* avatar */}
               <div class='relative h-14 w-14 min-w-14 overflow-hidden rounded-full'>
                 <Image
-                  class='my-0 bg-white'
+                  class='my-0 bg-card'
                   src={getAvatarSrc(frd)}
                   height={80}
                   width={80}
@@ -101,8 +101,10 @@ const getAvatarSrc = (friend: friend) =>
               alt='avatar bg'
               loading='lazy'
               style={{
-                msMaskImage: '-ms-linear-gradient(right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
-                WebkitMaskImage: '-webkit-linear-gradient(right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                msMaskImage:
+                  '-ms-linear-gradient(right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                WebkitMaskImage:
+                  '-webkit-linear-gradient(right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
                 maskImage: 'linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
               }}
             />

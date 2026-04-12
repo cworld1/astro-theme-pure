@@ -89,14 +89,14 @@ async function parseOpenGraph(pageUrl: string) {
   const description = getMetaProperty('og:description') || getMetaName('description')
   const image = urlOrNull(
     getMetaProperty('og:image:secure_url') ||
-      getMetaProperty('og:image:url') ||
-      getMetaProperty('og:image')
+    getMetaProperty('og:image:url') ||
+    getMetaProperty('og:image')
   )
   const imageAlt = getMetaProperty('og:image:alt')
   const video = urlOrNull(
     getMetaProperty('og:video:secure_url') ||
-      getMetaProperty('og:video:url') ||
-      getMetaProperty('og:video')
+    getMetaProperty('og:video:url') ||
+    getMetaProperty('og:video')
   )
   const videoType = getMetaProperty('og:video:type')
   const url =
