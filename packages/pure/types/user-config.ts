@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'astro/zod'
 
 import { IntegrationConfigSchema } from './integrations-config'
 import { ThemeConfigSchema } from './theme-config'
