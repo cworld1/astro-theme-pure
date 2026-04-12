@@ -7,7 +7,7 @@ import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import { AstroError } from 'astro/errors'
-import UnoCSS from 'unocss/astro'
+import UnoCSS from '@unocss/astro'
 
 import rehypeExternalLinks from './plugins/rehype-external-links'
 import rehypeImageCaption from './plugins/rehype-image-caption'
