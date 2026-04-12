@@ -31,7 +31,7 @@ import '@pagefind/default-ui/css/ui.css'
         onIdle(async () => {
           // @ts-expect-error — Missing types for @pagefind/default-ui package.
           const { PagefindUI } = await import('@pagefind/default-ui')
-          const pagefindUI = new PagefindUI({
+          new PagefindUI({
             element: '#site-search',
             baseUrl: import.meta.env.BASE_URL,
             bundlePath: `${import.meta.env.BASE_URL.replace(/\/$/, '')}/pagefind/`,
