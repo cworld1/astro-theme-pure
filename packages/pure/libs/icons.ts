@@ -135,4 +135,4 @@ export const BuiltInIcons = {
 export const Icons = {
   ...BuiltInIcons
 }
-export type IconName = keyof typeof Icons
+export type IconsType = keyof typeof Icons

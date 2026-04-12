@@ -1,8 +1,8 @@
-import type { Icons } from '../libs/icons'
-
 export type { IntegrationUserConfig } from './integrations-config'
 export type { ThemeUserConfig } from './theme-config'
 export type { UserConfig as ConfigOutput, UserInputConfig as Config } from './user-config'
+
+export type { IconsType } from '../libs/icons'
 
 export interface SiteMeta {
   title: string
@@ -26,7 +26,3 @@ export type TimelineEvent = {
   date: string
   content: string
 }
-
-export type iconsType = keyof typeof Icons
-
-export { socialLinks } from './constants'

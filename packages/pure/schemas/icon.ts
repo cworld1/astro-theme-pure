@@ -1,8 +1,8 @@
 import { z } from 'astro/zod'
 
-import { Icons, type IconName } from '../libs'
+import { Icons, type IconsType } from '../libs/icons'
 
-const iconNames = Object.keys(Icons) as [IconName, ...IconName[]]
+const icons = Object.keys(Icons) as [IconsType, ...IconsType[]]
 
 /** String that matches the name of one of Starlight’s built-in icons. */
-export const IconSchema = () => z.enum(iconNames)
+export const IconSchema = () => z.enum(icons)

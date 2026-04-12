@@ -1,10 +1,10 @@
 ---
-import { type iconsType, socialLinks } from 'astro-pure/types'
+import { type IconsType } from 'astro-pure/types'
 import { Icon } from 'astro-pure/user'
 
 interface SubstatsItem {
   platform: string
-  icon: (typeof socialLinks)[number]
+  icon: IconsType
   color?: string
   link?: string
   text: string
@@ -46,7 +46,7 @@ await Promise.all(stats.map(fetchCount))
         rel='noopener noreferrer'
       >
         <div class='flex items-center gap-3 rounded-lg border border-transparent px-3 py-2 transition-all hover:border-border hover:bg-muted'>
-          {icon && <Icon name={icon as iconsType} color={color} />}
+          {icon && <Icon name={icon} color={color} />}
           <div class='flex-1 text-foreground transition-colors group-hover:text-primary'>
             {platform}
           </div>

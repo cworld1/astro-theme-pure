@@ -2,7 +2,7 @@
 import { type ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 
-import type { iconsType } from 'astro-pure/types'
+import type { IconsType } from 'astro-pure/types'
 import { Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 
@@ -10,7 +10,7 @@ interface Props {
   class?: string
   methods: {
     name: string
-    icon: string
+    icon: IconsType
     image: ImageMetadata
   }[]
 }
@@ -23,7 +23,7 @@ const { class: className, methods, ...props } = Astro.props
     methods.map((item) => (
       <div class='sponsorship-card relative justify-center overflow-hidden rounded-xl border bg-white'>
         <div class='sponsorship-card-icon absolute bottom-0 end-0 start-0 top-0 flex items-center justify-center transition-opacity'>
-          <Icon class='size-20' name={item.icon as iconsType} />
+          <Icon class='size-20' name={item.icon} />
         </div>
         <Image
           class='sponsorship-card-img mx-auto my-0 max-w-60 blur-sm transition-opacity'
