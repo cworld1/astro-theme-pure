@@ -50,13 +50,8 @@ export default defineConfig({
   image: {
     responsiveStyles: true,
     service: { entrypoint: 'astro/assets/services/sharp' },
-    remotePatterns: [
-      // Allow improve Github activity chart
-      {
-        protocol: 'https',
-        hostname: '**.rshah.org'
-      }
-    ]
+    // domains: ['ghchart.rshah.org'],
+    remotePatterns: [{ protocol: 'https' }]
   },
   // Enable font preloading and optimization
   // https://docs.astro.build/en/guides/fonts/
