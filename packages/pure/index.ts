@@ -12,6 +12,7 @@ import UnoCSS from '@unocss/astro'
 import rehypeExternalLinks from './plugins/rehype-external-links'
 import rehypeImageCaption from './plugins/rehype-image-caption'
 import rehypeTable from './plugins/rehype-table'
+import { remarkRemoteImagesToNativeImg } from './plugins/remark-remote-images'
 import { remarkAddZoomable, remarkReadingTime } from './plugins/remark-plugins'
 import { vitePluginUserConfig } from './plugins/virtual-user-config'
 import { UserConfigSchema, type UserInputConfig } from './types/user-config'
@@ -53,6 +54,8 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         // Add supported remark plugins based on user config.
         if (userConfig.integ.mediumZoom.enable)
           remarkPlugins.push([remarkAddZoomable, userConfig.integ.mediumZoom.options])
+        if (userConfig.integ.markdownImage.useNativeForRemote)
+          remarkPlugins.push(remarkRemoteImagesToNativeImg)
         remarkPlugins.push(remarkReadingTime)
 
         // Add supported rehype plugins based on user config.
