@@ -46,6 +46,17 @@ export const IntegrationConfigSchema = () =>
       options: z.record(z.string(), z.any()).default({ className: 'zoomable' })
     }),
 
+    /** Markdown image rendering strategy */
+    markdownImage: z
+      .object({
+        /**
+         * Render remote markdown images as native <img> tags to skip Astro's remote inferSize pipeline.
+         * Set to false to restore Astro's default remote image processing.
+         */
+        useNativeForRemote: z.boolean().default(true)
+      })
+      .default({ useNativeForRemote: true }),
+
     /** The Waline comment system */
     waline: z.object({
       /** Enable the Waline comment system. */

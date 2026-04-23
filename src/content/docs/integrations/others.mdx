@@ -63,6 +63,36 @@ import { MediumZoom } from 'astro-pure/advanced'
 </TabItem>
 </Tabs>
 
+## Markdown Remote Images
+
+When an article contains many remote images, Astro's default markdown image pipeline can be slow because it may probe remote image size (`inferSize`) during rendering.
+
+This theme provides a toggle to render remote markdown images as native `<img>` tags and skip that server-side probing path.
+
+```ts title="src/site.config.ts"
+export const integ: IntegrationUserConfig = {
+  // ...
+  markdownImage: {
+    // default: true
+    // true: render remote markdown images as native <img>
+    // false: restore Astro's default remote image pipeline
+    useNativeForRemote: false
+  }
+}
+```
+
+Keep writing markdown images as usual:
+
+```md
+![Alt text](https://example.com/image.png)
+```
+
+Notes:
+
+- `true` improves rendering responsiveness for image-heavy markdown pages.
+- `false` re-enables Astro image processing for remote markdown images.
+- Native `<img>` mode skips Astro optimization for those remote markdown images (such as automatic infer-size handling).
+
 
 ## `@playform/compress`
 
@@ -154,7 +184,7 @@ Rendering LaTeX in Astro.js enriches your markdown files with mathematical expre
 Common Pitfalls and Solutions:
 
 - CSS Styling Issues
-  
+
   Problem: LaTeX formulas might not render with the correct styles if the KaTeX CSS isn’t loaded.
 
   Solution: Confirm the KaTeX stylesheet link is correctly placed in the HTML head and is loading without issues. Check for network errors or restrictions that might prevent the CSS from loading.

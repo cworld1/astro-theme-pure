@@ -161,6 +161,12 @@ export const integ: IntegrationUserConfig = {
       className: 'zoomable'
     }
   },
+  // [Markdown Image]
+  // Render remote Markdown images as native <img> tags to avoid Astro inferSize probing.
+  // Set to false to restore Astro's default remote image pipeline.
+  markdownImage: {
+    useNativeForRemote: false
+  },
   // Comment system
   waline: {
     enable: true,
