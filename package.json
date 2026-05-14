@@ -33,17 +33,17 @@
     "astro-pure": "1.4.6",
     "hastscript": "^9.0.1",
     "katex": "^0.16.45",
-    "rehype-stringify": "^10.0.1",
     "rehype-katex": "^7.0.1",
+    "rehype-stringify": "^10.0.1",
+    "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "remark-math": "^6.0.0",
     "sharp": "^0.34.5",
     "shiki": "^4.0.2",
     "typescript": "^6.0.3",
     "unified": "^11.0.5",
-    "unocss": "^66.6.8",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.1.0",
+    "unocss": "^66.6.8"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
