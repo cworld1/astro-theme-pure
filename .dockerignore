@@ -1,0 +1,90 @@
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+compose.yml
+
+# Git
+.git
+.gitignore
+.github
+
+# Documentation
+README.md
+README-zh-CN.md
+CODE_OF_CONDUCT.md
+LICENSE
+
+# Node
+node_modules
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Astro
+dist/
+.astro/
+
+# Vercel
+.vercel/
+
+# Netlify
+.netlify/
+
+# Wrangler
+.wrangler/
+
+# VisualStudioCode
+.vscode
+.vscode/
+
+# Code workspace files
+*.code-workspace
+
+# Vim
+*.sw?
+*.swp
+[._]*.un~
+
+# VisualStudio
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment
+.env
+.env.production
+*.local
+
+# IDEs
+.idea/
+.editorconfig
+
+# Build / Coverage
+coverage*
+
+# Development
+Makefile
+helm-charts
+
+# Claude
+.claude/
+
+# Custom
+old_blog
+ignore.*
+/src/content/blog/test.*
+/test/
+bunfig.toml
