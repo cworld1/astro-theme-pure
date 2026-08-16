@@ -54,31 +54,94 @@ See [astro-theme-pure](https://www.npmjs.com/package/astro-pure) on npm.
 
 ## Local development
 
-Environment requirements:
+### Environment requirements
 
-- [Nodejs](https://nodejs.org/): 18.0.0+
+> [!WARNING]
+> Astro 6.0+ requires Node.js 22.12.0 or newer. Odd-numbered Node.js versions such as 23 are not supported by Astro.
 
-Clone the repository:
+You can choose one of the following methods for project development:
+
+- [Bun](https://bun.com/get) - Recommended for local development
+- [Node.js](https://nodejs.org/) - Alternative to Bun
+- [Docker](https://docs.docker.com/get-started/get-docker) and [Docker Compose](https://docs.docker.com/compose/install) - Create an isolated development environment
+
+### Getting started
+
+1. **Clone the repository and enter the directory:**
+   ```shell
+   git clone https://github.com/cworld1/astro-theme-pure.git
+   cd astro-theme-pure
+   ```
+2. **Configure the site:**
+   - Edit `src/site.config.ts` to customize the site.
+
+#### Option 1: Native environment
+
+1. **Install dependencies:**
+   ```shell
+   # Install project dependencies
+   bun install
+   ```
+2. **Start the development server:**
+   ```shell
+   bun dev
+   # or
+   pnpm dev
+   # or
+   yarn run dev
+   # or
+   npm run dev
+   ```
+   The development server runs at http://localhost:4321 by default.
+
+#### Option 2: Docker isolated environment
+
+1. **Build and start the development container:**
+   ```shell
+   docker compose up --build
+   ```
+   The first run builds the image and when it starts, copies the production build output to the local `./dist` directory. The development server runs at http://localhost:4321 by default.
+2. **Stop and remove the container:**
+   ```shell
+   docker compose down
+   ```
+
+### Creating a new blog article
+
+After setting up either development environment, you can create a new blog article:
 
 ```shell
-git clone https://github.com/cworld1/astro-theme-pure.git
-cd astro-theme-pure
-```
-
-Useful commands:
-
-```shell
-# Install dependencies
-bun install
-# Start the dev server
-bun dev
-# Build the project
-bun run build
-# Preview (after the build)
-bun preview
 # Create a new post
 bun pure new
 ```
+
+## Deployment
+
+### Manual deployment
+
+1. **Build the production site into the `./dist` directory:**
+   ```shell
+   bun run build
+   # or
+   docker compose up --build
+   ```
+   Once the build is complete, the generated static files will be located in the `./dist` directory. You can deploy this directory to any platform that supports static site hosting.
+2. **Preview the production build locally (optional):**
+   ```shell
+   # preview (build before previewing)
+   bun preview
+   ```
+
+### Static hosting platforms
+
+You can deploy your blog to any static site hosting platform.
+
+- Refer to the official [Astro Deployment Guide](https://docs.astro.build/en/guides/deploy/) for specific deployment methods.
+- Depending on the deployment platform you choose, you may need to modify the `astro.config.ts` configuration file in the project.
+
+| Vercel | Netlify |
+| :---: | :---: |
+| [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcworld1%2Fastro-theme-pure) | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cworld1/astro-theme-pure) |
 
 ## Contributions
 

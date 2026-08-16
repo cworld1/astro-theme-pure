@@ -104,9 +104,36 @@ yarn run dev
 npm run dev
 ```
 </TabItem>
+<TabItem label='docker'>
+```shell
+docker compose up --build
+```
+</TabItem>
 </Tabs>
 
 Next, please read the configuration notes first and continue configuring the theme.
+
+### Develop with Docker Compose
+
+The template also includes a `Dockerfile` and `compose.yml` for local development. Use this when you want to build a development site with Astro running inside an isolated Bun container instead of installing dependencies directly on your host machine.
+
+Requirements:
+
+- Install [Docker](https://docs.docker.com/get-started/get-docker/) with Docker Compose support.
+
+```shell
+docker compose up --build
+```
+
+The first run downloads the `oven/bun:debian` base image, which is about 82 MB compressed before project dependencies and build layers are added.
+
+After the container starts, open http://localhost:4321. The Compose service mounts your source files into the container, so Astro's dev server watches for changes and automatically rebuilds while you edit. On each `docker compose up --build` run, it also copies the generated `./dist` output from the image into your local `dist` directory.
+
+To stop the container, press <kbd>Ctrl</kbd> + <kbd>C</kbd>. To remove the stopped container afterwards, run:
+
+```shell
+docker compose down
+```
 
 ## Migrate to Astro
 
@@ -132,6 +159,8 @@ The theme file structure is as follows:
 - `uno.config.ts`: UnoCSS configuration file
 - `tsconfig.json`: Typescript configuration file
 - `package.json`: Package information
+- `Dockerfile`: Docker build setup for local development
+- `compose.yml`: Docker Compose configuration for local dev and preview
 
 ## Simple Setup
 

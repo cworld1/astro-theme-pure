@@ -52,33 +52,96 @@
 
 在 NPM 上查看：[astro-theme-pure](https://www.npmjs.com/package/astro-pure)
 
-## 本地开发
+## 快速开始
 
-环境要求：
+### 环境要求
 
-- [Nodejs](https://nodejs.org/): 18.0.0+
+> [!WARNING]
+> Astro 6.0+ 要求 Node.js v22.12.0 或更高版本。Astro 不支持奇数版本的 Node.js，例如 v23。
 
-克隆存储库：
+你可以选择以下任一方式进行项目开发：
+
+- [Bun](https://bun.com/get) - 推荐用于本地开发
+- [Node.js](https://nodejs.org/zh-cn) - Bun 的替代方案
+- [Docker](https://docs.docker.com/get-started/get-docker) and [Docker Compose](https://docs.docker.com/compose/install) - 创建隔离的开发环境
+
+### 获取代码与配置
+
+1. 克隆仓库并进入目录：
+   ```shell
+   git clone https://github.com/cworld1/astro-theme-pure.git
+   cd astro-theme-pure
+   ```
+2. 配置站点：
+   - 编辑 `src/site.config.ts` 以个性化站点。
+
+#### 方式一：原生环境
+
+1. **安装依赖：**
+   ```shell
+   # 安装项目依赖
+   bun install
+   ```
+2. **启动开发服务器：**
+   ```shell
+   bun dev
+   # 或
+   pnpm dev
+   # 或
+   yarn run dev
+   # 或
+   npm run dev
+   ```
+   开发服务器默认运行在 <http://localhost:4321>。
+
+#### 方式二：Docker 隔离环境
+
+1. **构建并启动开发容器：**
+   ```shell
+   docker compose up --build
+   ```
+   首次运行会构建镜像，并在启动时将生产构建输出复制到本地 `./dist` 目录。开发服务器默认运行在 <http://localhost:4321>。
+2. **停止并移除容器：**
+   ```shell
+   docker compose down
+   ```
+
+### 创建新的博客文章
+
+完成任一开发环境的设置后，您可以创建一篇新的博客文章：
 
 ```shell
-git clone https://github.com/cworld1/astro-theme-pure.git
-cd astro-theme-pure
-```
-
-有用的命令：
-
-```shell
-# Install dependencies
-bun install
-# Start the dev server
-bun dev
-# Build the project
-bun run build
-# Preview (after the build)
-bun preview
-# Create a new post
+# 创建新文章
 bun pure new
 ```
+
+## 部署
+
+### 手动部署
+
+1. **构建生产站点到 `./dist` 目录：**
+   ```shell
+   bun run build
+   # 或
+   docker compose up --build
+   ```
+   构建完成后，生成的静态文件将位于 `./dist` 目录中，你可以将该目录部署到支持静态网站托管的平台。
+2. **本地预览构建结果（可选）：**
+   ```shell
+   # 预览前先完成构建
+   bun preview
+   ```
+
+### 静态托管平台
+
+你可以将你的博客部署到任意静态网站托管平台。
+
+- 参考官方 [Astro 部署指南](https://docs.astro.build/zh-cn/guides/deploy/) 了解具体的部署方式。
+- 根据所选择的部署平台，你可能需要修改项目中的 `astro.config.ts` 配置文件。
+
+| Vercel | Netlify |
+| :---: | :---: |
+| [![使用 Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcworld1%2Fastro-theme-pure) | [![部署到 Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cworld1/astro-theme-pure) |
 
 ## 贡献
 
