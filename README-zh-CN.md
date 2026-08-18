@@ -96,11 +96,13 @@
 
 #### 方式二：Docker 隔离环境
 
+使用 Docker Compose 在 Bun 容器中运行 Astro 及其依赖，同时将项目源文件保留在宿主机上。
+
 1. **构建并启动开发容器：**
    ```shell
-   docker compose up --build
+   docker compose --profile dev up --build
    ```
-   首次运行会构建镜像，并在启动时将生产构建输出复制到本地 `./dist` 目录。开发服务器默认运行在 <http://localhost:4321>。
+   首次运行会构建镜像。启动时，会将项目源代码挂载到容器中，并将 node_modules 存储在 Docker 管理的卷中。开发服务器默认运行在 http://localhost:4321。
 2. **停止并移除容器：**
    ```shell
    docker compose down
@@ -113,6 +115,8 @@
 ```shell
 # 创建新文章
 bun pure new
+# 或
+docker compose --profile new run --rm new
 ```
 
 ## 部署
@@ -123,13 +127,15 @@ bun pure new
    ```shell
    bun run build
    # 或
-   docker compose up --build
+   docker compose --profile build up --build
    ```
    构建完成后，生成的静态文件将位于 `./dist` 目录中，你可以将该目录部署到支持静态网站托管的平台。
 2. **本地预览构建结果（可选）：**
    ```shell
    # 预览前先完成构建
    bun preview
+   # 或
+   docker compose --profile preview up --build
    ```
 
 ### 静态托管平台

@@ -96,11 +96,13 @@ You can choose one of the following methods for project development:
 
 #### Option 2: Docker isolated environment
 
+Use Docker Compose to run Astro and its dependencies inside a Bun container while keeping your project source files on the host.
+
 1. **Build and start the development container:**
    ```shell
-   docker compose up --build
+   docker compose --profile dev up --build
    ```
-   The first run builds the image and when it starts, copies the production build output to the local `./dist` directory. The development server runs at http://localhost:4321 by default.
+   The first run builds the image and when it starts, mounts the project source into the container and stores `node_modules` in a Docker-managed volume. The development server runs at http://localhost:4321 by default.
 2. **Stop and remove the container:**
    ```shell
    docker compose down
@@ -113,6 +115,8 @@ After setting up either development environment, you can create a new blog artic
 ```shell
 # Create a new post
 bun pure new
+# or
+docker compose --profile new run --rm new
 ```
 
 ## Deployment
@@ -123,13 +127,15 @@ bun pure new
    ```shell
    bun run build
    # or
-   docker compose up --build
+   docker compose --profile build up --build
    ```
    Once the build is complete, the generated static files will be located in the `./dist` directory. You can deploy this directory to any platform that supports static site hosting.
 2. **Preview the production build locally (optional):**
    ```shell
    # preview (build before previewing)
    bun preview
+   # or
+   docker compose --profile preview up --build
    ```
 
 ### Static hosting platforms
