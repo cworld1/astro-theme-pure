@@ -10,14 +10,6 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-RUN bun astro telemetry disable && bun run build
-
-FROM oven/bun:debian AS dev
-
-WORKDIR /web
-
-COPY --from=build /web/node_modules ./node_modules
-
-COPY --from=build /web/dist /dist
+ENV ASTRO_TELEMETRY_DISABLED=1
 
 EXPOSE 4321
