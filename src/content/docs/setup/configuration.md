@@ -1,7 +1,7 @@
 ---
 title: 'Configuration'
 description: 'Configuration files'
-order: 4
+order: 5
 ---
 
 ## Theme Configuration
