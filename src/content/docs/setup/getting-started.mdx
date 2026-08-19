@@ -77,6 +77,10 @@ Then, you can start the Astro dev server and see a live preview of your project 
 
 ## Start the Dev Server
 
+<Aside type='tip'>
+For deployment methods using container like [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install), please refer the documention [Using Docker Compose](/docs/setup/using-docker-compose).
+</Aside>
+
 Go to your project directory:
 
 ```shell
@@ -104,41 +108,9 @@ yarn run dev
 npm run dev
 ```
 </TabItem>
-<TabItem label='docker'>
-```shell
-docker compose --profile dev up --build
-```
-</TabItem>
 </Tabs>
 
 Next, please read the configuration notes first and continue configuring the theme.
-
-### Develop with Docker Compose
-
-The template includes a `Dockerfile` and `compose.yml` with profile-based services for local development. Use this when you want to build a development site with Astro running inside an isolated Bun container instead of installing dependencies directly on your host machine.
-
-Requirements:
-
-- Install [Docker](https://docs.docker.com/get-started/get-docker/) with Docker Compose support.
-
-The services are profile-based, so nothing starts unless you pick a profile with `--profile`:
-
-| Profile | Command | What it does |
-| --- | --- | --- |
-| `dev` | `docker compose --profile dev up --build` | Starts the Astro dev server at http://localhost:4321 with your source files bind-mounted, so edits are picked up immediately without rebuilding the image. |
-| `build` | `docker compose --profile build up --build` | Runs `astro build` inside the container and copies the output into your local `./dist` directory. |
-| `preview` | `docker compose --profile preview up --build` | Runs the `build` profile first, then serves the production build with `astro preview` at http://localhost:4321 once the build finishes. |
-| `new` | `docker compose --profile new run --rm new` | Runs `astro-pure new` to scaffold a new article, without leaving a container running afterwards. |
-
-<Aside type='tip'>
-`--build` tells Docker to rebuild the image, which is only needed after changing dependencies or the Docker config.
-</Aside>
-
-To stop the containers, press <kbd>Ctrl</kbd> + <kbd>C</kbd>. To remove stopped containers afterwards, run:
-
-```shell
-docker compose down
-```
 
 ## Migrate to Astro
 

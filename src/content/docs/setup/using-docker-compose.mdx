@@ -1,0 +1,58 @@
+---
+title: 'Docker Compose'
+description: 'Develop & deploy theme using docker compose'
+order: 2
+---
+
+The template includes a `Dockerfile` and `compose.yml` with profile-based services for local development. Use this when you want to build a development site with Astro running inside an isolated Bun container instead of installing dependencies directly on your host machine.
+
+<Aside type='tip'>
+To build using Docker manually, please refer [Astro: Build your Astro site with Docker](https://docs.astro.build/en/recipes/docker/)
+</Aside>
+
+Requirements: Install [Docker](https://docs.docker.com/get-started/get-docker/) with Docker Compose support.
+
+## Usage
+
+The services are profile-based, so nothing starts unless you pick a profile with `--profile`:
+
+| Profile | Command | What it does |
+| --- | --- | --- |
+| `dev` | `docker compose --profile dev up --build` | Starts the Astro dev server at http://localhost:4321 with your source files bind-mounted, so edits are picked up immediately without rebuilding the image. |
+| `build` | `docker compose --profile build up --build` | Runs `astro build` inside the container and copies the output into your local `./dist` directory. |
+| `preview` | `docker compose --profile preview up --build` | Runs the `build` profile first, then serves the production build with `astro preview` at http://localhost:4321 once the build finishes. |
+| `new` | `docker compose --profile new run --rm new` | Runs `astro-pure new` to scaffold a new article, without leaving a container running afterwards. |
+
+`--build` tells Docker to rebuild the image, which is only needed after changing dependencies or the Docker config.
+
+To stop the containers, press <kbd>Ctrl</kbd> + <kbd>C</kbd>. To remove stopped containers afterwards, run:
+
+```shell
+docker compose down
+```
+
+## Examples
+
+Develop locally:
+
+```shell
+docker compose --profile dev up --build
+```
+
+Create a new post:
+
+```shell
+docker compose --profile new run --rm new
+```
+
+Build site:
+
+```shell
+docker compose --profile build up --build
+```
+
+Preview:
+
+```shell
+docker compose --profile preview up --build
+```
