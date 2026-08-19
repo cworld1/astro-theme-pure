@@ -61,9 +61,10 @@
 
 你可以选择以下任一方式进行项目开发：
 
-- [Bun](https://bun.com/get) - 推荐用于本地开发
-- [Node.js](https://nodejs.org/zh-cn) - Bun 的替代方案
-- [Docker](https://docs.docker.com/get-started/get-docker) and [Docker Compose](https://docs.docker.com/compose/install) - 创建隔离的开发环境
+- [Bun](https://bun.com/get)
+- [Node.js](https://nodejs.org/zh-cn)
+
+对于使用容器化部署如 [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install)，请参考文档 [Deployment#Using Docker Compose](https://astro-pure.js.org/docs/setup/deployment#using-docker-compose)
 
 ### 获取代码与配置
 
@@ -72,17 +73,16 @@
    git clone https://github.com/cworld1/astro-theme-pure.git
    cd astro-theme-pure
    ```
-2. 配置站点：
-   - 编辑 `src/site.config.ts` 以个性化站点。
 
-#### 方式一：原生环境
+   编辑 `src/site.config.ts` 以个性化站点。
 
-1. **安装依赖：**
+2. 安装依赖：
    ```shell
    # 安装项目依赖
    bun install
    ```
-2. **启动开发服务器：**
+
+3. 启动开发服务器：
    ```shell
    bun dev
    # 或
@@ -92,51 +92,34 @@
    # 或
    npm run dev
    ```
+   
    开发服务器默认运行在 <http://localhost:4321>。
-
-#### 方式二：Docker 隔离环境
-
-使用 Docker Compose 在 Bun 容器中运行 Astro 及其依赖，同时将项目源文件保留在宿主机上。
-
-1. **构建并启动开发容器：**
-   ```shell
-   docker compose --profile dev up --build
-   ```
-   首次运行会构建镜像。启动时，会将项目源代码挂载到容器中，并将 node_modules 存储在 Docker 管理的卷中。开发服务器默认运行在 http://localhost:4321。
-2. **停止并移除容器：**
-   ```shell
-   docker compose down
-   ```
 
 ### 创建新的博客文章
 
 完成任一开发环境的设置后，您可以创建一篇新的博客文章：
 
 ```shell
-# 创建新文章
 bun pure new
-# 或
-docker compose --profile new run --rm new
 ```
 
 ## 部署
 
 ### 手动部署
 
-1. **构建生产站点到 `./dist` 目录：**
-   ```shell
-   bun run build
-   # 或
-   docker compose --profile build up --build
-   ```
-   构建完成后，生成的静态文件将位于 `./dist` 目录中，你可以将该目录部署到支持静态网站托管的平台。
-2. **本地预览构建结果（可选）：**
-   ```shell
-   # 预览前先完成构建
-   bun preview
-   # 或
-   docker compose --profile preview up --build
-   ```
+构建生产站点到 `./dist` 目录：
+
+```shell
+bun run build
+```
+
+构建完成后，生成的静态文件将位于 `./dist` 目录中，你可以将该目录部署到支持静态网站托管的平台。
+
+本地预览构建结果：
+
+```shell
+bun preview
+```
 
 ### 静态托管平台
 
