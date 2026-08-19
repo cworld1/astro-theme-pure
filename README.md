@@ -65,7 +65,7 @@ You can choose one of the following methods for project development:
 - [Node.js](https://nodejs.org/)
 
 
-For deployment methods using container like [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install), please refer the documention [Deployment#Using Docker Compose](https://astro-pure.js.org/docs/setup/deployment#using-docker-compose).
+For deployment methods using container like [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install), please refer the documention [Using Docker Compose](https://astro-pure.js.org/docs/setup/using-docker-compose).
 
 ### Getting started
 
