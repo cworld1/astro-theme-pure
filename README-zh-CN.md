@@ -64,7 +64,7 @@
 - [Bun](https://bun.com/get)
 - [Node.js](https://nodejs.org/zh-cn)
 
-对于使用容器化部署如 [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install)，请参考文档 [Docker Compose](https://astro-pure.js.org/docs/setup/using-docker-compose)
+对于使用容器化部署如 [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install)，请参考文档 [Docker Compose](https://astro-pure.js.org/docs/setup/using-docker-compose)。
 
 ### 获取代码与配置
 
