@@ -61,28 +61,28 @@ See [astro-theme-pure](https://www.npmjs.com/package/astro-pure) on npm.
 
 You can choose one of the following methods for project development:
 
-- [Bun](https://bun.com/get) - Recommended for local development
-- [Node.js](https://nodejs.org/) - Alternative to Bun
-- [Docker](https://docs.docker.com/get-started/get-docker) and [Docker Compose](https://docs.docker.com/compose/install) - Create an isolated development environment
+- [Bun](https://bun.com/get)
+- [Node.js](https://nodejs.org/)
+
+
+For deployment methods using container like [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install), please refer the documention [Deployment#Using Docker Compose](https://astro-pure.js.org/docs/setup/deployment#using-docker-compose).
 
 ### Getting started
 
-1. **Clone the repository and enter the directory:**
+1. Clone the repository and enter the directory:
    ```shell
    git clone https://github.com/cworld1/astro-theme-pure.git
    cd astro-theme-pure
    ```
-2. **Configure the site:**
-   - Edit `src/site.config.ts` to customize the site.
 
-#### Option 1: Native environment
+   Edit `src/site.config.ts` to customize the site.
 
-1. **Install dependencies:**
+2. Install dependencies:
    ```shell
-   # Install project dependencies
    bun install
    ```
-2. **Start the development server:**
+   
+3. Start the development server:
    ```shell
    bun dev
    # or
@@ -92,51 +92,34 @@ You can choose one of the following methods for project development:
    # or
    npm run dev
    ```
+   
    The development server runs at http://localhost:4321 by default.
-
-#### Option 2: Docker isolated environment
-
-Use Docker Compose to run Astro and its dependencies inside a Bun container while keeping your project source files on the host.
-
-1. **Build and start the development container:**
-   ```shell
-   docker compose --profile dev up --build
-   ```
-   The first run builds the image and when it starts, mounts the project source into the container and stores `node_modules` in a Docker-managed volume. The development server runs at http://localhost:4321 by default.
-2. **Stop and remove the container:**
-   ```shell
-   docker compose down
-   ```
 
 ### Creating a new blog article
 
 After setting up either development environment, you can create a new blog article:
 
 ```shell
-# Create a new post
 bun pure new
-# or
-docker compose --profile new run --rm new
 ```
 
 ## Deployment
 
 ### Manual deployment
 
-1. **Build the production site into the `./dist` directory:**
-   ```shell
-   bun run build
-   # or
-   docker compose --profile build up --build
-   ```
-   Once the build is complete, the generated static files will be located in the `./dist` directory. You can deploy this directory to any platform that supports static site hosting.
-2. **Preview the production build locally (optional):**
-   ```shell
-   # preview (build before previewing)
-   bun preview
-   # or
-   docker compose --profile preview up --build
-   ```
+Build the production site into the `./dist` directory:
+
+```shell
+bun run build
+```
+   
+Once the build is complete, the generated static files will be located in the `./dist` directory. You can deploy this directory to any platform that supports static site hosting.
+   
+Preview the production build locally:
+
+```shell
+bun preview
+```
 
 ### Static hosting platforms
 
