@@ -6,55 +6,187 @@ order: 2
 
 import { Aside } from 'astro-pure/user'
 
-The template includes a `Dockerfile` and `compose.yml` with profile-based services for local development. Use this when you want to build a development site with Astro running inside an isolated Bun container instead of installing dependencies directly on your host machine.
-
+Astro Theme Pure provides Docker Compose workflows for development, building, previewing and content creation in an isolated Bun container. This allows you to perform these workflows inside Docker without installing Bun or its dependencies or running the tooling directly on your host.
 <Aside type='tip'>
 To build using Docker manually, please refer to [Astro: Build your Astro site with Docker](https://docs.astro.build/en/recipes/docker/).
 </Aside>
 
-Requirements: Install [Docker](https://docs.docker.com/get-started/get-docker/) with Docker Compose support.
+## Requirements
 
-## Usage
+- [Docker Desktop](https://docs.docker.com/get-started/get-docker/) with [Docker Compose](https://docs.docker.com/compose/install) support.
 
-The services are profile-based, so nothing starts unless you pick a profile with `--profile`:
-
-| Profile | Command | What it does |
-| --- | --- | --- |
-| `dev` | `docker compose --profile dev up --build` | Starts the Astro dev server at http://localhost:4321 with your source files bind-mounted, so edits are picked up immediately without rebuilding the image. |
-| `build` | `docker compose --profile build up --build` | Runs `astro build` inside the container and copies the output into your local `./dist` directory. |
-| `preview` | `docker compose --profile preview up --build` | Runs the `build` profile first, then serves the production build with `astro preview` at http://localhost:4321 once the build finishes. |
-| `new` | `docker compose --profile new run --rm new` | Runs `astro-pure new` to scaffold a new article, without leaving a container running afterwards. |
-
-`--build` tells Docker to rebuild the image, which is only needed after changing dependencies or the Docker config.
-
-To stop the containers, press <kbd>Ctrl</kbd> + <kbd>C</kbd>. To remove stopped containers afterwards, run:
+Verify your installation:
 
 ```shell
-docker compose down
+docker --version
+docker compose version
 ```
 
-## Examples
+## How it works
 
-Develop locally:
+The included Docker environment uses:
 
-```shell
-docker compose --profile dev up --build
-```
+- **Bun** via the official `oven/bun:debian` image
+- A shared Docker image built from the repository `Dockerfile`
+- Compose profiles to run specific workflows
+- Named Docker volumes for build artifacts and dependencies
 
-Create a new post:
+The Docker image:
 
-```shell
-docker compose --profile new run --rm new
-```
+- Installs project dependencies with `bun install --frozen-lockfile`
+- Disables Astro telemetry
+- Exposes port `4321`
+- Uses `/web` as the working directory
 
-Build site:
+All services reuse the same image and only start when the corresponding profile is selected.
+
+## Available profiles
+
+Each workflow is exposed through a Docker Compose profile. Select the profile corresponding to the task you want to perform:
+
+| Profile | What it does |
+| --- | --- |
+| `build` | Runs `astro build` inside the container and copies the output into your local `./dist` directory. |
+| `dev` | Starts the Astro dev server at http://localhost:4321 with your source files bind-mounted, so edits are picked up immediately without rebuilding the image. |
+| `preview` |  Runs the `build` profile first, then serves the production build with `astro preview` at http://localhost:4321 once the build finishes. |
+| `new` | Runs `astro-pure new` to scaffold a new article, without leaving a container running afterwards. |
+
+## Building for production
+
+Generate a production build:
 
 ```shell
 docker compose --profile build up --build
 ```
 
-Preview:
+The build process:
+
+1. Runs `bun run build`
+2. Creates the Astro production output inside the container
+3. Copies the generated files into your local `./dist` directory
+
+After the build completes, the generated site is available in:
+
+```text
+./dist
+```
+
+The build container exits automatically when finished.
+
+## Rebuilding the Docker image
+
+The `--build` flag forces Docker Compose to rebuild the image before starting services.
+
+Use it when:
+
+- Updating project dependencies
+- Modifying `package.json`
+- Changing the `Dockerfile`
+- Switching to a branch with dependency changes
+
+Example:
+
+```shell
+docker compose --profile dev up --build
+```
+<Aside type='tip'>
+Running `--build` again does not necessarily rebuild every layer from scratch. Docker reuses cached layers when possible, so unchanged dependencies and other build steps can still be cached.
+</Aside>
+
+## Development
+
+Start the Astro development server:
+
+```shell
+docker compose --profile dev up --build
+```
+
+The site will be available at:
+
+```text
+http://localhost:4321
+```
+
+### Hot reloading
+
+Your project directory is mounted directly into the container:
+
+```yaml
+- .:/web
+```
+
+This means changes to source files are immediately visible inside the container, allowing Astro's development server to hot reload automatically.
+
+Project dependencies are stored in a dedicated Docker volume:
+
+```yaml
+- node_modules:/web/node_modules
+```
+
+This avoids conflicts between container-managed dependencies and any local environment.
+
+To stop the development server, press <kbd>Ctrl</kbd> + <kbd>C</kbd>.
+
+## Previewing a production build
+
+To build and serve the production output:
 
 ```shell
 docker compose --profile preview up --build
 ```
+
+The preview workflow:
+
+1. Executes the `build` service
+2. Shares the generated files through a Docker volume
+3. Starts Astro Preview
+
+The production preview is available at:
+
+```text
+http://localhost:4321
+```
+
+This is useful for verifying behavior closer to a production deployment than the development server.
+
+## Creating an article
+
+Astro Theme Pure provides a command for scaffolding new articles that can be run without installing dependencies locally.
+
+Create a new article:
+
+```shell
+docker compose --profile new run --rm new
+```
+
+This executes:
+
+```shell
+bun run pure new
+```
+
+The container mounts only the content directory:
+
+```yaml
+- ./src/content:/web/src/content
+```
+
+Any generated content is written directly into your project.
+
+The `--rm` flag automatically removes the temporary container after the command completes.
+
+## Cleaning up
+
+Stop containers and remove Compose resources:
+
+```shell
+docker compose down
+```
+
+Remove associated volumes as well:
+
+```shell
+docker compose down --volumes
+```
+
+This removes cached build output and installed dependencies stored in Docker volumes.
