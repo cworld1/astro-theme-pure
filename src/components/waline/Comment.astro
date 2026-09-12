@@ -113,6 +113,54 @@ const { class: className } = Astro.props
     display: inline-block;
   }
 
+  /* Keep Waline's feed links visible without the default hover expansion. */
+  #waline :global(.wl-rss) {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.875rem;
+    max-width: none;
+    overflow: visible;
+    transition: none;
+  }
+
+  #waline :global(.wl-rss > a) {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.25rem;
+    max-width: none;
+    color: var(--waline-light-grey);
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  #waline :global(.wl-rss > a:hover) {
+    color: var(--waline-theme-color);
+  }
+
+  #waline :global(.wl-rss > a > svg) {
+    display: none;
+  }
+
+  #waline :global(.wl-rss > a::before) {
+    content: '';
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M5.5 17a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3m0-14C14.06 3 21 9.94 21 18.5q0 .268-.009.534a1 1 0 0 1-1.999-.068Q19 18.734 19 18.5C19 11.044 12.956 5 5.5 5q-.234 0-.466.008a1 1 0 0 1-.068-1.999Q5.231 3 5.5 3m0 7a8.5 8.5 0 0 1 8.482 9.066 1 1 0 0 1-1.996-.132 6.5 6.5 0 0 0-6.92-6.92 1 1 0 1 1-.132-1.995Q5.214 10 5.5 10'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M5.5 17a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3m0-14C14.06 3 21 9.94 21 18.5q0 .268-.009.534a1 1 0 0 1-1.999-.068Q19 18.734 19 18.5C19 11.044 12.956 5 5.5 5q-.234 0-.466.008a1 1 0 0 1-.068-1.999Q5.231 3 5.5 3m0 7a8.5 8.5 0 0 1 8.482 9.066 1 1 0 0 1-1.996-.132 6.5 6.5 0 0 1-6.92-6.92 1 1 0 1 1-.132-1.995Q5.214 10 5.5 10'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+
+  #waline :global(.wl-rss span) {
+    color: inherit;
+    font-size: 0.75rem;
+    line-height: 1.25;
+    text-align: start;
+  }
+
   /* Reaction buttons */
   #waline :global(.wl-reaction-title, .wl-reaction-text) {
     display: none;
