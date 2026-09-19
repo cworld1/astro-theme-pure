@@ -1,5 +1,3 @@
-import { spawn } from 'node:child_process'
-import { dirname, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 // Astro
 import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
@@ -9,6 +7,7 @@ import sitemap from '@astrojs/sitemap'
 import UnoCSS from '@unocss/astro'
 import { AstroError } from 'astro/errors'
 
+import * as pagefind from 'pagefind'
 import rehypeExternalLinks from './plugins/rehype-external-links'
 import rehypeImageCaption from './plugins/rehype-image-caption'
 import { remarkAddZoomable, remarkReadingTime } from './plugins/remark-plugins'
@@ -95,18 +94,28 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         })
       },
 
-      'astro:build:done': ({ dir }) => {
+      'astro:build:done': async ({ dir }) => {
         if (!opts.integ.pagefind) return
-        const targetDir = fileURLToPath(dir)
-        const cwd = dirname(fileURLToPath(import.meta.url))
-        const relativeDir = relative(cwd, targetDir)
-        return new Promise<void>((resolve) => {
-          spawn('npx', ['-y', 'pagefind', '--site', relativeDir], {
-            stdio: 'inherit',
-            shell: true,
-            cwd
-          }).on('close', () => resolve())
-        })
+
+        try {
+          const targetDir = fileURLToPath(dir)
+
+          const { index } = await pagefind.createIndex()
+
+          if (!index) {
+            throw new Error('Failed to create Pagefind index')
+          }
+
+          await index.addDirectory({
+            path: targetDir
+          })
+
+          await index.writeFiles({
+            outputPath: fileURLToPath(new URL('./pagefind/', dir))
+          })
+        } finally {
+          await pagefind.close()
+        }
       }
     }
   }
