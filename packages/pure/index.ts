@@ -64,11 +64,6 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         // Add image caption support
         if (userConfig.content.imageCaption) rehypePlugins.push(rehypeImageCaption)
 
-        // Add Starlight directives restoration integration at the end of the list so that remark
-        // plugins injected by Starlight plugins through Astro integrations can handle text and
-        // leaf directives before they are transformed back to their original form.
-        // integrations.push(starlightDirectivesRestorationIntegration())
-
         // Add integrations immediately after Starlight in the config array.
         // This ensures users can add integrations before/after Starlight and we respect that order.
         const selfIndex = config.integrations.findIndex((i) => i.name === 'astro-pure')
@@ -76,7 +71,6 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
 
         updateConfig({
           vite: {
-            // biome-ignore lint/suspicious/noTsIgnore: expects error for local, but expects no error when build
             // @ts-ignore
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
@@ -95,21 +89,19 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
       },
 
       'astro:build:done': async ({ dir }) => {
+        // Pagefind index hook
         if (!opts.integ.pagefind) return
-
         try {
           const targetDir = fileURLToPath(dir)
-
+          
+          // Create index
           const { index } = await pagefind.createIndex()
-
           if (!index) {
             throw new Error('Failed to create Pagefind index')
           }
 
-          await index.addDirectory({
-            path: targetDir
-          })
-
+          // Write index files to the `./pagefind/`
+          await index.addDirectory({ path: targetDir })
           await index.writeFiles({
             outputPath: fileURLToPath(new URL('./pagefind/', dir))
           })
