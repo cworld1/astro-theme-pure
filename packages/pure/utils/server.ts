@@ -5,9 +5,17 @@ type Collections = CollectionEntry<CollectionKey>[]
 export const prod = import.meta.env.PROD
 
 /** Note: this function filters out draft posts based on the environment */
-export async function getBlogCollection(contentType: CollectionKey = 'blog') {
-  return await getCollection(contentType, ({ data }: CollectionEntry<typeof contentType>) => {
-    // Not in production & draft is not false
+export async function getBlogCollection(): Promise<CollectionEntry<'blog'>[]>
+export async function getBlogCollection(
+  contentType: 'blog'
+): Promise<CollectionEntry<'blog'>[]>
+export async function getBlogCollection(
+  contentType: 'docs'
+): Promise<CollectionEntry<'docs'>[]>
+export async function getBlogCollection(
+  contentType: 'blog' | 'docs' = 'blog'
+) {
+  return getCollection(contentType, ({ data }) => {
     return prod ? !data.draft : true
   })
 }
@@ -18,26 +26,31 @@ function getYearFromCollection<T extends CollectionKey>(
   const dateStr = collection.data.updatedDate ?? collection.data.publishDate
   return dateStr ? new Date(dateStr).getFullYear() : undefined
 }
-export function groupCollectionsByYear<T extends CollectionKey>(
-  collections: Collections
-): [number, CollectionEntry<T>[]][] {
-  const collectionsByYear = collections.reduce((acc, collection) => {
-    const year = getYearFromCollection(collection)
-    if (year !== undefined) {
-      if (!acc.has(year)) {
-        acc.set(year, [])
-      }
-      acc.get(year)?.push(collection)
-    }
-    return acc
-  }, new Map<number, Collections>())
+export function groupCollectionsByYear<T extends CollectionEntry<CollectionKey>>(
+  collections: T[]
+): [number, T[]][] {
+  const collectionsByYear = collections.reduce(
+    (acc, collection) => {
+      const year = getYearFromCollection(collection)
 
-  return Array.from(
-    collectionsByYear.entries() as IterableIterator<[number, CollectionEntry<T>[]]>
-  ).sort((a, b) => b[0] - a[0])
+      if (year !== undefined) {
+        if (!acc.has(year)) {
+          acc.set(year, [])
+        }
+        acc.get(year)?.push(collection)
+      }
+
+      return acc
+    },
+    new Map<number, T[]>()
+  )
+
+  return Array.from(collectionsByYear.entries()).sort((a, b) => b[0] - a[0])
 }
 
-export function sortMDByDate(collections: Collections): Collections {
+export function sortMDByDate<T extends CollectionEntry<CollectionKey>>(
+  collections: T[]
+): T[] {
   return collections.sort((a, b) => {
     const aDate = new Date(a.data.updatedDate ?? a.data.publishDate ?? 0).valueOf()
     const bDate = new Date(b.data.updatedDate ?? b.data.publishDate ?? 0).valueOf()

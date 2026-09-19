@@ -3,6 +3,8 @@ import { dirname, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 // Astro
 import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
+// Markdown
+import { isUnifiedProcessor, unified } from '@astrojs/markdown-remark'
 // Integrations
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
@@ -75,6 +77,29 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         const selfIndex = config.integrations.findIndex((i) => i.name === 'astro-pure')
         config.integrations.splice(selfIndex + 1, 0, ...integrations)
 
+        // Astro 7 uses Sätteri as the default Markdown processor, which doesn't run remark/rehype
+        // plugins. This integration relies on Unified plugins for features such as reading time,
+        // zoomable images, external links, and image captions.
+        //
+        // Preserve an existing Unified processor and append the configured plugins. Otherwise, create
+        // a new Unified processor with the configured plugins.
+        const processor = isUnifiedProcessor(config.markdown.processor)
+          ? unified({
+              ...config.markdown.processor.options,
+              remarkPlugins: [
+                ...config.markdown.processor.options.remarkPlugins,
+                ...remarkPlugins
+              ],
+              rehypePlugins: [
+                ...config.markdown.processor.options.rehypePlugins,
+                ...rehypePlugins
+              ]
+            })
+          : unified({
+              remarkPlugins,
+              rehypePlugins
+            })
+
         updateConfig({
           vite: {
             // biome-ignore lint/suspicious/noTsIgnore: expects error for local, but expects no error when build
@@ -82,12 +107,7 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
           markdown: {
-            remarkPlugins,
-            rehypePlugins
-            // rehypePlugins: [rehypeRtlCodeSupport()],
-            // shikiConfig:
-            // Configure Shiki theme if the user is using the default github-dark theme.
-            //   config.markdown.shikiConfig.theme !== 'github-dark' ? {} : { theme: 'css-variables' }
+            processor
           },
           scopedStyleStrategy: 'where',
           // If not already configured, default to prefetching all links on hover.

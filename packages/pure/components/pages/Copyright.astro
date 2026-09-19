@@ -1,5 +1,5 @@
 ---
-import type { CollectionKey, InferEntrySchema } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
 import config from 'virtual:config'
 
@@ -7,8 +7,8 @@ import { cn, getFormattedDate } from '../../utils'
 import { QRCode } from '../advanced'
 import { Icon } from '../user'
 
-interface Props<T extends CollectionKey> {
-  data: InferEntrySchema<T>
+interface Props {
+  data: CollectionEntry<'blog'>['data']
   class?: string
 }
 

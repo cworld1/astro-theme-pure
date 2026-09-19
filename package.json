@@ -2,6 +2,9 @@
   "name": "astro-theme-pure",
   "type": "module",
   "version": "4.1.6",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
@@ -18,25 +21,34 @@
     "cache:avatars": "tsx preset/scripts/cacheAvatars.ts"
   },
   "dependencies": {
-    "@astrojs/check": "0.9.9",
-    "@astrojs/compiler-rs": "^0.1.10",
-    "@astrojs/rss": "4.0.18",
-    "@astrojs/vercel": "10.0.6",
-    "@waline/client": "^3.13.0",
-    "astro": "6.2.1",
-    "astro-pure": "1.4.7",
-    "katex": "^0.16.45",
+    "@astrojs/markdown-remark": "7.3.1",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/vercel": "11.0.10",
+    "@waline/client": "^3.15.2",
+    "astro": "7.3.3",
+    "astro-pure": "file:packages/pure",
+    "katex": "^0.18.7",
     "rehype-katex": "^7.0.1",
+    "rehype-stringify": "^10.0.1",
     "remark-math": "^6.0.0",
-    "sharp": "^0.34.5",
-    "typescript": "^6.0.3"
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "sharp": "^0.35.4",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.10",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@typescript-eslint/parser": "^8.59.1",
-    "eslint": "^10.2.1",
-    "eslint-plugin-astro": "^1.7.0",
-    "prettier": "^3.8.3",
-    "prettier-plugin-astro": "^0.14.1"
+    "@types/hast": "3.0.5",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^22.20.3",
+    "@typescript-eslint/parser": "^8.70.0",
+    "eslint": "^10.10.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "hastscript": "^9.0.1",
+    "prettier": "^3.9.7",
+    "prettier-plugin-astro": "^1.0.1",
+    "typescript": "^6.0.3"
   }
 }
