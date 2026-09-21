@@ -78,20 +78,32 @@ const editPath = `https://github.com/cworld1/astro-theme-pure/edit/main/${post.f
 
 <style>
   @media (min-width: 1300px) {
-    :global(
-      main, .bottom { transform: translateX(7.9rem); }
-      #sidebar { overflow: inherit; }
-      toc-heading { height: 100%; display: flex; flex-direction: column; }
-      toc-heading > ul { overflow-y: scroll; }
-    )
-    .docs-toc {
-      position: fixed;
-      top: 0;
-      left: -64rem;
-      margin-top: 0;
-      max-height: calc(100vh - 7rem);
-      overflow-y: scroll;
-      padding-right: 1rem !important;
-    }
+  :global(main, .bottom) {
+    transform: translateX(7.9rem);
   }
+
+  :global(#sidebar) {
+    overflow: inherit;
+  }
+
+  :global(toc-heading) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(toc-heading > ul) {
+    overflow-y: scroll;
+  }
+
+  .docs-toc {
+    position: fixed;
+    top: 0;
+    left: -64rem;
+    margin-top: 0;
+    max-height: calc(100vh - 7rem);
+    overflow-y: scroll;
+    padding-right: 1rem !important;
+  }
+}
 </style>

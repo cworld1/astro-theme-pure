@@ -19,9 +19,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
             <div>
               {footerLink1.map(({ title, link, style }, index) => (
                 <>
-                  <a href={link} target='_blank' class={style}>
-                    {title}
-                  </a>
+                  <a href={link} target='_blank' class={style}>{title}</a>
                   {index < footerLink1.length - 1 && <span class='mx-1'>•</span>}
                 </>
               ))}
@@ -29,8 +27,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
           )
         }
         {/* Position 2 */}
-        <div>
-          {config.footer.year}
+        <div>{config.footer.year}
           {config.author}
           {
             footerConf.links && footerConf.links.length > 0 && (
@@ -41,9 +38,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                     .filter(({ pos }) => pos === 2)
                     .map(({ title, link, style }) => (
                       <span>
-                        <a href={link} target='_blank' class={style}>
-                          {title}
-                        </a>
+                        <a href={link} target='_blank' class={style}>{title}</a>
                       </span>
                     ))}
                 </span>
@@ -54,13 +49,9 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         {
           footerConf.credits && (
             <span>
-              <a href='https://github.com/withastro/astro' target='_blank'>
-                Astro
-              </a>
+              <a href='https://github.com/withastro/astro' target='_blank'>Astro</a>
               &
-              <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>
-                Pure
-              </a>
+              <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>Pure</a>
               theme powered
             </span>
           )

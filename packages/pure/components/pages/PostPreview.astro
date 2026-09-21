@@ -1,12 +1,12 @@
 ---
 import { Image } from 'astro:assets'
-import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
+import { type CollectionEntry, render } from 'astro:content'
 
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
 
-type Props<T extends CollectionKey> = {
-  post: CollectionEntry<T>
+type Props = {
+  post: CollectionEntry<'blog'>
   detailed?: boolean
   class?: string
 }
@@ -47,11 +47,11 @@ const postDate = data.updatedDate ?? data.publishDate
       class={cn('relative flex flex-col gap-1', !detailed && 'sm:flex-row sm:items-center')}
       style='z-index:1'
     >
-      <FormattedDate class='min-w-[95px] text-xs' date={postDate} />
+      <FormattedDate class='min-w-[95px] text-xs' date={postDate!} />
 
       {/* title */}
       <div class='flex justify-between flex-grow'>
-        <div class={detailed && 'font-medium'}>
+        <div class={cn(detailed && 'font-medium')}>
           {data.draft && <span class='text-red-500'>(Draft) </span>}
           {data.title}
         </div>
