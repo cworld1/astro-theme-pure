@@ -1,5 +1,3 @@
-import { spawn } from 'node:child_process'
-import { dirname, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 // Astro
 import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
@@ -11,6 +9,7 @@ import sitemap from '@astrojs/sitemap'
 import UnoCSS from '@unocss/astro'
 import { AstroError } from 'astro/errors'
 
+import * as pagefind from 'pagefind'
 import rehypeExternalLinks from './plugins/rehype-external-links'
 import rehypeImageCaption from './plugins/rehype-image-caption'
 import { remarkAddZoomable, remarkReadingTime } from './plugins/remark-plugins'
@@ -67,11 +66,6 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         // Add image caption support
         if (userConfig.content.imageCaption) rehypePlugins.push(rehypeImageCaption)
 
-        // Add Starlight directives restoration integration at the end of the list so that remark
-        // plugins injected by Starlight plugins through Astro integrations can handle text and
-        // leaf directives before they are transformed back to their original form.
-        // integrations.push(starlightDirectivesRestorationIntegration())
-
         // Add integrations immediately after Starlight in the config array.
         // This ensures users can add integrations before/after Starlight and we respect that order.
         const selfIndex = config.integrations.findIndex((i) => i.name === 'astro-pure')
@@ -102,7 +96,6 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
 
         updateConfig({
           vite: {
-            // biome-ignore lint/suspicious/noTsIgnore: expects error for local, but expects no error when build
             // @ts-ignore
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
@@ -115,18 +108,26 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         })
       },
 
-      'astro:build:done': ({ dir }) => {
+      'astro:build:done': async ({ dir }) => {
+        // Pagefind index hook
         if (!opts.integ.pagefind) return
-        const targetDir = fileURLToPath(dir)
-        const cwd = dirname(fileURLToPath(import.meta.url))
-        const relativeDir = relative(cwd, targetDir)
-        return new Promise<void>((resolve) => {
-          spawn('npx', ['-y', 'pagefind', '--site', relativeDir], {
-            stdio: 'inherit',
-            shell: true,
-            cwd
-          }).on('close', () => resolve())
-        })
+        try {
+          const targetDir = fileURLToPath(dir)
+          
+          // Create index
+          const { index } = await pagefind.createIndex()
+          if (!index) {
+            throw new Error('Failed to create Pagefind index')
+          }
+
+          // Write index files to the `./pagefind/`
+          await index.addDirectory({ path: targetDir })
+          await index.writeFiles({
+            outputPath: fileURLToPath(new URL('./pagefind/', dir))
+          })
+        } finally {
+          await pagefind.close()
+        }
       }
     }
   }
