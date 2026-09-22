@@ -51,11 +51,11 @@ const getAvatarSrc = (friend: Friend) =>
               {/* avatar */}
               <div class='relative h-14 w-14 min-w-14 overflow-hidden rounded-full'>
                 <Image
-                  class='my-0 bg-card'
+                  class='my-0 bg-card flex items-center justify-center'
                   src={getAvatarSrc(frd)}
                   height={80}
                   width={80}
-                  alt='avatar'
+                  alt='Avatar'
                   loading='lazy'
                 />
                 <div class='absolute start-0 top-0 h-full w-full'>
@@ -98,7 +98,7 @@ const getAvatarSrc = (friend: Friend) =>
               src={getAvatarSrc(frd)}
               height={80}
               width={80}
-              alt='avatar bg'
+              alt='Avatar background'
               loading='lazy'
               style={{
                 msMaskImage:
