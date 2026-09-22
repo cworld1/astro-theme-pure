@@ -25,6 +25,7 @@
       "@/types": ["./src/types/index.ts"],
       "@/site-config": ["./src/site.config.ts"]
     }
+    // https://docs.astro.build/en/guides/typescript/#typescript-editor-plugin
   },
   "exclude": ["./node_modules", "./**/node_modules/*", "./.vscode", "./dist", "./public/scripts/*", "./test/*"]
 }
