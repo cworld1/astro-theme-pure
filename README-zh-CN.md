@@ -69,6 +69,7 @@
 ### 获取代码与配置
 
 1. 克隆仓库并进入目录：
+
    ```shell
    git clone https://github.com/cworld1/astro-theme-pure.git
    cd astro-theme-pure
@@ -77,12 +78,14 @@
    编辑 `src/site.config.ts` 以个性化站点。
 
 2. 安装依赖：
+
    ```shell
    # 安装项目依赖
    bun install
    ```
 
 3. 启动开发服务器：
+
    ```shell
    bun dev
    # 或
@@ -92,7 +95,7 @@
    # 或
    npm run dev
    ```
-   
+
    开发服务器默认运行在 <http://localhost:4321>。
 
 ### 创建新的博客文章
@@ -128,8 +131,8 @@ bun preview
 - 参考官方 [Astro 部署指南](https://docs.astro.build/zh-cn/guides/deploy/) 了解具体的部署方式。
 - 根据所选择的部署平台，你可能需要修改项目中的 `astro.config.ts` 配置文件。
 
-| Vercel | Netlify |
-| :---: | :---: |
+|                                                                       Vercel                                                                        |                                                                             Netlify                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![使用 Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcworld1%2Fastro-theme-pure) | [![部署到 Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cworld1/astro-theme-pure) |
 
 ## 贡献

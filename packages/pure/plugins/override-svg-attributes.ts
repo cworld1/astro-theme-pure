@@ -1,6 +1,6 @@
 /// <reference types="astro/astro-jsx" />
 
-import { type DocumentNode, type Node, parse, render } from 'ultrahtml'
+import { parse, render, type DocumentNode, type Node } from 'ultrahtml'
 
 export type SVGAttributes = Omit<
   astroHTML.JSX.SVGAttributes,

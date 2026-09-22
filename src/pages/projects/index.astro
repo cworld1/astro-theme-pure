@@ -23,7 +23,8 @@ const headings = [
   {/* About astro-pure */}
   <div class='not-prose flex justify-center'>
     <a
-      href='/docs/advanced/about' target='_blank'
+      href='/docs/advanced/about'
+      target='_blank'
       class='flex items-center gap-x-3 rounded-full border bg-background px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
     >
       <span class='size-2 rounded-full bg-green-400'></span>
@@ -147,18 +148,24 @@ const headings = [
   </Button>
 
   <h2 id='sponsorship'>Sponsorship</h2>
-  <p>Chinese methods: <a href="https://afdian.com/a/cworld" target="_blank">Afadian</a>, Wechat or Alipay </p>
+  <p>
+    Chinese methods: <a href='https://afdian.com/a/cworld' target='_blank'>Afadian</a>, Wechat or
+    Alipay
+  </p>
   <Sponsorship
     methods={[
       { name: 'WeChat', icon: 'wechat-pay', image: wechat },
       { name: 'Alipay', icon: 'alipay', image: alipay }
     ]}
   />
-  <p>Global methods: <a href="https://ko-fi.com/cworld0" target="_blank">Ko-fi</a> </p>
-  <p>Please leave a message or contact me proactively after sponsorship. My email is:
-    <code style='cursor: pointer'
+  <p>Global methods: <a href='https://ko-fi.com/cworld0' target='_blank'>Ko-fi</a></p>
+  <p>
+    Please leave a message or contact me proactively after sponsorship. My email is:
+    <code
+      style='cursor: pointer'
       onclick='const m=atob(this.textContent);alert(m);window.open(`mailto:${m}`,"_blank")'
-    >Y3dvcmxkMEBxcS5jb20=</code>
+      >Y3dvcmxkMEBxcS5jb20=</code
+    >
     (click code to transform base64).
   </p>
   <p>Thanks to the following sponsors:</p>

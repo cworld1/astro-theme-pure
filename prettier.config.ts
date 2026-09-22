@@ -41,6 +41,7 @@ export default {
     '^@/plugins/(.*)$',
     '^@/assets/(.*)$',
     '^@/site-config$',
+    '^virtual:(.*)$',
     '',
     '^[./]'
   ],

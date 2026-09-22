@@ -1,5 +1,6 @@
 // https://github.com/shikijs/shiki/blob/main/packages/transformers/src/transformers/notation-map.ts
 import type { ShikiTransformer } from '@shikijs/types'
+
 import type { MatchAlgorithmOptions } from './shared-notation-transformer'
 import { createCommentNotationTransformer } from './shared-notation-transformer'
 
@@ -23,17 +24,16 @@ function escapeRegExp(str: string): string {
 
 export function transformerNotationMap(
   options: TransformerNotationMapOptions = {},
-  name = '@shikijs/transformers:notation-map',
+  name = '@shikijs/transformers:notation-map'
 ): ShikiTransformer {
-  const {
-    classMap = {},
-    classActivePre = undefined,
-    classActiveCode = undefined,
-  } = options
+  const { classMap = {}, classActivePre = undefined, classActiveCode = undefined } = options
 
   return createCommentNotationTransformer(
     name,
-    new RegExp(`#?\\s*\\[!code (${Object.keys(classMap).map(escapeRegExp).join('|')})(:\\d+)?\\]`, 'gi'),
+    new RegExp(
+      `#?\\s*\\[!code (${Object.keys(classMap).map(escapeRegExp).join('|')})(:\\d+)?\\]`,
+      'gi'
+    ),
     function ([_, match, range = ':1'], _line, _comment, lines, index) {
       const lineNum = Number.parseInt(range.slice(1), 10)
 
@@ -41,12 +41,10 @@ export function transformerNotationMap(
         this.addClassToHast(lines[i], classMap[match])
       }
 
-      if (classActivePre)
-        this.addClassToHast(this.pre, classActivePre)
-      if (classActiveCode)
-        this.addClassToHast(this.code, classActiveCode)
+      if (classActivePre) this.addClassToHast(this.pre, classActivePre)
+      if (classActiveCode) this.addClassToHast(this.code, classActiveCode)
       return true
     },
-    options.matchAlgorithm,
+    options.matchAlgorithm
   )
 }

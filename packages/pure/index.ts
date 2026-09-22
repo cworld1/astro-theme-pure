@@ -6,8 +6,8 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import UnoCSS from '@unocss/astro'
 import { AstroError } from 'astro/errors'
-
 import * as pagefind from 'pagefind'
+
 import rehypeExternalLinks from './plugins/rehype-external-links'
 import rehypeImageCaption from './plugins/rehype-image-caption'
 import { remarkAddZoomable, remarkReadingTime } from './plugins/remark-plugins'
@@ -93,7 +93,7 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         if (!opts.integ.pagefind) return
         try {
           const targetDir = fileURLToPath(dir)
-          
+
           // Create index
           const { index } = await pagefind.createIndex()
           if (!index) {

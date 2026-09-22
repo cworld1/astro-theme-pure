@@ -7,8 +7,10 @@ order: 2
 import { Aside } from 'astro-pure/user'
 
 Astro Theme Pure provides Docker Compose workflows for development, building, previewing and content creation in an isolated Bun container. This allows you to perform these workflows inside Docker without installing Bun or its dependencies or running the tooling directly on your host.
+
 <Aside type='tip'>
-To build using Docker manually, please refer to [Astro: Build your Astro site with Docker](https://docs.astro.build/en/recipes/docker/).
+  To build using Docker manually, please refer to [Astro: Build your Astro site with
+  Docker](https://docs.astro.build/en/recipes/docker/).
 </Aside>
 
 ## Requirements
@@ -44,12 +46,12 @@ All services reuse the same image and only start when the corresponding profile 
 
 Each workflow is exposed through a Docker Compose profile. Select the profile corresponding to the task you want to perform:
 
-| Profile | What it does |
-| --- | --- |
-| `build` | Runs `astro build` inside the container and copies the output into your local `./dist` directory. |
-| `dev` | Starts the Astro dev server at http://localhost:4321 with your source files bind-mounted, so edits are picked up immediately without rebuilding the image. |
-| `preview` |  Runs the `build` profile first, then serves the production build with `astro preview` at http://localhost:4321 once the build finishes. |
-| `new` | Runs `astro-pure new` to scaffold a new article, without leaving a container running afterwards. |
+| Profile   | What it does                                                                                                                                               |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build`   | Runs `astro build` inside the container and copies the output into your local `./dist` directory.                                                          |
+| `dev`     | Starts the Astro dev server at http://localhost:4321 with your source files bind-mounted, so edits are picked up immediately without rebuilding the image. |
+| `preview` | Runs the `build` profile first, then serves the production build with `astro preview` at http://localhost:4321 once the build finishes.                    |
+| `new`     | Runs `astro-pure new` to scaffold a new article, without leaving a container running afterwards.                                                           |
 
 ## Building for production
 
@@ -89,8 +91,10 @@ Example:
 ```shell
 docker compose --profile dev up --build
 ```
+
 <Aside type='tip'>
-Running `--build` again does not necessarily rebuild every layer from scratch. Docker reuses cached layers when possible, so unchanged dependencies and other build steps can still be cached.
+  Running `--build` again does not necessarily rebuild every layer from scratch. Docker reuses
+  cached layers when possible, so unchanged dependencies and other build steps can still be cached.
 </Aside>
 
 ## Development
