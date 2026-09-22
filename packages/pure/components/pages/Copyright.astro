@@ -12,10 +12,9 @@ interface Props<T extends CollectionKey> {
   class?: string
 }
 
-const {
-  data: { heroImage, title, publishDate },
-  class: className
-} = Astro.props
+const { data, class: className } = Astro.props
+const { title, publishDate } = data
+const heroImage = 'heroImage' in data ? data.heroImage : undefined
 
 const image = typeof heroImage?.src === 'string' ? heroImage?.src : (heroImage?.src?.src ?? '')
 

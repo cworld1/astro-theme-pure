@@ -5,7 +5,9 @@ type Collections = CollectionEntry<CollectionKey>[]
 export const prod = import.meta.env.PROD
 
 /** Note: this function filters out draft posts based on the environment */
-export async function getBlogCollection(contentType: CollectionKey = 'blog') {
+export async function getBlogCollection<T extends CollectionKey = 'blog'>(
+  contentType: T = 'blog' as T
+) {
   return await getCollection(contentType, ({ data }: CollectionEntry<typeof contentType>) => {
     // Not in production & draft is not false
     return prod ? !data.draft : true
@@ -19,7 +21,7 @@ function getYearFromCollection<T extends CollectionKey>(
   return dateStr ? new Date(dateStr).getFullYear() : undefined
 }
 export function groupCollectionsByYear<T extends CollectionKey>(
-  collections: Collections
+  collections: CollectionEntry<T>[]
 ): [number, CollectionEntry<T>[]][] {
   const collectionsByYear = collections.reduce((acc, collection) => {
     const year = getYearFromCollection(collection)
@@ -30,17 +32,19 @@ export function groupCollectionsByYear<T extends CollectionKey>(
       acc.get(year)?.push(collection)
     }
     return acc
-  }, new Map<number, Collections>())
+  }, new Map<number, CollectionEntry<T>[]>())
 
   return Array.from(
     collectionsByYear.entries() as IterableIterator<[number, CollectionEntry<T>[]]>
   ).sort((a, b) => b[0] - a[0])
 }
 
-export function sortMDByDate(collections: Collections): Collections {
+export function sortMDByDate<T extends CollectionKey>(
+  collections: CollectionEntry<T>[]
+): CollectionEntry<T>[] {
   return collections.sort((a, b) => {
-    const aPin = a.data.pin === true
-    const bPin = b.data.pin === true
+    const aPin = 'pin' in a.data && a.data.pin === true
+    const bPin = 'pin' in b.data && b.data.pin === true
     if (aPin !== bPin) {
       return Number(bPin) - Number(aPin)
     }

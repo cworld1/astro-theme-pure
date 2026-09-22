@@ -1,4 +1,5 @@
 ---
+import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 
@@ -15,31 +16,44 @@ const { post, detailed = false, class: className } = Astro.props
 const { id, data } = post
 const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.updatedDate ?? data.publishDate
+type PreviewMetadata = {
+  heroImage?: {
+    src: ImageMetadata
+    alt?: string
+    inferSize?: boolean
+    width?: number
+    height?: number
+    color?: string
+  }
+  language?: string
+  pin?: boolean
+}
+const previewData = data as typeof data & Partial<PreviewMetadata>
 ---
 
 <li
   class={cn('post-preview', className)}
   style={detailed &&
-    data.heroImage?.color &&
-    `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
-    --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
+    previewData.heroImage?.color &&
+    `--preview-highlight:color-mix(in srgb,${previewData.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
+    --preview-highlight-bg:hsl(from ${previewData.heroImage.color} h s l/20%)`}
 >
   <a
     class={cn(
       'block w-full relative group rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted hover:text-primary',
       detailed && 'max-sm:px-4 sm:py-5',
-      detailed && data.heroImage && 'max-md:pt-24'
+      detailed && previewData.heroImage && 'max-md:pt-24'
     )}
     href={`/blog/${id}`}
     data-astro-prefetch
   >
     {
-      detailed && data.heroImage && (
+      detailed && previewData.heroImage && (
         <Image
-          alt={data.heroImage.alt || data.title}
+          alt={previewData.heroImage.alt || data.title}
           class='cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover:opacity-70 md:h-full md:w-3/5'
           loading='eager'
-          {...data.heroImage}
+          {...previewData.heroImage}
         />
       )
     }
@@ -47,12 +61,12 @@ const postDate = data.updatedDate ?? data.publishDate
       class={cn('relative flex flex-col gap-1', !detailed && 'sm:flex-row sm:items-center')}
       style='z-index:1'
     >
-      <FormattedDate class='min-w-[95px] text-xs' date={postDate} />
+      {postDate && <FormattedDate class='min-w-[95px] text-xs' date={postDate} />}
 
       {/* title */}
       <div class='flex justify-between flex-grow'>
-        <div class={detailed && 'font-medium'}>
-          {data.pin && <span class='text-primary me-1'>[Pin]</span>}
+        <div class={cn(detailed && 'font-medium')}>
+          {previewData.pin && <span class='text-primary me-1'>[Pin]</span>}
           {data.draft && <span class='text-red-500 me-1'>(Draft)</span>}
           {data.title}
         </div>
@@ -85,7 +99,7 @@ const postDate = data.updatedDate ?? data.publishDate
             <p
               class={cn(
                 'line-clamp-2 text-sm text-muted-foreground sm:line-clamp-3',
-                data.heroImage && 'sm:me-24'
+                previewData.heroImage && 'sm:me-24'
               )}
             >
               {data.description}
@@ -97,10 +111,10 @@ const postDate = data.updatedDate ?? data.publishDate
                 {remarkPluginFrontmatter.minutesRead}
               </span>
               {/* language */}
-              {data.language && (
+              {previewData.language && (
                 <span class='flex items-center gap-1'>
                   <Icon name='earth' class='size-4' />
-                  {data.language}
+                  {previewData.language}
                 </span>
               )}
             </div>
