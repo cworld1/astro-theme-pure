@@ -173,13 +173,13 @@ export const integ: IntegrationUserConfig = {
     // Refer https://waline.js.org/en/reference/client/props.html
     additionalConfigs: {
       // search: false,
-      pageview: true,
-      comment: true,
       locale: {
-        reaction0: 'Like',
-        placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'
-      },
-      imageUploader: false
+        nick: 'Name',
+        mail: 'Email',
+        login: 'Login (Optional)',
+        placeholder: 'Comment here... (Email to receive replies)',
+        reaction0: 'Like'
+      }
     }
   }
 }

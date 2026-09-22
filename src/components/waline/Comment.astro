@@ -26,8 +26,21 @@ const { class: className } = Astro.props
   const walineConfig = config.integ.waline
 
   class Comment extends HTMLElement {
-    constructor() {
-      super()
+    private initialized = false
+
+    private initWaline() {
+      if (this.initialized) return
+      this.initialized = true
+      const emoji = walineConfig.emoji?.map(
+        (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
+      )
+      walineInit({
+        el: 'comment-component #waline',
+        serverURL: walineConfig.server || '',
+        emoji,
+        reaction: ['/icons/heart-item.svg'],
+        ...walineConfig.additionalConfigs,
+      })
     }
 
     connectedCallback() {
@@ -38,17 +51,23 @@ const { class: className } = Astro.props
         globalThis as unknown as { __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: boolean }
       ).__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
 
-      const emoji = walineConfig.emoji?.map(
-        (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
-      )
+      const container = this.querySelector('#waline')
+      if (!container) return
 
-      walineInit({
-        el: 'comment-component #waline',
-        serverURL: walineConfig.server || '',
-        emoji,
-        reaction: ['/icons/heart-item.svg'],
-        ...walineConfig.additionalConfigs
-      })
+      if (typeof IntersectionObserver === 'undefined') {
+        setTimeout(() => this.initWaline(), 800)
+        return
+      }
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect()
+            this.initWaline()
+          }
+        },
+        { rootMargin: '200px' }
+      )
+      observer.observe(container)
     }
   }
 
