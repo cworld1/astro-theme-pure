@@ -24,7 +24,7 @@
     "@astrojs/vercel": "10.0.6",
     "@waline/client": "^3.15.2",
     "astro": "6.2.1",
-    "astro-pure": "1.4.7",
+    "astro-pure": "1.4.8",
     "katex": "^0.16.47",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",

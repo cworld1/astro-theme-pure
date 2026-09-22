@@ -2,7 +2,7 @@
   "name": "astro-pure",
   "type": "module",
   "description": "A simple, clean but powerful blog theme build by astro.",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "homepage": "https://astro-pure.js.org/",
   "author": "CWorld",
   "license": "Apache-2.0",
@@ -40,12 +40,12 @@
     "@astrojs/mdx": "5.0.4",
     "@astrojs/sitemap": "3.7.2",
     "@pagefind/default-ui": "^1.5.2",
-    "@unocss/astro": "^66.6.8",
-    "@unocss/reset": "^66.6.8",
+    "@unocss/astro": "^66.10.5",
+    "@unocss/reset": "^66.10.5",
     "astro": "6.2.1",
     "hast-util-select": "^6.0.4",
     "node-html-parser": "^7.1.0",
     "pagefind": "^1.5.2",
-    "unocss": "^66.6.8"
+    "unocss": "^66.10.5"
   }
 }
