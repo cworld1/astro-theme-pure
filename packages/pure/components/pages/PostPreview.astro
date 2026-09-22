@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
+import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
@@ -52,7 +52,8 @@ const postDate = data.updatedDate ?? data.publishDate
       {/* title */}
       <div class='flex justify-between flex-grow'>
         <div class={detailed && 'font-medium'}>
-          {data.draft && <span class='text-red-500'>(Draft) </span>}
+          {data.pin && <span class='text-primary me-1'>[Pin]</span>}
+          {data.draft && <span class='text-red-500 me-1'>(Draft)</span>}
           {data.title}
         </div>
         <svg
@@ -122,13 +123,18 @@ const postDate = data.updatedDate ?? data.publishDate
 
   <style>
     .post-preview {
-      --preview-highlight-final: var( --preview-highlight, hsl(var(--primary) / var(--un-text-opacity, 1))
+      --preview-highlight-final: var(
+        --preview-highlight,
+        hsl(var(--primary) / var(--un-text-opacity, 1))
       );
     }
     .post-preview:hover {
       & > a,
       & .tag-list a {
-        background-color: var( --preview-highlight-bg, hsl(var(--muted) / var(--un-bg-opacity, 1))) !important;
+        background-color: var(
+          --preview-highlight-bg,
+          hsl(var(--muted) / var(--un-bg-opacity, 1))
+        ) !important;
       }
       & > a,
       & .tag-list a:hover {
@@ -146,7 +152,11 @@ const postDate = data.updatedDate ?? data.publishDate
 
     @media (max-width: 768px) {
       .cover-image {
-        -webkit-mask-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+        -webkit-mask-image: -webkit-linear-gradient(
+          bottom,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
         -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
         mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
       }
