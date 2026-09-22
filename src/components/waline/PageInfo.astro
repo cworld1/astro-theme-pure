@@ -1,19 +1,25 @@
 ---
+// https://waline.js.org/en/guide/features/pageview.html#use-alone
 import { cn } from 'astro-pure/utils'
-import Pageview from '@/components/waline/Pageview.astro'
+import config from '@/site-config'
 
 interface Props {
-  view?: boolean
   comment?: boolean
   class?: string
 }
 
-const { view, comment, class: className, ...props } = Astro.props
+const { comment, class: className, ...props } = Astro.props
 
 const path = Astro.url.pathname
 ---
 
-<div class={cn('text-base text-sm text-muted-foreground', className)} {...props}>
+<div
+  class={cn('text-base text-sm text-muted-foreground', className)}
+  id='walinePageInfo'
+  data-server-url={config.integ.waline.server}
+  data-comment={comment ? 'true' : 'false'}
+  {...props}
+>
   <span class='waline-pageview-count' data-path={path}></span> views
   {
     comment && (
@@ -27,4 +33,45 @@ const path = Astro.url.pathname
   }
 </div>
 
-{view && !comment && <Pageview />}
+<script>
+  import type { WalineAbort } from '@waline/client'
+  import { commentCount } from '@waline/client/comment'
+  import { pageviewCount } from '@waline/client/pageview'
+
+  const container = document.querySelector('#walinePageInfo')
+
+  if (container instanceof HTMLElement) {
+    const serverURL = container.dataset.serverUrl
+    const comment = container.dataset.comment === 'true'
+    const path = window.location.pathname
+    const update = !['localhost', '127.0.0.1'].includes(window.location.hostname)
+
+    if (serverURL) {
+      const abortPageview = pageviewCount({
+        serverURL,
+        path,
+        update,
+        selector: '#walinePageInfo .waline-pageview-count'
+      })
+
+      let abortComment: WalineAbort
+
+      if (comment) {
+        abortComment = commentCount({
+          serverURL,
+          path,
+          selector: '#walinePageInfo .waline-comment-count'
+        })
+      }
+
+      document.addEventListener(
+        'astro:before-swap',
+        () => {
+          abortPageview?.()
+          abortComment?.()
+        },
+        { once: true }
+      )
+    }
+  }
+</script>
