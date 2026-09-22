@@ -101,16 +101,13 @@ const { class: className } = Astro.props
   }
 
   /* Fix long text and links overflow */
-  #waline :global(.wl-content, .wl-text, .wl-comment-text, .wl-item, .wl-card-item, a) {
+  #waline :global(.wl-content, .wl-text, .wl-comment-text, .wl-item, .wl-card-item) {
     max-width: 100%;
   }
   #waline :global(.wl-meta, .wl-content, .wl-text, .wl-comment-text) {
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: anywhere;
-  }
-  #waline :global(a) {
-    display: inline-block;
   }
 
   /* Reaction buttons */
