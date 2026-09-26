@@ -75,7 +75,7 @@ const { class: className } = Astro.props
 </script>
 
 {
-  config.integ.waline.showMeta &&(
+  !config.integ.waline.showMeta &&(
     <style> #waline :global(.wl-meta) { display: none; } </style>
   )
 }
