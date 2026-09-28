@@ -1,0 +1,49 @@
+import { getBlogCollection } from 'astro-pure/server'
+import { Button } from 'astro-pure/user'
+import { cn } from 'astro-pure/utils'
+import { getUniqueCategoriesWithCount } from '@/utils/categories'
+import PageLayout from '@/layouts/BaseLayout.astro'
+
+const allPosts = await getBlogCollection()
+const allCategories = getUniqueCategoriesWithCount(allPosts)
+
+const meta = {
+  description: 'Browse blog posts by category',
+  title: 'All Categories'
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back' href='/blog' variant='back' />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-6 text-3xl font-medium'>Categories</h1>
+    </div>
+
+    <div id='content' class='animate'>
+      {
+        allCategories.length > 0 ? (
+          <ul class='flex flex-wrap gap-4'>
+            {allCategories.map(([category, count]) => (
+              <li>
+                <Button
+                  href={`/categories/${encodeURIComponent(category)}`}
+                  variant='pill'
+                  class={cn(
+                    'items-start gap-x-1',
+                    count > 2 ? 'rounded-xl px-3 py-1 text-xl' : count > 1 && 'text-lg'
+                  )}
+                >
+                  {category}
+                  <span class={count > 2 ? 'text-base' : 'text-xs'}>{count}</span>
+                </Button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No categories yet.</p>
+        )
+      }
+    </div>
+  </main>
+</PageLayout>

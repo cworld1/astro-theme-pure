@@ -1,0 +1,73 @@
+import type { GetStaticPaths, Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+
+import { Paginator, PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
+import { getUniqueCategories } from '@/utils/categories'
+
+export const prerender = true
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const allPostsByDate = sortMDByDate(await getBlogCollection())
+  const categories = getUniqueCategories(allPostsByDate)
+
+  return Array.from(categories).flatMap((category) => {
+    const categoryPosts = allPostsByDate.filter((post) =>
+      post.data.categories.some((item) => item.toLowerCase() === category.toLowerCase())
+    )
+    return paginate(categoryPosts, {
+      pageSize: config.content.blogPageSize,
+      params: { category }
+    })
+  })
+}
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
+}
+
+const { page } = Astro.props
+const { category } = Astro.params
+
+const meta = {
+  description: `View all posts in the ${category} category`,
+  title: `Category: ${category}`
+}
+
+const paginationProps = {
+  ...(page.url.prev && {
+    prevUrl: {
+      text: '← Previous Posts',
+      url: page.url.prev
+    }
+  }),
+  ...(page.url.next && {
+    nextUrl: {
+      text: 'Next Posts →',
+      url: page.url.next
+    }
+  })
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back' href='/categories' variant='back' />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-6 flex items-end gap-x-2 text-3xl font-medium'>
+        Category:
+        <span class='text-2xl'>{category}</span>
+      </h1>
+    </div>
+
+    <section id='content' class='animate' aria-label='Blog posts in category'>
+      <ul class='flex flex-col gap-y-3 text-start'>
+        {page.data.map((post) => <PostPreview {post} detailed />)}
+      </ul>
+      <Paginator {...paginationProps} />
+    </section>
+  </main>
+</PageLayout>
