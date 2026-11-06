@@ -134,6 +134,14 @@ You can deploy your blog to any static site hosting platform.
 | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcworld1%2Fastro-theme-pure) | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cworld1/astro-theme-pure) |
 
+### Deploy on Deplo
+
+Copy this theme into your Git account and deploy it on your own [Deplo](https://deplo.build) instance:
+
+[![Deploy on Deplo](https://deplo.build/button.svg)](https://deplo.build/deploy?repo=https://github.com/cworld1/astro-theme-pure)
+
+Requires Deplo 0.8.2 or later. Set `ASTRO_OUTPUT=static` in Deplo before deploying to generate a portable static site in `dist`, without the Vercel server adapter. This option can also be used with other static hosts. See the [deploy button guide](https://deplo.build/docs/guides/deploy/deploy-button) for details.
+
 ## Contributions
 
 To spend more time coding and less time fiddling with whitespace, this project uses code conventions and styles to encourage consistency. Code with a consistent style is easier (and less error-prone!) to review, maintain, and understand.

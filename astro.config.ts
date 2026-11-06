@@ -22,6 +22,8 @@ import {
 } from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
+const isStaticBuild = process.env.ASTRO_OUTPUT === 'static'
+
 // https://astro.build/config
 export default defineConfig({
   // [Basic]
@@ -40,8 +42,8 @@ export default defineConfig({
 
   // [Adapter]
   // https://docs.astro.build/en/guides/deploy/
-  adapter: vercel({ imageService: true }),
-  output: 'server',
+  adapter: isStaticBuild ? undefined : vercel({ imageService: true }),
+  output: isStaticBuild ? 'static' : 'server',
   // Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',
