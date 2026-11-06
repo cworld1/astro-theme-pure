@@ -1,6 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
+  "include": ["./.astro/types.d.ts", "./**/*"],
   "compilerOptions": {
     // Basic
     "allowJs": true,
@@ -13,20 +13,21 @@
     // Module resolution for astro-pure compatibility
     "moduleResolution": "bundler",
     // Others
-    "baseUrl": ".",
     "strictNullChecks": true,
     // Paths
     "paths": {
-      "@/assets/*": ["src/assets/*"],
-      "@/components/*": ["src/components/*"],
-      "@/layouts/*": ["src/layouts/*"],
-      "@/utils": ["src/utils/index.ts"],
-      "@/utils/*": ["src/utils/*"],
-      "@/plugins/*": ["src/plugins/*"],
-      "@/pages/*": ["src/pages/*"],
-      "@/types": ["src/types/index.ts"],
-      "@/site-config": ["src/site.config.ts"]
+      "@/assets/*": ["./src/assets/*"],
+      "@/public/*": ["./public/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/layouts/*": ["./src/layouts/*"],
+      "@/utils": ["./src/utils/index.ts"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/plugins/*": ["./src/plugins/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/types": ["./src/types/index.ts"],
+      "@/site-config": ["./src/site.config.ts"]
     }
+    // https://docs.astro.build/en/guides/typescript/#typescript-editor-plugin
   },
-  "exclude": ["node_modules", "**/node_modules/*", ".vscode", "dist", "public/scripts/*", "test/*"]
+  "exclude": ["./node_modules", "./**/node_modules/*", "./.vscode", "./dist", "./public/scripts/*", "./test/*"]
 }

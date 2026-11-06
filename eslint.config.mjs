@@ -1,8 +1,8 @@
 // @ts-check
-
 import eslintPluginAstro from 'eslint-plugin-astro'
+import { defineConfig } from "eslint/config";
 
-export default [
+export default defineConfig([
   ...eslintPluginAstro.configs.recommended,
   // Ignore files
   {
@@ -12,4 +12,4 @@ export default [
       // "astro/no-set-html-directive": "error"
     }
   }
-]
+])

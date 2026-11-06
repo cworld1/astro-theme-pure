@@ -19,3 +19,9 @@ const { content, class: className, ...props } = Astro.props
   if (!qrcodeContainer) throw new Error('qrcode container not found')
   loadQRcode(qrcodeContainer)
 </script>
+
+<style>
+  #qrcode-container :global(canvas) {
+    width: 100%;
+  }
+</style>

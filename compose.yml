@@ -1,0 +1,98 @@
+#
+# Local Docker workflows
+#
+# The services are profile-based so you can choose the workflow you need.
+#
+# Build the site and export the generated `dist/` to the host:
+#   docker compose --profile build up --build
+#
+# Preview the production build at http://localhost:4321:
+#   docker compose --profile preview up --build
+#
+# Start the Astro development server with source files mounted:
+#   docker compose --profile dev up --build
+#
+# Create a new article:
+#   docker compose --profile new run --rm new
+#
+# `--build` forces Docker to rebuild the image when the Dockerfile or build
+# context changes. It is useful after changing dependencies or Docker config.
+#
+# The `preview` workflow runs the `build` service first and starts the
+# Astro preview server only after the build completes successfully.
+#
+# The `dev` workflow mounts the repository into the container, so source
+# changes are reflected immediately without rebuilding the image each time.
+#
+# The `new` workflow mounts `src/` and runs `astro-pure new` without
+# leaving a long-running container behind.
+#
+
+x-image: &default-image astro-pure:local
+
+services:
+  build:
+    profiles: [build, preview]
+    build:
+      context: .
+      target: build
+    image: *default-image
+    pull_policy: never
+    working_dir: /web
+    volumes:
+      - dist:/web/dist
+      - ./dist:/export
+    command: >
+      sh -c "bun run build &&
+             find /export -mindepth 1 -print -delete &&
+             cp -rv /web/dist/. /export/"
+    restart: "no"
+
+  preview:
+    profiles: [preview]
+    build:
+      context: .
+      target: build
+    image: *default-image
+    pull_policy: never
+    working_dir: /web
+    depends_on:
+      build:
+        condition: service_completed_successfully
+    ports:
+      - "4321:4321"
+    volumes:
+      - dist:/web/dist
+    command: bun run preview --host 0.0.0.0
+
+  dev:
+    profiles: [dev]
+    build:
+      context: .
+      target: build
+    image: *default-image
+    pull_policy: never
+    working_dir: /web
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/web
+      - node_modules:/web/node_modules
+    command: bun run dev --host 0.0.0.0
+
+  new:
+    profiles: [new]
+    build:
+      context: .
+      target: build
+    image: *default-image
+    pull_policy: never
+    working_dir: /web
+    volumes:
+      - ./src/content:/web/src/content
+    command: bun run pure new
+    restart: "no"
+
+volumes:
+  dist:
+  node_modules:

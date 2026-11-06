@@ -1,11 +1,11 @@
 ---
 import type { MarkdownHeading, MarkdownLayoutProps } from 'astro'
-import config from 'virtual:config'
 
 import { BackToTop, TOC } from 'astro-pure/components/pages'
 import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import config from 'virtual:config'
 
 type Props = MarkdownLayoutProps<{
   title: string
@@ -34,7 +34,7 @@ const socialImage = heroImage?.src ?? config.socialCard
       )
     }
 
-    <article class='min-w-0 grow'>
+    <article class='min-w-0 data-pagefind-body grow'>
       <div id='content-header' class='animate'>
         <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>
           {title}

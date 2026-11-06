@@ -13,7 +13,7 @@
 ![image](./.github/assets/body.webp)
 
 > [!NOTE]
-> 已知问题：1. Head 标签和自定义选项仍在开发中（已经暴露模板直接改）；2. 主题模板 v4.0.5^ CSS 预设被换到 PresetMini。如有任何问题，请及时反馈。
+> 已知问题：Head 标签和自定义选项仍在开发中（已暴露模板用于修改）
 
 ## 简介
 
@@ -52,37 +52,88 @@
 
 在 NPM 上查看：[astro-theme-pure](https://www.npmjs.com/package/astro-pure)
 
-## 本地开发
+## 快速开始
 
-环境要求：
+### 环境要求
 
-- [Nodejs](https://nodejs.org/): 18.0.0+
+> [!WARNING]
+> Astro 6.0+ 要求 Node.js v22.12.0 或更高版本。Astro 不支持奇数版本的 Node.js，例如 v23。
 
-克隆存储库：
+你可以选择以下任一方式进行项目开发：
+
+- [Bun](https://bun.com/get)
+- [Node.js](https://nodejs.org/zh-cn)
+
+对于使用容器化部署如 [Docker](https://docs.docker.com/get-started/get-docker) & [Docker Compose](https://docs.docker.com/compose/install)，请参考文档 [Docker Compose](https://astro-pure.js.org/docs/setup/using-docker-compose)。
+
+### 获取代码与配置
+
+1. 克隆仓库并进入目录：
+
+   ```shell
+   git clone https://github.com/cworld1/astro-theme-pure.git
+   cd astro-theme-pure
+   ```
+
+   编辑 `src/site.config.ts` 以个性化站点。
+
+2. 安装依赖：
+
+   ```shell
+   # 安装项目依赖
+   bun install
+   ```
+
+3. 启动开发服务器：
+
+   ```shell
+   bun dev
+   # 或
+   pnpm dev
+   # 或
+   yarn run dev
+   # 或
+   npm run dev
+   ```
+
+   开发服务器默认运行在 <http://localhost:4321>。
+
+### 创建新的博客文章
+
+完成任一开发环境的设置后，您可以创建一篇新的博客文章：
 
 ```shell
-git clone https://github.com/cworld1/astro-theme-pure.git
-cd astro-theme-pure
+bun pure new
 ```
 
-有用的命令：
+## 部署
+
+### 手动部署
+
+构建生产站点到 `./dist` 目录：
 
 ```shell
-# install dependencies
-bun install
-
-# start the dev server
-bun dev
-
-# build the project
 bun run build
-
-# preview (after the build)
-bun preview
-
-# create a new post
-bun new-post
 ```
+
+构建完成后，生成的静态文件将位于 `./dist` 目录中，你可以将该目录部署到支持静态网站托管的平台。
+
+本地预览构建结果：
+
+```shell
+bun preview
+```
+
+### 静态托管平台
+
+你可以将你的博客部署到任意静态网站托管平台。
+
+- 参考官方 [Astro 部署指南](https://docs.astro.build/zh-cn/guides/deploy/) 了解具体的部署方式。
+- 根据所选择的部署平台，你可能需要修改项目中的 `astro.config.ts` 配置文件。
+
+|                                                                       Vercel                                                                        |                                                                             Netlify                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [![使用 Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcworld1%2Fastro-theme-pure) | [![部署到 Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cworld1/astro-theme-pure) |
 
 ## 贡献
 
@@ -94,10 +145,10 @@ bun new-post
 - [Astro Resume](https://github.com/srleom/astro-theme-resume)
 - [Starlight](https://github.com/withastro/starlight)
 
-其他第三方参考资料在 [Docs#Contributions](https://astro-pure.js.org/docs/advanced/thanks) 上。感谢所有开源库。
+其他第三方参考资料在 [Docs#Contributions](https://astro-pure.js.org/docs/advanced/about) 上。感谢所有开源库。
 
 ## 许可证
 
 本项目基于 Apache 2.0 许可证。
 
-[![Star History Chart](https://api.star-history.com/svg?repos=cworld1/astro-theme-pure&type=Date)](https://star-history.com/#cworld1/astro-theme-pure&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=cworld1/astro-theme-pure&type=Date)](https://star-history.dera.page/#cworld1/astro-theme-pure&Date)

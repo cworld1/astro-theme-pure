@@ -4,6 +4,7 @@ import type { HTMLTag, Polymorphic } from 'astro/types'
 import { cn } from '../../utils'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+  href?: string
   heading?: string
   subheading?: string
   date?: string

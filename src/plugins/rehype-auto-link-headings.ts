@@ -3,6 +3,7 @@ import { visit } from 'unist-util-visit'
 
 const headingRank = (tag: string) => /^h[1-6]$/.test(tag)
 
+// Add # link to headings
 export default function rehypeAutolinkHeadings({
   properties = { ariaHidden: 'true', tabIndex: -1 },
   behavior = 'prepend',
@@ -14,7 +15,7 @@ export default function rehypeAutolinkHeadings({
         const link: Element = {
           type: 'element',
           tagName: 'a',
-          properties: { ...properties, href: `#${node.properties.id}` },
+          properties: { ...properties, href: `#${node.properties.id.toString()}` },
           // children: Array.isArray(content) ? content : [content]
           children: Array.isArray(content)
             ? content

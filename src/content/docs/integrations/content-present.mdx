@@ -8,6 +8,8 @@ import { MdxRepl } from 'astro-pure/user'
 
 ## Shiki Code
 
+You can change transformer at `defineConfig.markdown.shikiConfig` in config file `astro.config.ts`.
+
 ### Basic Usage
 
 For `.astro` file:
@@ -68,8 +70,6 @@ git push
 
 <Fragment slot='desc'>
 ````markdown
-<!-- You need to delete `\` during the use -->
-
 ```shell title="deploy.sh"
 #!/bin/bash
 
@@ -110,8 +110,6 @@ function draw(t,c) { ctx.fillStyle=c; ctx.fillRect(t%sz*sz+1,~~(t/sz)*sz+1,sz-2,
 
 <Fragment slot='desc'>
 ````markdown
-<!-- You need to delete `\` during the use -->
-
 ```html
 <!doctype html><html><head><meta name="color-scheme" content="dark"></head><body style='overflow:hidden'> 
 <!-- Highlight a single line -->

@@ -5,7 +5,7 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
 ---
 
 <div
-  class='z-10 group fixed bottom-8 end-4 transition-all flex flex-col gap-y-4 sm:end-8'
+  class='z-10 md:z-50 group fixed bottom-8 end-4 transition-all flex flex-col gap-y-4 sm:end-8'
   id='action-buttons'
 >
   <slot name='other-icons' />
@@ -38,10 +38,6 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
     clientHeight = 0
     ticking = false
     needPercent = true
-
-    constructor() {
-      super()
-    }
 
     calculateScrollPercent() {
       const scrollTop = Math.max(0, window.scrollY || document.documentElement.scrollTop)

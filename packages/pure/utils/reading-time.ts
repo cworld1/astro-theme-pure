@@ -1,5 +1,3 @@
-'use strict'
-
 // Tks for issue https://github.com/cworld1/astro-theme-pure/issues/36
 // CJK character ranges
 const CJK_RANGES = [
@@ -67,7 +65,7 @@ export function getReadingTime(text: string, wordsPerMinute: number = 200): Read
   const displayed = Math.ceil(minutes)
 
   return {
-    text: displayed + ' min',
+    text: `${displayed} min`,
     minutes,
     time,
     words

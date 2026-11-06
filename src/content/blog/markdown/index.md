@@ -114,12 +114,12 @@ Currently using KaTeX as the math formula plugin. For supported syntax, refer to
 #### Images
 
 ```markdown
-![CWorld](https://cravatar.cn/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200)
+![CWorld](https://gravatar.loli.net/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200)
 ```
 
 Preview:
 
-![CWorld](https://cravatar.cn/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200)
+![CWorld](https://gravatar.loli.net/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200)
 
 #### Strikethrough
 

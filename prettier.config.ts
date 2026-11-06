@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * @see https://prettier.io/docs/en/configuration.html
  * @type {import("prettier").Config}
@@ -26,6 +24,7 @@ export default {
   vueIndentScriptAndStyle: false,
 
   // Prettier plugins
+  // https://docs.astro.build/en/editor-setup/#prettier
   plugins: ['prettier-plugin-astro', '@ianvs/prettier-plugin-sort-imports'],
   importOrder: [
     '^(astro$)|^(astro:(.*)$)',
@@ -42,6 +41,7 @@ export default {
     '^@/plugins/(.*)$',
     '^@/assets/(.*)$',
     '^@/site-config$',
+    '^virtual:(.*)$',
     '',
     '^[./]'
   ],

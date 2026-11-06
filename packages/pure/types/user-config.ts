@@ -1,15 +1,13 @@
-import { z } from 'zod'
+import { z } from 'astro/zod'
 
 import { IntegrationConfigSchema } from './integrations-config'
 import { ThemeConfigSchema } from './theme-config'
 
 export const UserConfigSchema = ThemeConfigSchema()
   .strict()
-  .merge(
-    z.object({
-      integ: IntegrationConfigSchema()
-    })
-  )
+  .extend({
+    integ: IntegrationConfigSchema()
+  })
   .transform((config) => ({
     ...config,
     // Pagefind only defaults to true if prerender is also true.

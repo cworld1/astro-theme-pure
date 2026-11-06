@@ -32,8 +32,9 @@ const isSynced = syncKey !== undefined
 const didRenderSyncedTabsRestoreScriptSymbol = Symbol.for(
   'starlight:did-render-synced-tabs-restore-script'
 )
-// @ts-expect-error - See bove
-const shouldRenderSyncedTabsRestoreScript = isSynced && Astro.locals[didRenderSyncedTabsRestoreScriptSymbol] !== true
+const shouldRenderSyncedTabsRestoreScript =
+  // @ts-expect-error - See above
+  isSynced && Astro.locals[didRenderSyncedTabsRestoreScriptSymbol] !== true
 
 if (isSynced) {
   // @ts-expect-error - See above
@@ -41,8 +42,8 @@ if (isSynced) {
 }
 ---
 
-{/* Inlined to avoid a flash of invalid active tab. */}
-{shouldRenderSyncedTabsRestoreScript && (
+{ /* Inlined to avoid a flash of invalid active tab. */
+shouldRenderSyncedTabsRestoreScript && (
   <script is:inline>
     class StarlightTabsRestore extends HTMLElement {
       connectedCallback() {
@@ -81,6 +82,7 @@ if (isSynced) {
             <li role='presentation' class='tab'>
               <a
                 role='tab'
+                draggable="false"
                 href={'#' + panelId}
                 id={tabId}
                 aria-selected={idx === 0 ? 'true' : 'false'}
@@ -127,6 +129,7 @@ if (isSynced) {
     color: hsl(var(--foreground) / var(--un-text-opacity, 1));
     outline-offset: -0.1875rem;
     overflow-wrap: initial;
+    white-space: nowrap;
   }
   .tab [role='tab'][aria-selected='true'] {
     color: hsl(var(--primary) / var(--un-text-opacity, 1));

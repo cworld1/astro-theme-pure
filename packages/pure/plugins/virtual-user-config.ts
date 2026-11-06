@@ -1,3 +1,5 @@
+// https://github.com/withastro/starlight/blob/main/packages/starlight/integrations/virtual-user-config.ts
+
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -26,7 +28,7 @@ export function vitePluginUserConfig(
     trailingSlash
   }: Pick<AstroConfig, 'root' | 'srcDir' | 'trailingSlash'> & {
     build: Pick<AstroConfig['build'], 'format'>
-    legacy: Pick<AstroConfig['legacy'], 'collections'>
+    legacy: Pick<AstroConfig['legacy'], 'collectionsBackwardsCompat'>
   }
 ): NonNullable<ViteUserConfig['plugins']>[number] {
   /**
@@ -39,21 +41,12 @@ export function vitePluginUserConfig(
   const resolveId = (id: string, base = root) =>
     JSON.stringify(id.startsWith('.') ? resolve(fileURLToPath(base), id) : id)
 
-  /**
-   * Resolves a path to a Starlight file relative to this file.
-   * @example
-   * resolveLocalPath('../utils/git.ts');
-   * // => '"/users/houston/docs/node_modules/@astrojs/starlight/utils/git.ts"'
-   */
-  let collectionConfigImportPath = resolve(
-    fileURLToPath(srcDir),
-    legacy.collections ? './content/config.ts' : './content.config.ts'
-  )
+  let collectionConfigImportPath = resolve(fileURLToPath(srcDir), './content.config.ts')
 
   // If not using legacy collections and the config doesn't exist, fallback to the legacy location.
   // We need to test this ahead of time as we cannot `try/catch` a failing import in the virtual
   // module as this would fail at build time when Rollup tries to resolve a non-existent path.
-  if (!legacy.collections && !existsSync(collectionConfigImportPath)) {
+  if (legacy.collectionsBackwardsCompat && !existsSync(collectionConfigImportPath)) {
     collectionConfigImportPath = resolve(fileURLToPath(srcDir), './content/config.ts')
   }
 
@@ -62,7 +55,6 @@ export function vitePluginUserConfig(
     'virtual:config': `export default ${JSON.stringify(opts)}`,
     'virtual:project-context': `export default ${JSON.stringify({
       build: { format: build.format },
-      legacyCollections: legacy.collections,
       root,
       srcDir,
       trailingSlash
@@ -73,7 +65,7 @@ export function vitePluginUserConfig(
     'virtual:user-css': opts.customCss.map((id) => `import ${resolveId(id)};`).join(''),
     'virtual:collection-config': `let userCollections;
 			try {
-				userCollections = (await import(${resolveId('./content/config.ts', srcDir)})).collections;
+				userCollections = (await import(${JSON.stringify(collectionConfigImportPath)})).collections;
 			} catch {}
 			export const collections = userCollections;`
   } satisfies Record<string, string>
@@ -87,11 +79,11 @@ export function vitePluginUserConfig(
   )
 
   return {
-    name: 'vite-plugin-starlight-user-config',
-    resolveId(id): string | void {
+    name: 'vite-plugin-user-config',
+    resolveId(id): string | undefined {
       if (id in modules) return resolveVirtualModuleId(id)
     },
-    load(id): string | void {
+    load(id): string | undefined {
       const resolution = resolutionMap[id]
       if (resolution) return modules[resolution]
     }

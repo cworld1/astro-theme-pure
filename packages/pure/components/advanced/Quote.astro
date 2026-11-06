@@ -22,10 +22,6 @@ const { class: className } = Astro.props
   const { quote } = config.integ
 
   class Quote extends HTMLElement {
-    constructor() {
-      super()
-    }
-
     render(sentence: string) {
       const quoteEl = this.querySelector('#quote-sentence') as HTMLElement
       if (!quoteEl) return
@@ -34,7 +30,7 @@ const { class: className } = Astro.props
 
     connectedCallback() {
       // Because virtual:config can only be accessed using json string, function cannot work, so we need to use new Function
-      const targetFunction = new Function('data', 'return (' + quote.target + ')(data)')
+      const targetFunction = new Function('data', `return (${quote.target})(data)`)
       fetch(quote.server)
         .then((response) => response.json())
         .then((data) => this.render(targetFunction(data)))

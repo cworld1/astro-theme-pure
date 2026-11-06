@@ -5,12 +5,11 @@ import type { CollectionEntry } from 'astro:content'
 // Plugin styles
 import 'katex/dist/katex.min.css'
 
-import config from 'virtual:config'
-
 import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Copyright, Hero, TOC } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import { Comment } from '@/components/giscus'
+import config from 'virtual:config'
 
 interface Props {
   post: CollectionEntry<'blog'>

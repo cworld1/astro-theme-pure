@@ -122,12 +122,12 @@ async function cacheFriendAvatar(friend: Friend) {
     : undefined
 
   if (existingCache?.hash === hash && potentialFile && (await ensureFileExists(potentialFile))) {
-    // Ensure the cache path stays normalised even if the JSON was edited manually
-    const normalisedPath = `/avatars/${hash}.${expectedExt}`
-    const mutated = existingCache.path !== normalisedPath
+    // Ensure the cache path stays normalized even if the JSON was edited manually
+    const normalizedPath = `/avatars/${hash}.${expectedExt}`
+    const mutated = existingCache.path !== normalizedPath
     friend.avatar_cache = {
       hash,
-      path: normalisedPath
+      path: normalizedPath
     }
     return mutated
   }
@@ -139,8 +139,8 @@ async function cacheFriendAvatar(friend: Friend) {
     const targetPath = path.join(avatarOutputDir, fileName)
 
     try {
-      const buffer = Buffer.from(await response.arrayBuffer())
-      await writeFile(targetPath, buffer)
+      const buffer = await response.arrayBuffer()
+      await writeFile(targetPath, new Uint8Array(buffer))
       friend.avatar_cache = {
         hash,
         path: `/avatars/${fileName}`
@@ -178,9 +178,9 @@ async function main() {
     }
   }
 
-  const serialised = `${JSON.stringify(links, null, 2)}\n`
-  if (serialised !== raw) {
-    await writeFile(linksJsonPath, serialised, 'utf-8')
+  const serialized = `${JSON.stringify(links, null, 2)}\n`
+  if (serialized !== raw) {
+    await writeFile(linksJsonPath, serialized, 'utf-8')
     console.log(
       updated
         ? '[avatar-cache] links.json updated with fresh avatar caches.'

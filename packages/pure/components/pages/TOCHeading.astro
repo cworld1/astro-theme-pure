@@ -16,12 +16,12 @@ const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText
 <li>
   <div class='relative'>
     <span
-      class='absolute top-[5%] w-[2px] rounded transition-colors duration-300 [&.highlight-bg]:bg-primary [&.is-read]:bg-input'
+      class='absolute top-[5%] w-[2px] rounded transition-colors duration-300 [&.highlight-bg]:bg-primary [&.is-read]:bg-border'
     ></span>
     <a
       aria-label={`Scroll to section: ${text}`}
       class={cn(
-        'toc-item line-clamp-2 px-3 py-1 ms-2 text-foreground/75 transition-all hover:text-foreground [&.highlight]:font-medium [&.highlight]:text-primary [&.is-read]:text-input [&.highlight-bg-translucent]:bg-muted',
+        'toc-item line-clamp-2 px-3 py-1 ms-2 text-foreground/75 transition-all hover:text-foreground [&.highlight]:font-medium [&.highlight]:text-primary [&.highlight-bg-translucent]:bg-muted',
         depth > 2 && 'ps-7'
       )}
       href={`#${slug}`}>{text}</a

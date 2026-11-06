@@ -24,6 +24,7 @@ const headings = [
   <p>
     <Image
       src='https://ghchart.rshah.org/A0522D/pipitonelabs'
+      format='svg'
       alt='github activities'
       inferSize
       loading='lazy'
@@ -66,17 +67,21 @@ const headings = [
     <ProjectSection
       projects={[
         {
-          name: 'Search Switcher',
-          description: 'Add links to each other in search engines',
-          links: [{ type: 'github', href: 'https://github.com/cworld1/search-switcher' }]
+          name: '🧩 rehype-autolink-headings-simple',
+          description: 'A simple version of rehype-autolink-headings',
+          links: [
+            { type: 'github', href: 'https://github.com/cworld1/rehype-autolink-headings-simple' },
+            {
+              type: 'release',
+              href: 'https://www.npmjs.com/package/rehype-autolink-headings-simple'
+            }
+          ]
         },
         {
-          name: 'Pure Baidu',
-          description: 'Baidu search page beautification module',
-          links: [
-            { type: 'doc', href: 'https://cworld0.com/blog/pure-baidu' },
-            { type: 'site', href: 'https://userstyles.org/styles/173673/pure' }
-          ]
+          name: 'Gaussian NB',
+          description:
+            'Simulating the Parsimonious Bayesian Algorithm with Python and Finding the Probability Prediction of Breast Cancer ',
+          links: [{ type: 'github', href: 'https://github.com/cworld1/gaussian-nb' }]
         }
       ]}
     />
@@ -87,9 +92,12 @@ const headings = [
     class='my-2'
     projects={[
       {
-        name: 'Rust Learning',
-        description: 'Some notes and code about CWorld learning Rust',
-        links: [{ type: 'github', href: 'https://github.com/cworld1/rust-learning' }]
+        name: 'R Learning',
+        description: 'Some notes and code about learning R language',
+        links: [
+          { type: 'github', href: 'https://github.com/cworld1/r-learning' },
+          { type: 'site', href: 'https://cworld1.github.io/r-learning' }
+        ]
       },
       {
         name: 'CS 213 Learning',
@@ -120,7 +128,6 @@ const headings = [
     ]}
   />
 
-  <!-- gpg signature -->
   <h2 id='gpg-signature'>GPG Signature</h2>
   <p>
     You can verify the authenticity of the files I signed by checking the GPG signature. My GPG key
@@ -132,22 +139,46 @@ const headings = [
   
   <!-- sponsorship -->
   <h2 id='sponsorship'>Sponsorship</h2>
-  <p>Please leave a message or contact me proactively after sponsorship.</p>
+  <p>
+    Chinese methods: <a href='https://afdian.com/a/cworld' target='_blank'>Afadian</a>, Wechat or
+    Alipay
+  </p>
   <Sponsorship
     methods={[
       { name: 'WeChat', icon: 'wechat-pay', image: wechat },
       { name: 'Alipay', icon: 'alipay', image: alipay }
     ]}
   />
+  <p>Global methods: <a href='https://ko-fi.com/cworld0' target='_blank'>Ko-fi</a></p>
+  <p>
+    Please leave a message or contact me proactively after sponsorship. My email is:
+    <code
+      style='cursor: pointer'
+      onclick='const m=atob(this.textContent);alert(m);window.open(`mailto:${m}`,"_blank")'
+      >Y3dvcmxkMEBxcS5jb20=</code
+    >
+    (click code to transform base64).
+  </p>
   <p>Thanks to the following sponsors:</p>
   <Sponsors
-    progressMax={25}
+    progressMax={50}
     sponsors={[
+      { name: 'd2be8', platform: 'Afdian', amount: 5, date: '2026-05-22' },
+      { name: 'Saneko', platform: 'Wechat', amount: 188, date: '2026-02-25' },
+      { name: '边缘星2020', platform: 'Afdian', amount: 20.26, date: '2026-02-17' },
+      { name: 'Juyao Huang', platform: 'Wechat', amount: 5, date: '2026-01-15' },
+      { name: 'hoochanlon', platform: 'Wechat', amount: 5, date: '2025-11-09' },
       { name: 'Arthals', platform: 'Wechat', amount: 50, date: '2025-11-06' },
+      { name: '边缘星2020 (byx2020.com)', platform: 'Alipay', amount: 50, date: '2025-11-01' },
+      { name: '小哲', platform: 'Wechat', amount: 50, date: '2025-08-19' },
+      { name: 'Open1V', platform: 'Wechat', amount: 2, date: '2025-08-14' },
+      { name: 'Luis Xu', platform: 'Alipay', amount: 30, date: '2025-08-03' },
       { name: '顾**', platform: 'Wechat', amount: 28, date: '2025-06-23' },
+      { name: 'Hans J.Han', platform: 'Wechat', amount: 10, date: '2025-04-04' },
+      { name: '**青', platform: 'Alipay', amount: 12, date: '2024-05-21' },
       { name: 'Anonymous', platform: 'Wechat', amount: 20, date: '2022-04-06' },
-      { name: '华雄 (1300****71)', platform: 'QQ', amount: 5, date: '2019-12-30' },
-      { name: '◌ (1934****45)', platform: 'QQ', amount: 3, date: '2019-12-30' },
+      { name: '华雄', platform: 'QQ', amount: 5, date: '2019-12-30' },
+      { name: '◌', platform: 'QQ', amount: 3, date: '2019-12-30' },
       { name: 'C*a (酷安@暴走の蜗牛)', amount: 2, date: '2019-07-02' }
     ]}
   />

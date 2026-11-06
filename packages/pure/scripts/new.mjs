@@ -89,20 +89,19 @@ export default function main(args) {
 
   const fileExtension = parsedArgs.mdx ? '.mdx' : '.md'
   const fileName = getPostSlug(postTitle) + fileExtension
-  
+
   let fullPath
   if (parsedArgs.folder) {
-    const folderName = getPostSlug(postTitle);
-    const folderPath = path.join(TARGET_DIR, folderName);
+    const folderName = getPostSlug(postTitle)
+    const folderPath = path.join(TARGET_DIR, folderName)
     if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath, { recursive: true });
+      fs.mkdirSync(folderPath, { recursive: true })
     }
-    const fileName = 'index' + fileExtension;
-    fullPath = path.join(folderPath, fileName);
+    const fileName = `index${fileExtension}`
+    fullPath = path.join(folderPath, fileName)
   } else {
-    fullPath = path.join(TARGET_DIR, fileName);
+    fullPath = path.join(TARGET_DIR, fileName)
   }
-  
 
   console.log('Full path:', fullPath)
 
@@ -112,9 +111,9 @@ export default function main(args) {
   }
 
   let content = `---
-title: ${postTitle}
+title: '${postTitle}'
 description: 'Write your description here.'
-publishDate: ${getDate()}
+publishDate: '${getDate()}'
 `
   content += parsedArgs.draft ? 'draft: true\n' : ''
   content += parsedArgs.lang ? `lang: ${parsedArgs.lang}\n` : ''

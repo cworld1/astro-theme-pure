@@ -5,7 +5,9 @@ export function simpleMerge(...classes: string[]): string {
 
   classes.forEach((cls) => {
     if (cls) {
-      cls.split(' ').forEach((c) => uniqueClasses.add(c))
+      cls.split(' ').forEach((c) => {
+        uniqueClasses.add(c)
+      })
     }
   })
 

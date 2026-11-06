@@ -39,7 +39,8 @@ const {
       )
     }
     <div
-      class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'
+      id='main-container'
+      class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'
     >
       <Header />
       <div class='flex-1 w-full'>
@@ -52,13 +53,40 @@ const {
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {
-        color: var(--highlightColor, hsl(var(--primary) / var(--un-text-opacity))) !important;
+        --highlight-fg: color-mix(
+          in srgb,
+          var(--highlightColor) 40%,
+          hsl(var(--foreground)/var(--un-text-opacity, 1))
+        );
+        color: var(--highlight-fg, hsl(var(--primary) / var(--un-text-opacity))) !important;
       }
       :global(.highlight-bg) {
         background-color: var(
           --highlightColor,
           hsl(var(--primary) / var(--un-text-opacity))
         ) !important;
+      }
+
+      /* Extend safe area for some special screens
+       * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/env
+       * https://webkit.org/blog/7929/designing-websites-for-iphone-x/
+       */
+      #main-container {
+        padding-top: env(safe-area-inset-top);
+        padding-left: calc(1rem + env(safe-area-inset-left));
+        padding-right: calc(1rem + env(safe-area-inset-right));
+      }
+      @media (min-width: 640px) {
+        #main-container {
+          padding-left: calc(1.75rem + env(safe-area-inset-left));
+          padding-right: calc(1.75rem + env(safe-area-inset-right));
+        }
+      }
+      @media (min-width: 1024px) {
+        #main-container {
+          padding-left: calc(2.5rem + env(safe-area-inset-left));
+          padding-right: calc(2.5rem + env(safe-area-inset-right));
+        }
       }
     </style>
   </body>

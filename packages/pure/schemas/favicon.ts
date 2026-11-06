@@ -18,11 +18,11 @@ export const FaviconSchema = () =>
       // favicon can be absolute or relative url
       const { pathname } = new URL(favicon, 'https://example.com')
       const ext = extname(pathname).toLowerCase()
-
       if (!isFaviconExt(ext)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'favicon must be a .ico, .gif, .jpg, .png, or .svg file'
+        ctx.issues.push({
+          code: 'custom',
+          message: 'favicon must be a .ico, .gif, .jpg, .png, or .svg file',
+          input: favicon
         })
 
         return z.NEVER
