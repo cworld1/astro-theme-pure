@@ -75,6 +75,18 @@ const headings = [
         description: 'Docker',
         href: 'https://docker.com/',
         icon: import('@/assets/tools/docker.svg?raw')
+      },
+      {
+        name: 'GitHub',
+        description: 'DevOps Platform',
+        href: 'https://github.com/',
+        icon: import('@/assets/tools/github.svg?raw')
+      },
+      {
+        name: 'GitLab',
+        description: 'DevOps Platform',
+        href: 'https://gitlab.com/',
+        icon: import('@/assets/tools/gitlab.svg?raw')
       }
     ]}
   />
@@ -95,10 +107,16 @@ const headings = [
         icon: import('@/assets/tools/sublime.svg?raw')
       },
       {
-        name: 'Kilo Code',
+        name: 'Cursor',
+        description: 'AI IDE',
+        href: 'https://cursor.com/',
+        icon: import('@/assets/tools/cursor.svg?raw')
+      },
+      {
+        name: 'Grok Build',
         description: 'Coding Agent',
-        href: 'https://www.kilo.ai/',
-        icon: import('@/assets/tools/kilo.svg?raw')
+        href: 'https://x.ai/',
+        icon: import('@/assets/tools/grok.svg?raw')
       },
       {
         name: 'Claude Code',
@@ -117,6 +135,12 @@ const headings = [
         description: 'IaC Tool',
         href: 'https://docs.aws.amazon.com/cloudformation/',
         icon: import('@/assets/tools/cloudformation.svg?raw')
+      },
+      {
+        name: 'AWS SDK',
+        description: 'SDK',
+        href: 'https://aws.amazon.com/developer/tools/',
+        icon: import('@/assets/tools/aws.svg?raw')
       }
     ]}
   />
@@ -197,6 +221,24 @@ const headings = [
         icon: import('@/assets/tools/ubuntu.svg?raw')
       },
       {
+        name: 'Debian',
+        description: 'Linux Distribution',
+        href: 'https://www.debian.org/',
+        icon: import('@/assets/tools/debian.svg?raw')
+      },
+      {
+        name: 'Rocky Linux',
+        description: 'Enterprise Linux',
+        href: 'https://rockylinux.org/',
+        icon: import('@/assets/tools/rockylinux.svg?raw')
+      },
+      {
+        name: 'Arch Linux',
+        description: 'Linux Distribution',
+        href: 'https://archlinux.org/',
+        icon: import('@/assets/tools/archlinux.svg?raw')
+      },
+      {
         name: 'macOS',
         description: 'Apple',
         href: 'https://www.apple.com/macos/',
@@ -248,6 +290,11 @@ const headings = [
   <p>Website history:</p>
   <Timeline
     events={[
+      {
+        date: '2026-11-06',
+        content:
+          'Synced the site with upstream <a href="https://github.com/cworld1/astro-theme-pure" target="_blank">Astro Theme Pure</a> (Astro 6, theme v4.1.6) and built a new container image for the Kubernetes deployment'
+      },
       {
         date: '2025-11-25',
         content:
