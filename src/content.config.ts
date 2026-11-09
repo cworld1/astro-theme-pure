@@ -9,6 +9,16 @@ function removeDupsAndLowerCase(array: string[]) {
   return Array.from(distinctItems)
 }
 
+function removeDuplicateCategories(categories: string[]) {
+  const unique = new Map<string, string>()
+  for (const category of categories) {
+    const label = category.trim()
+    const key = label.toLowerCase()
+    if (label && !unique.has(key)) unique.set(key, label)
+  }
+  return Array.from(unique.values())
+}
+
 // Define blog collection
 const blog = defineCollection({
   // Load Markdown and MDX files in the `src/content/blog/` directory.
@@ -32,6 +42,7 @@ const blog = defineCollection({
           color: z.string().optional()
         })
         .optional(),
+      categories: z.array(z.string().trim()).default([]).transform(removeDuplicateCategories),
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
       language: z.string().optional(),
       draft: z.boolean().default(false),

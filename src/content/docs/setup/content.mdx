@@ -32,8 +32,10 @@ Let's give you example of [writing Markdown content in Astro](https://docs.astro
 title: 'First Article' # (Required, max 60)
 description: 'I like writing articles.' # (Required, 10 to 160)
 publishDate: '2024-11-30 00:08:00' # (Required, Date)
+categories:
+  - Astro # Optional; browse related posts at /categories/astro
 tags:
-  - Markdown # (Also can write format like next line)
+  - Markdown # Optional, useful for cross-cutting topics
 heroImage: { src: './thumbnail.jpg', alt: 'an image targeting my article', color: '#B4C6DA' }
 # thumbnail.jpg should be in the same folder as the article
 draft: false # (set true will only show in development)
@@ -45,6 +47,8 @@ comment: true # (set false will disable comment, even if you've enabled it in si
 
 This is a paragraph.
 ```
+
+Categories and tags are separate optional fields. Categories group posts into broad sections, while tags can describe topics that cross those sections. A post can have multiple categories and tags; category pages are available at `/categories` and `/categories/<category>`.
 
 If you have a lot of assets, you can create a folder for title like `src/content/blog/first-article/` and put all your assets in there. Of course, your content should be renamed to `index.md` or `index.mdx` and also be contained in this folder.
 
