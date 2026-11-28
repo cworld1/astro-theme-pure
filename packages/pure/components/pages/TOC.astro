@@ -38,6 +38,23 @@ const toc = generateToc(headings)
     progress: number
   }
 
+  function appendHeadingLabel(node: Node, label: DocumentFragment) {
+    if (node instanceof Text) {
+      label.append(node.data)
+      return
+    }
+    if (!(node instanceof Element)) return
+    if (node.matches('.katex')) {
+      const formula = document.createElement('span')
+      formula.className = 'toc-formula'
+      formula.append(node.cloneNode(true))
+      label.append(formula)
+      return
+    }
+    if (node.matches('a.anchor, [aria-hidden="true"]')) return
+    for (const child of node.childNodes) appendHeadingLabel(child, label)
+  }
+
   class TOC extends HTMLElement {
     headings: HTMLElement[] = []
     tocLinks: TOCLink[] = []
@@ -99,8 +116,17 @@ const toc = generateToc(headings)
     }
 
     connectedCallback() {
-      // Smooth scroll
       this.tocLinks.forEach((link) => {
+        const heading = this.headings.find((heading) => heading.id === link.slug)
+        if (heading?.querySelector('.katex')) {
+          const label = document.createDocumentFragment()
+          for (const child of heading.childNodes) appendHeadingLabel(child, label)
+          link.element.replaceChildren(label)
+          link.element.removeAttribute('aria-label')
+          link.element.dataset.math = ''
+        }
+
+        // Smooth scroll
         link.element.addEventListener('click', (e) => {
           e.preventDefault()
           // Push the history to add the hash at the end of the URL
@@ -131,5 +157,26 @@ const toc = generateToc(headings)
 <style>
   toc-heading :global(.toc-item) {
     display: flow-root;
+  }
+
+  toc-heading :global(.toc-item[data-math]) {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  toc-heading :global(.toc-formula) {
+    display: inline-block;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    padding-block: 0.1em;
+    vertical-align: middle;
+  }
+
+  toc-heading :global(.toc-formula .katex) {
+    font-size: 1em;
+  }
+
+  toc-heading :global(.toc-formula .katex-html) {
+    overflow: visible;
   }
 </style>
